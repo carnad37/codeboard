@@ -10,9 +10,7 @@ public class MainController {
 	@RequestMapping("/main")
 	public String main() {
 		
-		
-		
-		return "templates/index.html";
+		return "main";
 	}
 	
 }
