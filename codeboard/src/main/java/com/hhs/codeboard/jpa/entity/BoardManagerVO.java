@@ -1,4 +1,4 @@
-package com.hhs.codeboard.board.service;
+package com.hhs.codeboard.jpa.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
