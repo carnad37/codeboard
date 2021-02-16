@@ -1,6 +1,7 @@
 package com.hhs.codeboard.config.security;
 
 import javax.annotation.Resource;
+import com.hhs.codeboard.member.service.MemberService;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Resource(name="memberService")
-	MemberService memberService;
+	private MemberService memberService;
 	
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -73,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    	auth.userDetailsService(memberService)
+    	auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
     }
     
     
