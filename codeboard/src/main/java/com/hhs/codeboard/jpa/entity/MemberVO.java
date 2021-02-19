@@ -3,10 +3,12 @@ package com.hhs.codeboard.jpa.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.hhs.codeboard.common.service.DefaultDateVO;
 
 @Entity
+@Table(name = "member")
 public class MemberVO extends DefaultDateVO {
 
 	@Id

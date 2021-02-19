@@ -2,10 +2,12 @@ package com.hhs.codeboard.jpa.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.hhs.codeboard.common.service.DefaultVO;
 
 @Entity
+@Table(name="code_board_manager")
 public class BoardManagerVO extends DefaultVO{
 
 	@Column

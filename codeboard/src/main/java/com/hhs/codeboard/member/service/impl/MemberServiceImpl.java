@@ -27,8 +27,15 @@ public class MemberServiceImpl implements MemberService {
 		Optional<MemberVO> memberEntityWrapper = memberDAO.findByMemberId(memberId);
 		MemberVO memberEntity = memberEntityWrapper.orElse(null);
 
+		//권한 리스트
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+
+		if ("A".equals(memberEntity.getUserType())) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+			authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+		} else if ("N".equals(memberEntity.getUserType())) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+		}		
 
 		return new User(memberEntity.getMemberId(), memberEntity.getPassword(), authorities);
 	}
@@ -38,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
         memberVO.setRegDate(LocalDateTime.now());
 
         // 비밀번호 암호화
+		// PK값은 memberId로 쓰기때문에, return 값은 String(memberId)로 한다.
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         memberVO.setPassword(passwordEncoder.encode(memberVO.getPassword()));
         return memberDAO.save(memberVO).getMemberId();

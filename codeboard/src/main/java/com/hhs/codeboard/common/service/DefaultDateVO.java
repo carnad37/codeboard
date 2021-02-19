@@ -3,9 +3,7 @@ package com.hhs.codeboard.common.service;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 
-@Entity
 public class DefaultDateVO {
 
 	/**
