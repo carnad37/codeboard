@@ -27,8 +27,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
 		Optional<MemberVO> memberEntityWrapper = memberDAO.findByMemberId(memberId);
-		MemberVO memberEntity = memberEntityWrapper.orElse(null);
-
+		MemberVO memberEntity = memberEntityWrapper.orElseThrow(() -> new UsernameNotFoundException("not found data"));
 		//권한 리스트
 		List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -37,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
 			authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 		} else if ("N".equals(memberEntity.getUserType())) {
 			authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
-		}		
+		}
 
 		return new User(memberEntity.getMemberId(), memberEntity.getPassword(), authorities);
 	}
