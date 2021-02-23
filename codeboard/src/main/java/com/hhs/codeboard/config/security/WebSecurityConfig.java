@@ -3,6 +3,7 @@ package com.hhs.codeboard.config.security;
 import javax.annotation.Resource;
 import com.hhs.codeboard.member.service.MemberService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,7 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
-	@Resource(name="memberService")
+	@Autowired
 	private MemberService memberService;
 	
     @Bean
@@ -56,13 +57,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         		.antMatchers("/**").permitAll();
          
         http.formLogin()
-	        .loginPage("/login")
 	        .defaultSuccessUrl("/")
 	        .permitAll();
 	        
         http.logout()
         	.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        	.logoutSuccessUrl("/login")
         	.invalidateHttpSession(true);
         
         http.exceptionHandling()

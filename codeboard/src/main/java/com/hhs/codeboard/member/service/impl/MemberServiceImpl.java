@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import com.hhs.codeboard.jpa.entity.MemberVO;
 import com.hhs.codeboard.jpa.service.MemberDAO;
 import com.hhs.codeboard.member.service.MemberService;
 
+@Service
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
