@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public String save(MemberVO memberVO) {
+	public String insertUser(MemberVO memberVO) {
         memberVO.setRegDate(LocalDateTime.now());
 
         // 비밀번호 암호화
