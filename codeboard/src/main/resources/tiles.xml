@@ -2,16 +2,10 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-    <!-- <definition name="sidebar-layout" template="/WEB-INF/views/layouts/sidebar-layout.jsp">
-        <put-attribute name="css" value="/WEB-INF/views/layouts/adminLayout/admin-css.jsp" />
-        <put-attribute name="header" value="/WEB-INF/views/layouts/mainLayout/main-header.jsp" />
-        <put-attribute name="modal" value="/WEB-INF/views/layouts/modalLayout/modal.jsp"/>
-        <put-attribute name="sidebar" value="/WEB-INF/views/layouts/adminLayout/admin-sidebar.jsp"/>
-        <put-attribute name="script" value="/WEB-INF/views/layouts/adminLayout/admin-script.jsp"/>
-        <put-attribute name="container" />
-        <put-attribute name="footer" value="/WEB-INF/views/layouts/mainLayout/main-footer.jsp" />
+    <definition name="no-design-temp" template="/WEB-INF/jsp/tiles/template/no-design-temp.jsp">
     </definition>
 
+    <!-- 
     <definition name="non-sidebar-layout" template="/WEB-INF/views/layouts/non-sidebar-layout.jsp">
         <put-attribute name="css" value="/WEB-INF/views/layouts/mainLayout/main-css.jsp" />
         <put-attribute name="header" value="/WEB-INF/views/layouts/mainLayout/main-header.jsp" />
@@ -21,13 +15,13 @@
         <put-attribute name="script" value="/WEB-INF/views/layouts/mainLayout/main-script.jsp" />
     </definition> -->
 
-    <!-- <definition name="/*.main-temp" extends="non-sidebar-layout">
-        <put-attribute name="container" value="/WEB-INF/views/{1}.jsp" />
+    <definition name="/non/*" extends="no-design-temp">        
     </definition>
-    <definition name="/*/*.main-temp" extends="non-sidebar-layout">
-        <put-attribute name="container" value="/WEB-INF/views/{1}/{2}.jsp" />
+    <definition name="/non/*/*" extends="no-design-temp">        
     </definition>
 
+
+    <!--
     <definition name="/*.admin-temp" extends="sidebar-layout">
         <put-attribute name="container" value="/WEB-INF/views/{1}.jsp" />
     </definition>
