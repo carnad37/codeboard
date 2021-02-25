@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         		.antMatchers("/**").permitAll();
          
         http.formLogin()
+            .loginPage("/login")
 	        .defaultSuccessUrl("/")
 	        .permitAll();
 	        

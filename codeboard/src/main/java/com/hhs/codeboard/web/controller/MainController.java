@@ -11,5 +11,11 @@ public class MainController {
 		
 		return "/non/main";
 	}
+
+	@RequestMapping("/login")
+	public String login() {
+		
+		return "/non/main";
+	}
 	
 }
