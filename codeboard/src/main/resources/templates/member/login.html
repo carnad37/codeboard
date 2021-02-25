@@ -8,6 +8,16 @@
   </th:block>
   <!-- 고유 script -->
   <th:block layout:fragment="script">
+  <script type="text/javascript">
+    $(function() {
+      $("#remember").click(function(){
+        if ($(this).is(":checked")) {
+          alert("로그인 유지 기능은 개인컴퓨터에서만 사용해주시기 바랍니다.");
+        }
+      });
+    });
+
+  </script>
   </th:block>
 
   <div layout:fragment="content">
@@ -16,12 +26,12 @@
       <!-- /.login-logo -->
       <div class="card card-outline card-primary">
         <div class="card-header text-center">
-          <a href="/index2.html" class="h1"><b>Admin</b>LTE</a>
+          <a href="#" onclick="return false;" class="h1"><b>Code</b>board</a>
         </div>
         <div class="card-body">
-          <p class="login-box-msg">Sign in to start your session</p>
+          <p class="login-box-msg">로그인정보를 입력해주세요</p>
 
-          <form action="/index3.html" method="post">
+          <form th:action="" method="post">
             <div class="input-group mb-3">
               <input type="email" class="form-control" placeholder="Email">
               <div class="input-group-append">
@@ -38,18 +48,18 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
               <div class="col-8">
                 <div class="icheck-primary">
                   <input type="checkbox" id="remember">
                   <label for="remember">
-                    Remember Me
+                    로그인 유지하기
                   </label>
                 </div>
               </div>
               <!-- /.col -->
               <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                <button type="submit" class="btn btn-primary btn-block">로그인</button>
               </div>
               <!-- /.col -->
             </div>
@@ -65,12 +75,12 @@
           </div>
           -->
           <!-- /.social-auth-links -->
-
-          <p class="mb-1">
-            <a href="forgot-password.html">I forgot my password</a>
+          
+          <p class="col-12 mb-3 px-0">
+            <a href="forgot-password.html" class="btn btn-block btn-secondary">비밀번호 찾기</a>
           </p>
-          <p class="mb-0">
-            <a href="/register" class="text-center">Register a new membership</a>
+          <p class="col-12 px-0">
+            <a href="/register" class="btn btn-block btn-primary">가입하기</a>
           </p>
         </div>
         <!-- /.card-body -->
