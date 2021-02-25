@@ -9,19 +9,19 @@ public class MainController {
 	@RequestMapping("/main")
 	public String main() {
 		
-		return "/non/main";
+		return "main";
 	}
 
 	@RequestMapping("/login")
 	public String login() {
 		
-		return "/non/member/login";
+		return "member/login";
 	}
 
 	@RequestMapping("/register")
 	public String register() {
 		
-		return "/non/member/register";
+		return "member/register";
 	}
 	
 }
