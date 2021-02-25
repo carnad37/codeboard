@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     public void configure(WebSecurity web) throws Exception {
 //        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    	web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
+    	web.ignoring().antMatchers("/dist/**", "/plugins/**");
     }
 
     @Override
@@ -53,8 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
         http.authorizeRequests()
         		.antMatchers("/admin/**").hasRole("ADMIN")
-        		.antMatchers("/board/**").authenticated()
-        		.antMatchers("/**").permitAll();
+        		.antMatchers("/**").authenticated()
+        		.antMatchers("/login").permitAll();
          
         http.formLogin()
             .loginPage("/login")

@@ -15,7 +15,13 @@ public class MainController {
 	@RequestMapping("/login")
 	public String login() {
 		
-		return "/non/main";
+		return "/non/member/login";
+	}
+
+	@RequestMapping("/register")
+	public String register() {
+		
+		return "/non/member/register";
 	}
 	
 }
