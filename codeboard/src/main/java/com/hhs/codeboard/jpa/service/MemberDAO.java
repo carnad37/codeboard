@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.hhs.codeboard.jpa.entity.MemberVO;
 
 public interface MemberDAO extends JpaRepository<MemberVO, Long> {
-	Optional<MemberVO> findByMemberId(String memberId);
+	Optional<MemberVO> findByEmail(String email);
 }

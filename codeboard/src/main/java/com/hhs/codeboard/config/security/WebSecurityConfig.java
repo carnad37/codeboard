@@ -1,11 +1,8 @@
 package com.hhs.codeboard.config.security;
 
-import javax.annotation.Resource;
-import com.hhs.codeboard.member.service.MemberService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -13,35 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-	
-	@Autowired
-	private MemberService memberService;
-	
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-//
-//    @Bean
-//    public CustomLoginSuccessHandler customLoginSuccessHandler() {
-//        return new CustomLoginSuccessHandler();
-//    }
-//    
-//    
-//    @Bean
-//    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
-//        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
-//        customAuthenticationFilter.setFilterProcessesUrl("/user/login");
-//        customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
-//        customAuthenticationFilter.afterPropertiesSet();
-//        return customAuthenticationFilter;
-//    }
-    
+
     @Override
     public void configure(WebSecurity web) throws Exception {
 //        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
@@ -55,10 +30,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         		.antMatchers("/admin/**").hasRole("ADMIN")        		
         		.antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/actionLogin").permitAll()
+                .antMatchers("/actionRegister").permitAll()
                 .antMatchers("/**").authenticated();
          
         http.formLogin()
             .loginPage("/login")
+            .loginProcessingUrl("/actionLogin")
+            .failureHandler(loginFailureHandler())
 	        .defaultSuccessUrl("/")
 	        .permitAll();
 	        
@@ -72,8 +51,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    	auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
+    	auth.authenticationProvider(authenticationProvider());
     }
-    
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler loginFailureHandler() {
+        return new LoginFailureHandler();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new AuthenticationProviderImpl();
+    }
+
     
 }

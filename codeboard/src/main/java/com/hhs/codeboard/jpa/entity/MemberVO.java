@@ -2,6 +2,8 @@ package com.hhs.codeboard.jpa.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,8 +14,12 @@ import com.hhs.codeboard.common.service.DefaultDateVO;
 public class MemberVO extends DefaultDateVO {
 
 	@Id
-	private String memberId;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String seq;
 	
+	@Column
+	private String email;
+
 	@Column
 	private String password;
 	
@@ -21,17 +27,26 @@ public class MemberVO extends DefaultDateVO {
 	private String nickName;
 	
 	@Column
-	private String email;
-	
-	@Column
 	private String userType;
 
-	public String getMemberId() {
-		return memberId;
+	@Column
+	private Integer regUserSeq;
+
+
+	public String getSeq() {
+		return this.seq;
 	}
 
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
+
+	public Integer getRegUserSeq() {
+		return this.regUserSeq;
+	}
+
+	public void setRegUserSeq(Integer regUserSeq) {
+		this.regUserSeq = regUserSeq;
 	}
 
 	public String getPassword() {
