@@ -5,9 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import com.hhs.codeboard.common.service.DefaultVO;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name="code_board_manager")
 public class BoardManagerVO extends DefaultVO{
+
+	private static final long serialVersionUID = 5738213743471877845L;
 
 	@Column
 	private String title;
@@ -18,20 +25,5 @@ public class BoardManagerVO extends DefaultVO{
 	@Column
 	private String type;
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 	
 }

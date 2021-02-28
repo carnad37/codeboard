@@ -9,8 +9,16 @@ import javax.persistence.MappedSuperclass;
 
 import com.hhs.codeboard.jpa.entity.MemberVO;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class DefaultVO extends DefaultDateVO {
+
+	private static final long serialVersionUID = 3989969904364677147L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,28 +32,4 @@ public abstract class DefaultVO extends DefaultDateVO {
 	@JoinColumn(name="modUserSeq")
 	private MemberVO modUser;
 
-	public Integer getSeq() {
-		return seq;
-	}
-	public void setSeq(Integer seq) {
-		this.seq = seq;
-	}
-
-	public MemberVO getRegUser() {
-		return this.regUser;
-	}
-
-	public void setRegUser(MemberVO regUser) {
-		this.regUser = regUser;
-	}
-
-	public MemberVO getModUser() {
-		return this.modUser;
-	}
-
-	public void setModUser(MemberVO modUser) {
-		this.modUser = modUser;
-	}
-
-	
 }

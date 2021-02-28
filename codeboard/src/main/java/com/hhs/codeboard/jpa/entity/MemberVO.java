@@ -8,10 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.hhs.codeboard.common.service.DefaultDateVO;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "member")
 public class MemberVO extends DefaultDateVO {
+
+	private static final long serialVersionUID = -3781361636538961523L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,53 +38,4 @@ public class MemberVO extends DefaultDateVO {
 	@Column
 	private Integer regUserSeq;
 
-
-	public String getSeq() {
-		return this.seq;
-	}
-
-	public void setSeq(String seq) {
-		this.seq = seq;
-	}
-
-	public Integer getRegUserSeq() {
-		return this.regUserSeq;
-	}
-
-	public void setRegUserSeq(Integer regUserSeq) {
-		this.regUserSeq = regUserSeq;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getNickName() {
-		return nickName;
-	}
-
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getUserType() {
-		return userType;
-	}
-
-	public void setUserType(String userType) {
-		this.userType = userType;
-	}
-	
 }

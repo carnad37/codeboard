@@ -6,9 +6,16 @@ import javax.persistence.Table;
 
 import com.hhs.codeboard.common.service.DefaultVO;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name="code_board_menu")
 public class MenuVO extends DefaultVO{
+
+	private static final long serialVersionUID = 1L;
 
 	@Column
 	private String title;
