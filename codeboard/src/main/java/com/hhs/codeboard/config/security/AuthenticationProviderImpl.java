@@ -1,7 +1,7 @@
 package com.hhs.codeboard.config.security;
 
 
-import com.hhs.codeboard.jpa.entity.UserDetailsVO;
+import com.hhs.codeboard.jpa.entity.MemberVO;
 import com.hhs.codeboard.member.service.MemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,10 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
-        String userEmail = token.getName();
-        String userPasswd = (String) token.getCredentials();
+        String userEmail = (String) authentication.getPrincipal();
+        String userPasswd = (String) authentication.getCredentials();
 
-        UserDetailsVO userVO = (UserDetailsVO) memberService.loadUserByUsername(userEmail);
+        MemberVO userVO = (MemberVO) memberService.loadUserByUsername(userEmail);
 
         if (!passwordEncoder.matches(userPasswd, userVO.getPassword())) {
             // throw new BadCredentialsException("잘못된 로그인 정보입니다.");

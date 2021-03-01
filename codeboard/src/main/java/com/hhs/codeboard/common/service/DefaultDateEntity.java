@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class DefaultDateVO implements Serializable {
+public abstract class DefaultDateEntity implements Serializable {
 
 	private static final long serialVersionUID = -7080461491952563362L;
 

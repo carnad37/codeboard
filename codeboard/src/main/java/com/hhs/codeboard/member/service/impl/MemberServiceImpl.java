@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hhs.codeboard.enumeration.UserTypeEnum;
+import com.hhs.codeboard.jpa.entity.MemberEntity;
 import com.hhs.codeboard.jpa.entity.MemberVO;
-import com.hhs.codeboard.jpa.entity.UserDetailsVO;
 import com.hhs.codeboard.jpa.service.MemberDAO;
 import com.hhs.codeboard.member.service.MemberService;
 
@@ -30,8 +30,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
-		Optional<MemberVO> memberEntityWrapper = memberDAO.findByEmail(memberId);
-		MemberVO memberVO = memberEntityWrapper.orElseThrow(() -> new UsernameNotFoundException("가입정보가 없습니다"));
+		Optional<MemberEntity> memberEntityWrapper = memberDAO.findByEmail(memberId);
+		MemberEntity memberVO = memberEntityWrapper.orElseThrow(() -> new UsernameNotFoundException("가입정보가 없습니다"));
 		//권한 리스트
 		List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -44,11 +44,11 @@ public class MemberServiceImpl implements MemberService {
 			throw new UsernameNotFoundException("가입승인 대기중입니다");
 		}
 		
-		return new UserDetailsVO(memberVO);
+		return new MemberVO(memberVO, authorities);
 	}
 
 	@Override
-	public String insertUser(MemberVO memberVO) {
+	public String insertUser(MemberEntity memberVO) {
         memberVO.setRegDate(LocalDateTime.now());
 		memberVO.setUserType(UserTypeEnum.NORMAL.getTypeCode());
         // 비밀번호 암호화

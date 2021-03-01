@@ -19,14 +19,6 @@ public enum UserTypeEnum {
         return typeName;
     }
 
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
     public boolean matchTypeCode(String userType) {
         return this.typeCode.equals(typeCode);
     }

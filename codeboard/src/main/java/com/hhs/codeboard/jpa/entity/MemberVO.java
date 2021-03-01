@@ -1,41 +1,86 @@
 package com.hhs.codeboard.jpa.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Collection;
+import java.util.List;
 
-import com.hhs.codeboard.common.service.DefaultDateVO;
-import lombok.Getter;
-import lombok.Setter;
+import com.hhs.codeboard.enumeration.UserTypeEnum;
+import com.hhs.codeboard.menu.service.MenuVO;
 
-@Entity
-@Getter
-@Setter
-@Table(name = "member")
-public class MemberVO extends DefaultDateVO {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
-	private static final long serialVersionUID = -3781361636538961523L;
+public class MemberVO extends User{
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private String seq;
+	public  MemberVO(String username, String password, Collection<GrantedAuthority> authorities) {
+		super(username, password, authorities);
+	}
 	
-	@Column
-	private String email;
+	public  MemberVO(MemberEntity memberVO, Collection<GrantedAuthority> authorities) {
+		super(memberVO.getEmail(), memberVO.getPassword(), !UserTypeEnum.WAIT.getTypeCode().equals(memberVO.getUserType()),
+			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
+		this.seq = memberVO.getSeq();
+	}
 
-	@Column
-	private String password;
-	
-	@Column
-	private String nickName;
-	
-	@Column
-	private String userType;
+	public  MemberVO(String username, String password, boolean enabled,
+	 boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<GrantedAuthority> authorities) {
+		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+	}
 
-	@Column
-	private Integer regUserSeq;
+	private static final long serialVersionUID = 3262283502601992796L;
+	
+	private Integer seq;
+	private List<MenuVO> menuList;
+
+	@Override
+	public Collection<GrantedAuthority> getAuthorities() {
+		return super.getAuthorities();
+	}
+	
+	@Override
+	public String getPassword() {
+		return super.getPassword();
+	}
+
+	@Override
+	public String getUsername() {
+		return super.getUsername();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return super.isAccountNonExpired();
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return super.isAccountNonLocked();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return super.isCredentialsNonExpired();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return isEnabled();
+	}
+
+	public List<MenuVO> getMenuList() {
+		return this.menuList;
+	}
+
+	public void setMenuList(List<MenuVO> menuList) {
+		this.menuList = menuList;
+	}
+
+	public Integer getSeq() {
+		return this.seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+
 
 }

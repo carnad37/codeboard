@@ -1,64 +1,64 @@
 package com.hhs.codeboard.menu.service;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.hhs.codeboard.common.service.DefaultVO;
+import com.hhs.codeboard.enumeration.MenuTypeEnum;
+import com.hhs.codeboard.jpa.entity.BoardManagerEntity;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-@Table(name="code_board_menu")
-public class MenuVO extends DefaultVO{
+public class MenuVO implements Serializable{
 
-	private static final long serialVersionUID = 1L;
+    @Autowired
+    MenuService menuService;
 
-	@Column
-	private String title;
-	
-	@Column
-	private Integer parentSeq;
-	
-	@Column
-	private String type;
+    private static final long serialVersionUID = 4741866450856421798L;
+    public final static String MENU_SEQ_COOKIE_NAME = "MID";
+    public final static int MENU_SEQ_NOT_SELECT = 0;
 
-	@Column
-	private Integer BoardSeq;
-	
-	public String getTitle() {
-		return title;
-	}
+    public MenuVO () {
+        super();
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public MenuVO (Integer seq, String title, String url, String type) {
+        super();
+        this.seq =seq;
+        this.title = title;
+        this.url = url;
+        this.type = MenuTypeEnum.BOARD.getMenuType();
+    }
 
-	public Integer getParentSeq() {
-		return parentSeq;
-	}
+    public MenuVO (BoardManagerEntity boardManager) {
+        super();
+        this.seq = boardManager.getSeq();
+        this.title = boardManager.getTitle();
+        this.url =  menuService.getBoardUrl(boardManager.getSeq());
+        this.type = MenuTypeEnum.BOARD.getMenuType();
+    }
 
-	public void setParentSeq(Integer parentSeq) {
-		this.parentSeq = parentSeq;
-	}
+    public MenuVO (List<BoardManagerEntity> boardManagerList) {
+        super();
+        childrenMenu = new ArrayList<>();
+        for (BoardManagerEntity targetVO : boardManagerList) {
+            childrenMenu.add(new MenuVO(targetVO));
+        }
+    }
 
-	public String getType() {
-		return type;
-	}
+    private Integer seq;
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    private String title;
 
-	public Integer getBoardSeq() {
-		return BoardSeq;
-	}
+    private String url;
 
-	public void setBoardSeq(Integer boardSeq) {
-		BoardSeq = boardSeq;
-	}
-	
+    private String type;
+
+    private List<MenuVO> childrenMenu;
+    
 }
