@@ -1,0 +1,87 @@
+DROP DATABASE IF EXISTS `jpa`;
+CREATE DATABASE IF NOT EXISTS `jpa`;
+
+CREATE TABLE `code_board_article` (
+  `SEQ` int(11) NOT NULL AUTO_INCREMENT COMMENT '게시물 번호',
+  `BOARD_SEQ` int(11) NOT NULL,
+  `TITLE` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `CONTENT` mediumtext COLLATE utf8mb4_general_ci COMMENT '내용',
+  `REG_DATE` datetime NOT NULL,
+  `REG_USER_SEQ` int(11) NOT NULL,
+  `MOD_DATE` datetime DEFAULT NULL,
+  `MOD_USER_SEQ` int(11) DEFAULT NULL,
+  `DEL_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`SEQ`),
+  KEY `FN_BOARD_ARTICLE_idx` (`BOARD_SEQ`),
+  CONSTRAINT `FN_BOARD_ARTICLE` FOREIGN KEY (`BOARD_SEQ`) REFERENCES `code_board_manager` (`SEQ`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `code_board_manager` (
+  `SEQ` int(11) NOT NULL AUTO_INCREMENT COMMENT '구분자',
+  `TITLE` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `USE_F` varchar(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Y',
+  `BLOG_F` varchar(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'N',
+  `REG_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `REG_USER_SEQ` int(11) NOT NULL,
+  `MOD_DATE` datetime DEFAULT NULL,
+  `MOD_USER_SEQ` int(11) DEFAULT NULL,
+  `DEL_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`SEQ`),
+  KEY `SEQ_idx` (`REG_USER_SEQ`,`MOD_USER_SEQ`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='게시판 관리자';
+
+CREATE TABLE `code_category` (
+  `SEQ` int(11) NOT NULL AUTO_INCREMENT COMMENT '구분자',
+  `BOARD_SEQ` int(11) NOT NULL,
+  `TITLE` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `USE_F` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Y',
+  `REG_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `REG_USER_SEQ` int(11) NOT NULL,
+  `MOD_DATE` datetime DEFAULT NULL,
+  `MOD_USER_SEQ` int(11) DEFAULT NULL,
+  `DEL_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`SEQ`),
+  KEY `SEQ_idx` (`REG_USER_SEQ`,`MOD_USER_SEQ`),
+  KEY `FN_BOARD_CATE_idx` (`BOARD_SEQ`),
+  CONSTRAINT `FN_BOARD_CATE` FOREIGN KEY (`BOARD_SEQ`) REFERENCES `code_board_manager` (`SEQ`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='게시판 관리자';
+
+CREATE TABLE `code_category_item` (
+  `SEQ` int(11) NOT NULL AUTO_INCREMENT COMMENT '구분자',
+  `CATEGORY_SEQ` int(11) NOT NULL,
+  `TITLE` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `REG_DATE` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `REG_USER_SEQ` int(11) NOT NULL,
+  `MOD_DATE` datetime DEFAULT NULL,
+  `MOD_USER_SEQ` int(11) DEFAULT NULL,
+  `DEL_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`SEQ`),
+  KEY `SEQ_idx` (`REG_USER_SEQ`,`MOD_USER_SEQ`),
+  KEY `FN_CATE_ITEM_idx` (`CATEGORY_SEQ`),
+  CONSTRAINT `FN_CATE_ITEM` FOREIGN KEY (`CATEGORY_SEQ`) REFERENCES `code_category` (`SEQ`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='게시판 관리자';
+
+CREATE TABLE `connect_category_article` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ARTICLE_SEQ` int(11) NOT NULL,
+  `CATE_ITEM_SEQ` int(11) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FN_CON_CATE_ITEM_idx` (`CATE_ITEM_SEQ`),
+  KEY `FN_CON_ARTICLE_idx` (`ARTICLE_SEQ`),
+  CONSTRAINT `FN_CON_ARTICLE` FOREIGN KEY (`ARTICLE_SEQ`) REFERENCES `code_board_article` (`SEQ`),
+  CONSTRAINT `FN_CON_CATE_ITEM` FOREIGN KEY (`CATE_ITEM_SEQ`) REFERENCES `code_category_item` (`SEQ`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='게시판 관리자';
+
+CREATE TABLE `member` (
+  `SEQ` int(11) NOT NULL AUTO_INCREMENT,
+  `EMAIL` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `PASSWORD` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `NICK_NAME` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `USER_TYPE` varchar(1) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'A는 amdin, N은 normal',
+  `REG_DATE` datetime NOT NULL,
+  `MOD_DATE` datetime DEFAULT NULL,
+  `MOD_USER_SEQ` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `DEL_DATE` datetime DEFAULT NULL,
+  PRIMARY KEY (`SEQ`),
+  UNIQUE KEY `EMAIL_UNIQUE` (`EMAIL`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
