@@ -10,4 +10,6 @@ import com.hhs.codeboard.jpa.entity.BoardManagerEntity;
 @Repository
 public interface BoardDAO extends JpaRepository<BoardManagerEntity, Long> {
     List<BoardManagerEntity> findAllByRegUserSeq(Integer regUserSeq);
+
+    BoardManagerEntity findBySeq(Integer boardSeq);
 }

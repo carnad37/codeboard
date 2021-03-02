@@ -52,7 +52,7 @@ public class MenuService {
     }
 
     public String getBoardUrl(Integer boardSeq) {
-        return "/board/" + boardSeq + "/article";
+        return "/board/" + boardSeq + "/list";
     }
 
     public List<Integer> getSiteAcitveByDepth (List<MenuVO> menuList, Integer activeSeq) {

@@ -1,7 +1,13 @@
 package com.hhs.codeboard.jpa.entity;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.hhs.codeboard.common.service.DefaultEntity;
 
@@ -34,5 +40,9 @@ public class BoardManagerEntity extends DefaultEntity{
 	/** 사용여부 */
 	@Column(name="use_f")
 	private String useF;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="boardSeq")
+    private Collection<BoardArticleEntity> articleList;
 	
 }
