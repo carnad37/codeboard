@@ -180,7 +180,7 @@
       <nav id="side-menu" class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li th:each="oneDepthMenu : ${menuList}" class="nav-item">
-            <a th:onclick="${oneDepthMenu.url} ? 'fncSetMID(' + ${oneDepthMenu.seq} + ');' : 'return false;'" th:href="@{${oneDepthMenu.url}}" class="nav-link" th:classappend="${activeList} and ${activeList[0] == oneDepthMenu.seq} ? 'active'">
+            <a th:onclick="'fncSetMID(' + ${oneDepthMenu.seq} + ');'" th:href="@{${oneDepthMenu.url}}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 <span th:text="${oneDepthMenu.title}" th:remove="tag"></span>
@@ -188,9 +188,8 @@
               </p>
             </a>
             <ul th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="nav nav-treeview">
-              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" class="nav-item" th:classappend="${activeList} and ${activeList[1] == oneDepthMenu.seq} ? 'active'">
-                <a th:if="${twoDepthMenu.url}">
-                <a th:unless="${twoDepthMenu.url}" th:onclick="'fncSetMID(' + ${twoDepthMenu.seq} + ');'" href="@{${twoDepthMenu.url}}" class="nav-link">
+              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" class="nav-item">
+                <a th:onclick="'fncSetMID(' + ${twoDepthMenu.seq} + ');'" th:href="@{${twoDepthMenu.url}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p th:text="${twoDepthMenu.title}"></p>
                 </a>

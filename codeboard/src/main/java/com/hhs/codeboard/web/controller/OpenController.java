@@ -3,6 +3,7 @@ package com.hhs.codeboard.web.controller;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.hhs.codeboard.jpa.entity.MemberEntity;
+import com.hhs.codeboard.jpa.entity.MemberVO;
 import com.hhs.codeboard.member.service.MemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,14 @@ public class OpenController {
 	MemberService memberService;
 
     @RequestMapping("/login")
-	public String login(@AuthenticationPrincipal MemberEntity loginVO,
+	public String login(@AuthenticationPrincipal MemberVO loginVO,
 			Model model) {		
 		if (loginVO != null) return "/main";
 		return "member/login";
 	}
 
 	@RequestMapping("/register")
-	public String register(@AuthenticationPrincipal MemberEntity loginVO,
+	public String register(@AuthenticationPrincipal MemberVO loginVO,
             @ModelAttribute MemberEntity insertVO,
             Model model) {
 		if (loginVO != null) return "/main";
@@ -36,7 +37,7 @@ public class OpenController {
 	}
 
 	@RequestMapping("/actionRegister")
-	public String actionRegister(@AuthenticationPrincipal MemberEntity loginVO,
+	public String actionRegister(@AuthenticationPrincipal MemberVO loginVO,
 			@ModelAttribute MemberEntity insertVO,
             Model model) throws Exception {
         if (loginVO != null) return "/main";
