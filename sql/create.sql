@@ -6,6 +6,7 @@ CREATE TABLE `code_board_article` (
   `BOARD_SEQ` int(11) NOT NULL,
   `TITLE` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
   `CONTENT` mediumtext COLLATE utf8mb4_general_ci COMMENT '내용',
+  `DISPLAY_F` varchar(1) DEFAULT 'Y' NOT NULL,
   `REG_DATE` datetime NOT NULL,
   `REG_USER_SEQ` int(11) NOT NULL,
   `MOD_DATE` datetime DEFAULT NULL,

@@ -9,7 +9,7 @@ import com.hhs.codeboard.jpa.entity.BoardArticleEntity;
 
 @Repository
 public interface ArticleDAO extends JpaRepository<BoardArticleEntity, Long> {
-    List<BoardArticleEntity> findAllByRegUserSeqAndDelDateIsNotNull(Integer regUserSeq);
+    List<BoardArticleEntity> findAllByRegUserSeqAndDelDateIsNull(Integer regUserSeq);
 
-    List<BoardArticleEntity> findAllByRegUserSeqAndBoardSeqAndDelDateIsNotNull(Integer regUserSeq, Integer boardSeq);
+    List<BoardArticleEntity> findAllByRegUserSeqAndBoardSeqAndDelDateIsNull(Integer regUserSeq, Integer boardSeq);
 }

@@ -44,9 +44,8 @@ public class BoardController {
     @RequestMapping("/{boardSeq}/list")
     public String list(@PathVariable(name = "boardSeq") String boardSeq
             , Model model) {
-        Optional<BoardManagerEntity> boardManager = boardDAO.findBySeq(Integer.parseInt(boardSeq));
-        List<BoardArticleEntity> articleList = new ArrayList<>(boardManager.getArticleList());
-        model.addAttribute("articleList", articleList);
+        // Optional<BoardManagerEntity> boardManager = boardDAO.findBySeq(Integer.parseInt(boardSeq));
+        // model.addAttribute("articleList", articleList);
         return "/board/list";
     }
 

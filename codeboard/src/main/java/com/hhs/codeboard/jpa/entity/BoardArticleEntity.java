@@ -28,9 +28,12 @@ public class BoardArticleEntity extends DefaultEntity{
     @Column
     private String content;
 
-    @Column
+    @Column(name="display_f")
     private String displayF;
     
+    @Column
+    private Integer boardSeq;
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="articleSeq")
     private Collection<BoardCateArticleEntity> categorys;
