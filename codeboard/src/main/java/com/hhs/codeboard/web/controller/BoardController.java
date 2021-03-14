@@ -1,11 +1,8 @@
 package com.hhs.codeboard.web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.hhs.codeboard.jpa.entity.BoardArticleEntity;
-import com.hhs.codeboard.jpa.entity.BoardManagerEntity;
 import com.hhs.codeboard.jpa.entity.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 import com.hhs.codeboard.jpa.service.BoardDAO;

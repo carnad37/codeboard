@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.BoardManagerEntity;
+import com.hhs.codeboard.jpa.entity.MenuEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,6 +44,14 @@ public class MenuVO implements Serializable{
         this.type = MenuTypeEnum.BOARD.getMenuType();
     }
 
+    public MenuVO (MenuEntity menuEntity) {
+        super();
+        this.seq = menuEntity.getSeq();
+        this.title = menuEntity.getTitle();
+        this.url =  menuService.getBoardUrl(menuEntity.getBoardManager());
+        this.type = MenuTypeEnum.BOARD.getMenuType();
+    }
+
     public MenuVO (List<BoardManagerEntity> boardManagerList) {
         super();
         childrenMenu = new ArrayList<>();
@@ -54,6 +63,8 @@ public class MenuVO implements Serializable{
     private Integer seq;
 
     private String title;
+
+    private Integer boardSeq;
 
     private String url;
 

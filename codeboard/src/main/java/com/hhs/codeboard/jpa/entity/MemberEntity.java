@@ -1,10 +1,15 @@
 package com.hhs.codeboard.jpa.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.hhs.codeboard.common.service.DefaultDateEntity;
@@ -37,5 +42,9 @@ public class MemberEntity extends DefaultDateEntity {
 
 	@Column
 	private Integer modUserSeq;
+
+	@OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="regUserSeq")
+	private List<MenuEntity> menuList;
 
 }

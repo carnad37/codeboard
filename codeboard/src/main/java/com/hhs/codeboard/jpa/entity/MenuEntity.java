@@ -22,10 +22,16 @@ public class MenuEntity extends DefaultEntity{
     private static final long serialVersionUID = 6217465463857529869L;
 
     @Column
+    private String title;
+
+    @Column
     private Integer order;
 
     @Column
     private String menuType;
+
+    @Column 
+    private Integer boardSeq;
 
     @ManyToOne
     @JoinColumn(name="boardSeq")
@@ -36,5 +42,6 @@ public class MenuEntity extends DefaultEntity{
 
     @Column(unique = true)
     private String uuid;
+    
 
 }
