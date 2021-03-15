@@ -16,15 +16,15 @@ import org.springframework.util.CollectionUtils;
 @Component
 public class MenuService {
 
-    public List<MenuVO> initMenuList() {
+    public List<MenuVO> initMenuList(List<MenuVO> dbMenuList) {
+
         List<MenuVO> menuList = new ArrayList<>();
         List<MenuVO> setInnerList = new ArrayList<>();
 
         //공통 설정
-        MenuVO setMenu = new MenuVO(MenuSeqEnum.CONFIG_TOP.getMenuSeq(), "설정메뉴", null, null);
+        MenuVO setMenu = new MenuVO(0, "설정메뉴", null, MenuTypeEnum.CONFIG.getMenuType());
         //공통 게시판
-        MenuVO commonBoardMenu = new MenuVO(MenuSeqEnum.COMMON_BOARD.getMenuSeq(),
-            "공통 게시판", this.getBoardUrl(-1), null);
+        MenuVO commonBoardMenu = new MenuVO(1, "공통 게시판", this.getBoardUrl(-1), null);
 
         menuList.add(setMenu);
         menuList.add(commonBoardMenu);

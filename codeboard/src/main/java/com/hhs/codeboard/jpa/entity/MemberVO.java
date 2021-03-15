@@ -1,5 +1,6 @@
 package com.hhs.codeboard.jpa.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class MemberVO extends User{
 		super(memberVO.getEmail(), memberVO.getPassword(), !UserTypeEnum.WAIT.getTypeCode().equals(memberVO.getUserType()),
 			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
 		this.seq = memberVO.getSeq();
+		memberVO.getMenuList().forEach(
+			(MenuEntity entity) -> menuList.add(new MenuVO(entity))
+		);;
 	}
 
 	public  MemberVO(String username, String password, boolean enabled,
@@ -29,7 +33,7 @@ public class MemberVO extends User{
 	private static final long serialVersionUID = 3262283502601992796L;
 	
 	private Integer seq;
-	private List<MenuVO> menuList;
+	private List<MenuVO> menuList = new ArrayList<>();
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {

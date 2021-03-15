@@ -33,10 +33,6 @@ public class MenuEntity extends DefaultEntity{
     @Column 
     private Integer boardSeq;
 
-    @ManyToOne
-    @JoinColumn(name="boardSeq")
-    private BoardManagerEntity boardManager;
-
     @Column
     private String menuUrl;
 

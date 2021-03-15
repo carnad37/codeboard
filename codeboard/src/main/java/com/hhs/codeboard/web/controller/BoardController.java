@@ -27,6 +27,7 @@ public class BoardController {
     @RequestMapping("/config")
     public String config() {
         //게시판 추가가 가능해야함.
+        
         return "/board/config";
     }
 

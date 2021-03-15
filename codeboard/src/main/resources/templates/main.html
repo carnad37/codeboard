@@ -137,8 +137,8 @@
                 <p class="text-center mb-3">1 Depth &nbsp;&nbsp;&nbsp; 
                     <i class="fas fa-plus-square text-info font-size-25 align-middle mr-1"></i>
                 </p>      
-                <ul th:each="menu : ${menuList}" class="menu-group col-md-9 col-12 rounded text-center border mx-auto border-dark board-width-3 p-3">                    
-                    <li class="row m-0 p-0">
+                <ul class="menu-group col-md-9 col-12 rounded text-center border mx-auto border-dark board-width-3 p-3">                    
+                    <li th:each="menu : ${menuList}" class="row m-0 p-0">
                         <p th:text="${menu.title}" class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button"></p>
                         <p class="mb-0 col-3">
                             <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>

@@ -1,5 +1,6 @@
 package com.hhs.codeboard.jpa.entity;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -43,8 +44,8 @@ public class MemberEntity extends DefaultDateEntity {
 	@Column
 	private Integer modUserSeq;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="regUserSeq")
-	private List<MenuEntity> menuList;
+	private Collection<MenuEntity> menuList;
 
 }
