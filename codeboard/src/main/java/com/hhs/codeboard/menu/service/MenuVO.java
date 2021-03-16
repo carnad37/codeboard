@@ -50,6 +50,7 @@ public class MenuVO implements Serializable{
         this.title = menuEntity.getTitle();
         this.url =  "/board" + menuEntity.getUuid();
         this.type = MenuTypeEnum.BOARD.getMenuType();
+        this.order = menuEntity.getOrder();
     }
 
     public MenuVO (List<BoardManagerEntity> boardManagerList) {
@@ -66,10 +67,13 @@ public class MenuVO implements Serializable{
 
     private Integer boardSeq;
 
+    private Integer parentSeq;
+
     private String url;
 
     private String type;
 
     private List<MenuVO> childrenMenu;
     
+    private Integer order;
 }

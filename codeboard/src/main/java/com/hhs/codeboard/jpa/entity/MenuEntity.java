@@ -33,6 +33,9 @@ public class MenuEntity extends DefaultEntity{
     @Column 
     private Integer boardSeq;
 
+    @Column 
+    private Integer parentSeq;
+
     @Column
     private String menuUrl;
 

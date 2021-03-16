@@ -30,17 +30,17 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			Authentication authentication) throws ServletException, IOException {
         
         MemberVO memberVO = (MemberVO) authentication.getPrincipal();
-		List<MenuVO> menuList = menuService.initMenuList();
+		// List<MenuVO> menuList = menuService.initMenuList(null);
 
-		List<BoardManagerEntity> boardManagerList = boardDAO.findAllByRegUserSeq(memberVO.getSeq());
+		// List<BoardManagerEntity> boardManagerList = boardDAO.findAllByRegUserSeq(memberVO.getSeq());
 
-		//boardList를 얻어야함. 해당 boardSeq들이 필요.
-		//정렬에 관해선 나중에 boardManager 테이블에 order 추가.
-		boardManagerList.forEach(
-			boardManager -> menuList.add(new MenuVO(boardManager))
-		);
+		// //boardList를 얻어야함. 해당 boardSeq들이 필요.
+		// //정렬에 관해선 나중에 boardManager 테이블에 order 추가.
+		// boardManagerList.forEach(
+		// 	boardManager -> menuList.add(new MenuVO(boardManager))
+		// );
 		
-		memberVO.setMenuList(menuList);
+		// memberVO.setMenuList(menuList);
 
         response.sendRedirect("/main");
 	}

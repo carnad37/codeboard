@@ -2,7 +2,13 @@ package com.hhs.codeboard.enumeration;
 
 public enum MenuTypeEnum {
     
-    BOARD("B"), CONFIG("C");
+    BOARD("B")
+    , MENU("M")
+    , BOARD_CONFIG("D")
+    , MENU_CONFIG("U")
+    , COMMON_BOARD("C")
+    , STATIC_MENU("S")
+    , CATEGORY_CONFIG("Y");
 
     private String menuType;
 
