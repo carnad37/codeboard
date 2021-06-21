@@ -23,7 +23,7 @@ public class BoardCateArticleEntity implements Serializable{
     private static final long serialVersionUID = -701957800132578608L;
 
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer seq;
 
     @ManyToOne(fetch = FetchType.EAGER)

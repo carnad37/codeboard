@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.hhs</groupId>
 	<artifactId>codeboard</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>	
 	<name>codeboard</name>
 	<description>code board system</description>
 
@@ -44,12 +44,32 @@
 			<artifactId>mariadb-java-client</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- DATABASE -->
 		<dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
 		    <version>8.0.20</version>
 		</dependency>
-				
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/oracle.osdt/ojdbc8.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>osdt_cert</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/oracle.osdt/osdt_cert.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>osdt_core</artifactId>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/oracle.osdt/osdt_core.jar</systemPath>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -97,6 +117,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
+
 	</dependencies>
 	
 	<build>
@@ -105,6 +126,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<includeSystemScope>true</includeSystemScope>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

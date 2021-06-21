@@ -26,7 +26,7 @@ public class MemberEntity extends DefaultDateEntity {
 	private static final long serialVersionUID = -3781361636538961523L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer seq;
 	
 	@Column
