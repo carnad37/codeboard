@@ -80,12 +80,18 @@
                     }
                 });
 
-                $(".fas.fa-plus-square").click(function(){
-                    
+                $(document).on("click", ".fas.fa-plus-square", function(){
+                    let html = '<li class="row m-0 p-0 ui-sortable-handle">';
+                    html += '<p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴</p>';
+                    html += '<p class="mb-0 col-3">';
+                    html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
+                    html += '</p></li>';
+                    $(this).closest(".menu-tab").find(".menu-group").append($(html));
                 });
-                $(".fas.fa-minus-square").click(function(){
+                $(document).on("click", ".fas.fa-minus-square", function(){
+                    $(this).closest("li").remove();
+                });
 
-                });
             });
 
             function resetChildrenList (uuid) {
