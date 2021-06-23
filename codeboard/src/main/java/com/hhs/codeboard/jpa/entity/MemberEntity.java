@@ -3,15 +3,7 @@ package com.hhs.codeboard.jpa.entity;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.hhs.codeboard.common.service.DefaultDateEntity;
 import lombok.Getter;
@@ -21,12 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "member")
+@TableGenerator(name = "SEQ_MEMBER", table = "SEQ_TABLE", allocationSize = 1)
 public class MemberEntity extends DefaultDateEntity {
 
 	private static final long serialVersionUID = -3781361636538961523L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.TABLE)
 	private Integer seq;
 	
 	@Column
