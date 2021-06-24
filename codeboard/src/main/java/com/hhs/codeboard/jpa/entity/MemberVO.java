@@ -20,9 +20,9 @@ public class MemberVO extends User{
 		super(memberVO.getEmail(), memberVO.getPassword(), !UserTypeEnum.WAIT.getTypeCode().equals(memberVO.getUserType()),
 			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
 		this.seq = memberVO.getSeq();
-		memberVO.getMenuList().forEach(
-			(MenuEntity entity) -> menuList.add(new MenuVO(entity))
-		);;
+//		memberVO.getMenuList().forEach(
+//			(MenuEntity entity) -> menuList.add(new MenuVO(entity))
+//		);
 	}
 
 	public  MemberVO(String username, String password, boolean enabled,

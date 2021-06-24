@@ -13,13 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "member")
-@TableGenerator(name = "SEQ_MEMBER", table = "SEQ_TABLE", allocationSize = 1)
+@SequenceGenerator(name="seqMemberGenerator", sequenceName = "seqMember", initialValue = 1, allocationSize = 1)
 public class MemberEntity extends DefaultDateEntity {
 
 	private static final long serialVersionUID = -3781361636538961523L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="seqMemberGenerator")
 	private Integer seq;
 	
 	@Column
@@ -37,8 +37,8 @@ public class MemberEntity extends DefaultDateEntity {
 	@Column
 	private Integer modUserSeq;
 
-	@OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name="regUserSeq")
-	private Collection<MenuEntity> menuList;
+//	@OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name="regUserSeq")
+//	private Collection<MenuEntity> menuList;
 
 }

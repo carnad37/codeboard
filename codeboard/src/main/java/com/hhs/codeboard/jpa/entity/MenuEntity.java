@@ -41,6 +41,5 @@ public class MenuEntity extends DefaultEntity{
 
     @Column(unique = true)
     private String uuid;
-    
 
 }
