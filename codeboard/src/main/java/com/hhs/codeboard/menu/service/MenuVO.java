@@ -46,7 +46,7 @@ public class MenuVO implements Serializable{
 
     public MenuVO (MenuEntity menuEntity) {
         super();
-        this.seq = menuEntity.getSeq();
+        this.seq = menuEntity.getMenuSeq();
         this.title = menuEntity.getTitle();
         this.url =  "/board" + menuEntity.getUuid();
         this.type = MenuTypeEnum.BOARD.getMenuType();

@@ -37,8 +37,8 @@ public class MemberEntity extends DefaultDateEntity {
 	@Column
 	private Integer modUserSeq;
 
-//	@OneToMany(fetch = FetchType.EAGER)
-//    @JoinColumn(name="regUserSeq")
-//	private Collection<MenuEntity> menuList;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="regUserSeq")
+	private Collection<MenuEntity> menuList;
 
 }

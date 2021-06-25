@@ -2,13 +2,8 @@ package com.hhs.codeboard.jpa.entity;
 
 import java.util.Collection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import com.hhs.codeboard.common.service.DefaultEntity;
 
 import lombok.Getter;
@@ -29,6 +24,10 @@ public class BoardManagerEntity extends DefaultEntity{
 	 * cate <-> board table에서 얻은 cateList 필요.
 	 * cateList로 boardArticle을 검색.
 	 */
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer seq;
 
 	@Column
 	private String title;

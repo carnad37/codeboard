@@ -18,10 +18,6 @@ public abstract class DefaultEntity extends DefaultDateEntity {
 
 	private static final long serialVersionUID = 3989969904364677147L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer seq;
-
 	@Column
 	private Integer regUserSeq;
 

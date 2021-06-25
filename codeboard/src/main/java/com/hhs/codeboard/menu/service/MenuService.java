@@ -46,7 +46,7 @@ public class MenuService {
             MenuVO tMenuVO = new MenuVO(dbMenu);
             if (dbMenu.getParentSeq() != null) {
                 //부모값이 있는 하위 메뉴의 경우.
-                List<MenuVO> tList = childrenMap.computeIfAbsent(dbMenu.getSeq(), (Integer parentBoard) -> new ArrayList<>());
+                List<MenuVO> tList = childrenMap.computeIfAbsent(dbMenu.getMenuSeq(), (Integer parentBoard) -> new ArrayList<>());
                 tMenuVO.setChildrenMenu(tList);
             } else if (MenuTypeEnum.MENU.getMenuType().equals(tMenuVO.getType())) {
                 //부모값이 없고, 단순메뉴인경우.

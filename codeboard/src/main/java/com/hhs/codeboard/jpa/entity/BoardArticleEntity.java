@@ -2,12 +2,7 @@ package com.hhs.codeboard.jpa.entity;
 
 import java.util.Collection;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.hhs.codeboard.common.service.DefaultEntity;
 
@@ -21,7 +16,11 @@ import lombok.Setter;
 public class BoardArticleEntity extends DefaultEntity{
 
     private static final long serialVersionUID = 536546113468443744L;
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer seq;
+
     @Column
     private String title;
 
