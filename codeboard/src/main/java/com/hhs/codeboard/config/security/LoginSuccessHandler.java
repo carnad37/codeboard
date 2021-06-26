@@ -7,11 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hhs.codeboard.jpa.entity.BoardManagerEntity;
-import com.hhs.codeboard.jpa.entity.MemberVO;
+import com.hhs.codeboard.jpa.entity.board.BoardManagerEntity;
+import com.hhs.codeboard.util.common.SessionUtil;
+import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.BoardDAO;
-import com.hhs.codeboard.menu.service.MenuService;
-import com.hhs.codeboard.menu.service.MenuVO;
+import com.hhs.codeboard.web.service.menu.MenuService;
+import com.hhs.codeboard.web.service.menu.MenuVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -30,19 +31,20 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			Authentication authentication) throws ServletException, IOException {
         
         MemberVO memberVO = (MemberVO) authentication.getPrincipal();
-		// List<MenuVO> menuList = menuService.initMenuList(null);
+		List<MenuVO> menuList = menuService.initMenuList(memberVO.getMenuList());
 
-		// List<BoardManagerEntity> boardManagerList = boardDAO.findAllByRegUserSeq(memberVO.getSeq());
+//		List<BoardManagerEntity> boardManagerList = boardDAO.findAllByRegUserSeq(memberVO.getSeq());
 
-		// //boardList를 얻어야함. 해당 boardSeq들이 필요.
-		// //정렬에 관해선 나중에 boardManager 테이블에 order 추가.
-		// boardManagerList.forEach(
-		// 	boardManager -> menuList.add(new MenuVO(boardManager))
-		// );
-		
-		// memberVO.setMenuList(menuList);
+		//boardList를 얻어야함. 해당 boardSeq들이 필요.
+		//정렬에 관해선 나중에 boardManager 테이블에 order 추가.
+//		boardManagerList.forEach(
+//			boardManager -> menuList.add(new MenuVO(boardManager))
+//		);
 
-        response.sendRedirect("/main");
+		//가공된 MenuList를 memberVO와 session에 담는다.
+		memberVO.setMenuList(menuList);
+		SessionUtil.setSession(request, "menuList", menuList);
+		response.sendRedirect("/main");
 	}
 	
 }

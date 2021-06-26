@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import com.hhs.codeboard.jpa.entity.BoardArticleEntity;
+import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 
 @Repository
 public interface ArticleDAO extends JpaRepository<BoardArticleEntity, Long> {

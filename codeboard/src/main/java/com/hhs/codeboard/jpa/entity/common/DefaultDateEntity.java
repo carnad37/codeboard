@@ -1,4 +1,4 @@
-package com.hhs.codeboard.common.service;
+package com.hhs.codeboard.jpa.entity.common;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

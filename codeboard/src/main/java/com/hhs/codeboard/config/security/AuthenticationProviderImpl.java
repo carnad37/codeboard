@@ -1,8 +1,8 @@
 package com.hhs.codeboard.config.security;
 
 
-import com.hhs.codeboard.jpa.entity.MemberVO;
-import com.hhs.codeboard.member.service.MemberService;
+import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.web.service.member.MemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

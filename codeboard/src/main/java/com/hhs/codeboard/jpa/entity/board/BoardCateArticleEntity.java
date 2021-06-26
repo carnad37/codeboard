@@ -1,4 +1,4 @@
-package com.hhs.codeboard.jpa.entity;
+package com.hhs.codeboard.jpa.entity.board;
 
 import java.io.Serializable;
 
@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.hhs.codeboard.jpa.entity.board.BoardCateItemEntity;
 import lombok.Getter;
 import lombok.Setter;
 

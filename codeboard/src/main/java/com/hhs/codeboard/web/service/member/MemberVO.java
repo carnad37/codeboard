@@ -1,11 +1,13 @@
-package com.hhs.codeboard.jpa.entity;
+package com.hhs.codeboard.web.service.member;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import com.hhs.codeboard.enumeration.UserTypeEnum;
-import com.hhs.codeboard.menu.service.MenuVO;
+import com.hhs.codeboard.jpa.entity.member.MemberEntity;
+import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
+import com.hhs.codeboard.web.service.menu.MenuVO;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,9 +22,9 @@ public class MemberVO extends User{
 		super(memberVO.getEmail(), memberVO.getPassword(), !UserTypeEnum.WAIT.getTypeCode().equals(memberVO.getUserType()),
 			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
 		this.seq = memberVO.getSeq();
-//		memberVO.getMenuList().forEach(
-//			(MenuEntity entity) -> menuList.add(new MenuVO(entity))
-//		);
+		memberVO.getMenuList().forEach(
+			(MenuEntity entity) -> menuList.add(new MenuVO(entity))
+		);
 	}
 
 	public  MemberVO(String username, String password, boolean enabled,

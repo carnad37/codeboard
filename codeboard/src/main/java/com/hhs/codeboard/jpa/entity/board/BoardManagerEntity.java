@@ -1,10 +1,10 @@
-package com.hhs.codeboard.jpa.entity;
+package com.hhs.codeboard.jpa.entity.board;
 
 import java.util.Collection;
 
 import javax.persistence.*;
 
-import com.hhs.codeboard.common.service.DefaultEntity;
+import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="code_board_manager")
+@SequenceGenerator(name = "seqGenerator", sequenceName = "seqBoardManager")
 public class BoardManagerEntity extends DefaultEntity{
 
 	private static final long serialVersionUID = 5738213743471877845L;
@@ -24,10 +25,6 @@ public class BoardManagerEntity extends DefaultEntity{
 	 * cate <-> board table에서 얻은 cateList 필요.
 	 * cateList로 boardArticle을 검색.
 	 */
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer seq;
 
 	@Column
 	private String title;

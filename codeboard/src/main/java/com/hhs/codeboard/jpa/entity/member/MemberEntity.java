@@ -1,11 +1,11 @@
-package com.hhs.codeboard.jpa.entity;
+package com.hhs.codeboard.jpa.entity.member;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.*;
 
-import com.hhs.codeboard.common.service.DefaultDateEntity;
+import com.hhs.codeboard.jpa.entity.common.DefaultDateEntity;
+import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -20,4 +20,11 @@ public enum MenuTypeEnum {
         return this.menuType;
     }
 
+    public String getUrl(String uuid) {
+        if (MenuTypeEnum.BOARD.equals(this)) {
+            return "board/" + uuid + "/list";
+        }
+        return "menu/" + uuid + "/list";
+    }
+
 }

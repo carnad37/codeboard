@@ -1,26 +1,41 @@
-package com.hhs.codeboard.menu.service;
+package com.hhs.codeboard.web.service.menu.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
-import com.hhs.codeboard.jpa.entity.MenuEntity;
 
+import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
+import com.hhs.codeboard.jpa.service.BoardDAO;
+import com.hhs.codeboard.jpa.service.MenuDAO;
+import com.hhs.codeboard.web.service.menu.MenuService;
+import com.hhs.codeboard.web.service.menu.MenuVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 @Component
-public class MenuService {
+public class MenuServiceimpl implements MenuService {
 
-    public List<MenuVO> initMenuList(Collection<MenuEntity> dbMenuList) {
+    @Autowired
+    MenuDAO menuDAO;
+
+    @Override
+    public List<MenuVO> selectAllBoardMenu(int regUserSeq) {
+        List<MenuVO> resultList = new ArrayList<>();
+        List<MenuEntity> menuList = menuDAO.findAllByRegUserSeq(regUserSeq);
+        menuList.forEach(
+            menuVO -> resultList.add(new MenuVO(menuVO))
+        );
+        return resultList;
+    }
+
+    public List<MenuVO> initMenuList(List<MenuVO> dbMenuList) {
 
         List<MenuVO> menuList = new ArrayList<>();
         List<MenuVO> setInnerList = new ArrayList<>();
@@ -30,27 +45,23 @@ public class MenuService {
         //공통게시판 내용추가
         setInnerList.add(new MenuVO(0, "게시판 설정", "/board/config", MenuTypeEnum.BOARD_CONFIG.getMenuType()));
         setInnerList.add(new MenuVO(0, "메뉴 설정", "/menu/config", MenuTypeEnum.MENU_CONFIG.getMenuType()));
-        setInnerList.add(new MenuVO(0, "카테고리 설정", "/category/config", MenuTypeEnum.CATEGORY_CONFIG.getMenuType()));        
+        setInnerList.add(new MenuVO(0, "카테고리 설정", "/category/config", MenuTypeEnum.CATEGORY_CONFIG.getMenuType()));
 
         setMenu.setChildrenMenu(setInnerList);
         menuList.add(setMenu);
 
         //공통 게시판
-        MenuVO commonBoardMenu = new MenuVO(1, "공통 게시판", "/board/common", MenuTypeEnum.BOARD_CONFIG.getMenuType());
-        menuList.add(commonBoardMenu);
-
         Map<Integer, List<MenuVO>> childrenMap = new HashMap<>();
 
         //부모자식 구분하기
-        for (MenuEntity dbMenu : dbMenuList) {
-            MenuVO tMenuVO = new MenuVO(dbMenu);
+        for (MenuVO dbMenu : dbMenuList) {
             if (dbMenu.getParentSeq() != null) {
                 //부모값이 있는 하위 메뉴의 경우.
-                List<MenuVO> tList = childrenMap.computeIfAbsent(dbMenu.getMenuSeq(), (Integer parentBoard) -> new ArrayList<>());
-                tMenuVO.setChildrenMenu(tList);
-            } else if (MenuTypeEnum.MENU.getMenuType().equals(tMenuVO.getType())) {
+                List<MenuVO> tList = childrenMap.computeIfAbsent(dbMenu.getSeq(), (Integer parentBoard) -> new ArrayList<>());
+                dbMenu.setChildrenMenu(tList);
+            } else if (MenuTypeEnum.MENU.getMenuType().equals(dbMenu.getType())) {
                 //부모값이 없고, 단순메뉴인경우.
-                menuList.add(tMenuVO);
+                menuList.add(dbMenu);
             }
         }
 

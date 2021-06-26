@@ -2,16 +2,20 @@ package com.hhs.codeboard.web.controller;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
-import com.hhs.codeboard.jpa.entity.MemberEntity;
-import com.hhs.codeboard.jpa.entity.MemberVO;
-import com.hhs.codeboard.member.service.MemberService;
+import com.hhs.codeboard.jpa.entity.member.MemberEntity;
+import com.hhs.codeboard.util.common.SessionUtil;
+import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.web.service.member.MemberService;
 
+import com.hhs.codeboard.web.service.menu.MenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/open")
 @Controller
@@ -22,15 +26,15 @@ public class OpenController {
 
     @RequestMapping("/login")
 	public String login(@AuthenticationPrincipal MemberVO loginVO,
-			Model model) {		
-		if (loginVO != null) return "/main";
+				Model model, HttpServletRequest request) {
+		if (loginVO != null) return "redirect:/main";
 		return "member/login";
 	}
 
 	@RequestMapping("/register")
 	public String register(@AuthenticationPrincipal MemberVO loginVO,
-            @ModelAttribute MemberEntity insertVO,
-            Model model) {
+				@ModelAttribute MemberEntity insertVO,
+				Model model) {
 		if (loginVO != null) return "/main";
         model.addAttribute("insertVO", insertVO);
 		return "member/register";
@@ -38,8 +42,8 @@ public class OpenController {
 
 	@RequestMapping("/actionRegister")
 	public String actionRegister(@AuthenticationPrincipal MemberVO loginVO,
-			@ModelAttribute MemberEntity insertVO,
-            Model model) throws Exception {
+				@ModelAttribute MemberEntity insertVO,
+				Model model) throws Exception {
         if (loginVO != null) return "/main";
         try {
             memberService.insertUser(insertVO);

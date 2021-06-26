@@ -1,4 +1,4 @@
-package com.hhs.codeboard.common.service;
+package com.hhs.codeboard.jpa.entity.common;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -17,6 +17,10 @@ import lombok.Setter;
 public abstract class DefaultEntity extends DefaultDateEntity {
 
 	private static final long serialVersionUID = 3989969904364677147L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "seqGenerator")
+	private Integer seq;
 
 	@Column
 	private Integer regUserSeq;

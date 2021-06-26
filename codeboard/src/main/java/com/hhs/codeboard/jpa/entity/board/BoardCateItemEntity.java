@@ -1,8 +1,8 @@
-package com.hhs.codeboard.jpa.entity;
+package com.hhs.codeboard.jpa.entity.board;
 
 import javax.persistence.*;
 
-import com.hhs.codeboard.common.service.DefaultEntity;
+import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,13 +11,10 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="code_category_item")
+@SequenceGenerator(name = "seqGenerator", sequenceName = "seqCategoryItem")
 public class BoardCateItemEntity extends DefaultEntity{
 
     private static final long serialVersionUID = 4507117424141720882L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer seq;
 
     @Column
     private String title;

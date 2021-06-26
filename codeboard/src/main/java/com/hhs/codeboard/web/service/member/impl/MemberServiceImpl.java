@@ -1,4 +1,4 @@
-package com.hhs.codeboard.member.service.impl;
+package com.hhs.codeboard.web.service.member.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hhs.codeboard.enumeration.UserTypeEnum;
-import com.hhs.codeboard.jpa.entity.MemberEntity;
-import com.hhs.codeboard.jpa.entity.MemberVO;
+import com.hhs.codeboard.jpa.entity.member.MemberEntity;
+import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.MemberDAO;
-import com.hhs.codeboard.member.service.MemberService;
+import com.hhs.codeboard.web.service.member.MemberService;
 
 @Service
 public class MemberServiceImpl implements MemberService {

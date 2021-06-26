@@ -1,9 +1,9 @@
-package com.hhs.codeboard.jpa.entity;
+package com.hhs.codeboard.jpa.entity.board;
 import java.util.Collection;
 
 import javax.persistence.*;
 
-import com.hhs.codeboard.common.service.DefaultEntity;
+import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
 import lombok.Getter;
 import lombok.Setter;

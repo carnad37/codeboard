@@ -2,17 +2,21 @@ package com.hhs.codeboard.web.controller;
 
 import java.util.List;
 
-import com.hhs.codeboard.jpa.entity.BoardArticleEntity;
-import com.hhs.codeboard.jpa.entity.MemberVO;
+import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
+import com.hhs.codeboard.util.common.SessionUtil;
+import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 import com.hhs.codeboard.jpa.service.BoardDAO;
 
+import com.mysql.cj.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/board")
 @Controller
@@ -32,7 +36,7 @@ public class BoardController {
     }
 
     @RequestMapping("/list")
-    public String commonList(@AuthenticationPrincipal MemberVO memberVO, Model model) {
+    public String commonList(@AuthenticationPrincipal MemberVO memberVO, Model model, HttpServletRequest request) {
         //regUserSeq 랑 delDate로 조건을 건다.(모든 게시물)
         List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndDelDateIsNull(memberVO.getSeq());
         model.addAttribute("articleList", articleList);
