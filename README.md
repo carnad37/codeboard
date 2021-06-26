@@ -11,6 +11,7 @@
 * jpa, hibernate, spring data jpa를 통해 자동쿼리생성
 * mysql이나 oracle에서 모두 사용가능하게 GenerationType은 AUTO로 설정
 * github action을 이용한 자동배포
+* 이메일 인증을 통한 회원가입
 * (추가예정)
 
 > 개발환경
