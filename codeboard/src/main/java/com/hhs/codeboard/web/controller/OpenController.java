@@ -2,6 +2,7 @@ package com.hhs.codeboard.web.controller;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
+import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.jpa.entity.member.MemberEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/open")
 @Controller
-public class OpenController {
+public class OpenController extends LoggerController {
 
 	@Autowired
 	MemberService memberService;

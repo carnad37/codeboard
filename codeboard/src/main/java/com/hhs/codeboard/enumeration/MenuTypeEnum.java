@@ -1,19 +1,23 @@
 package com.hhs.codeboard.enumeration;
 
+import java.util.function.Function;
+
 public enum MenuTypeEnum {
     
-    BOARD("B")
-    , MENU("M")
-    , BOARD_CONFIG("D")
-    , MENU_CONFIG("U")
-    , COMMON_BOARD("C")
-    , STATIC_MENU("S")
-    , CATEGORY_CONFIG("Y");
+    BOARD("B", (uuid) -> "board/" + uuid + "link")
+    , MENU("M", (uuid) -> null)
+    , BOARD_CONFIG("D", null)
+    , MENU_CONFIG("U", null)
+    , COMMON_BOARD("C", null)
+    , STATIC_MENU("S", null)
+    , CATEGORY_CONFIG("Y", null);
 
     private String menuType;
+    private Function<String, String> url;
 
-    MenuTypeEnum (String menuType) {
+    MenuTypeEnum (String menuType, Function<String, String> url) {
         this.menuType = menuType;
+        this.url = url;
     }
 
     public String getMenuType() {
@@ -21,10 +25,14 @@ public enum MenuTypeEnum {
     }
 
     public String getUrl(String uuid) {
-        if (MenuTypeEnum.BOARD.equals(this)) {
-            return "board/" + uuid + "/list";
+        return url.apply(uuid);
+    }
+
+    public static MenuTypeEnum getEnumByMenuType(String menuType) {
+        for (MenuTypeEnum targetEnum : values()) {
+            if (targetEnum.getMenuType().equals(menuType)) return targetEnum;
         }
-        return "menu/" + uuid + "/list";
+        return null;
     }
 
 }

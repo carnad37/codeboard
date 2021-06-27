@@ -8,7 +8,6 @@ import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardManagerEntity;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 
-import com.hhs.codeboard.web.service.menu.impl.MenuServiceimpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Getter;
@@ -53,7 +52,7 @@ public class MenuVO implements Serializable{
         super();
         this.seq = menuEntity.getSeq();
         this.title = menuEntity.getTitle();
-        this.url =  "/board" + menuEntity.getUuid();
+        this.url =  MenuTypeEnum.getEnumByMenuType(menuEntity.getMenuType()).getUrl(menuEntity.getUuid());
         this.type = menuEntity.getMenuType();
         this.order = menuEntity.getMenuOrder();
     }

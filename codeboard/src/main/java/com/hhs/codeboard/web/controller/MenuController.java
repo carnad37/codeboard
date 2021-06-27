@@ -2,6 +2,7 @@ package com.hhs.codeboard.web.controller;
 
 import java.util.List;
 
+import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/menu")
-public class MenuController {
+public class MenuController extends LoggerController {
 
     @Autowired
     MenuService menuService;

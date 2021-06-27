@@ -17,4 +17,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             throws IOException, ServletException {
         response.sendRedirect("/open/login?error=" + URLEncoder.encode(exception.getMessage(), "UTF-8"));
     }
+
+
+
+
 }

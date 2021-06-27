@@ -188,12 +188,12 @@
               </p>
             </a>
             <ul th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="nav nav-treeview">
-              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" class="nav-item">
+              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" th:classappend="${twoDepthMenu.uuid == param.selectUUID} ? 'select'" class="nav-item">
                 <a th:onclick="'fncSetMID(' + ${twoDepthMenu.seq} + ');'" th:href="@{${twoDepthMenu.url}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p th:text="${twoDepthMenu.title}"></p>
                 </a>
-              </li>             
+              </li>
             </ul>
           </li>          
         </ul>
@@ -277,15 +277,23 @@
 <script src="/dist/js/pages/dashboard2.js"></script>
 
 <script>
-  // $(function(){
-  //   $("#side-menu").click(function(){
-  //     var menuSeq = $(this).data("menuSeq");
-  //     $.cookie('MID', menuSeq);
-  //   });
-  // });
-  function fncSetMID (menuSeq) {
-    $.cookie('MID', menuSeq, { path: '/' })
-  }
+  $(function(){
+    //선택된 메뉴를 활성화
+    let $menu_ul = $(".nav-item.select").parent("ul");
+    let $parent_li = $menu_ul.parent("li");
+    //부모 ul값이 있을땐 무한 반복.
+    do {
+      $menu_ul.show();
+      $parent_li.addClass("menu-is-opening menu-open");
+      $menu_ul = $parent_li.parent("ul");
+      $parent_li = $menu_ul.parent("li");
+    } while ($parent_li.parent("li").length > 0);
+
+  });
+
+  // function fncSetMID (menuSeq) {
+  //   $.cookie('MID', menuSeq, { path: '/' })
+  // }
 </script>
 
 <th:block layout:fragment="script"></th:block>

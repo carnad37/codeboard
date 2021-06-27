@@ -2,6 +2,7 @@ package com.hhs.codeboard.web.controller;
 
 import java.util.List;
 
+import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/board")
 @Controller
-public class BoardController {
+public class BoardController extends LoggerController {
     
     @Autowired
     BoardDAO boardDAO;
@@ -31,7 +32,6 @@ public class BoardController {
     @RequestMapping("/config")
     public String config() {
         //게시판 추가가 가능해야함.
-        
         return "/board/config";
     }
 
@@ -53,7 +53,6 @@ public class BoardController {
 
     @RequestMapping("/read")
     public String read() {
-        
         return "/board/read";
     }
 

@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hhs.codeboard.web.service.menu.MenuService;
-import com.hhs.codeboard.web.service.menu.impl.MenuServiceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
