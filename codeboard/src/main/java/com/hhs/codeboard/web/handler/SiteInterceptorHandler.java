@@ -3,6 +3,7 @@ package com.hhs.codeboard.web.handler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.menu.MenuService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class SiteInterceptorHandler implements HandlerInterceptor {
             response.sendRedirect("/main");
         }
 
+//        SessionUtil.setSession("selectMenu");
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        if (!(auth instanceof AnonymousAuthenticationToken)) {
 //            MemberVO memberVO = (MemberVO) auth.getPrincipal();

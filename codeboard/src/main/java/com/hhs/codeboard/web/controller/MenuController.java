@@ -2,7 +2,9 @@ package com.hhs.codeboard.web.controller;
 
 import java.util.List;
 
+import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
+import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
@@ -31,6 +33,7 @@ public class MenuController extends LoggerController {
         return "redirect:/main";
     }
 
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
     @RequestMapping("config")
     public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
             , Model model) {

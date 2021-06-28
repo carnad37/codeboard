@@ -36,7 +36,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="index3.html" class="nav-link" th:text="${session.viewMenuType}"></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -188,7 +188,7 @@
               </p>
             </a>
             <ul th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="nav nav-treeview">
-              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" th:classappend="${twoDepthMenu.uuid == param.selectUUID} ? 'select'" class="nav-item">
+              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" th:classappend="${twoDepthMenu.url == session.viewMenuType} ? 'select'" class="nav-item">
                 <a th:onclick="'fncSetMID(' + ${twoDepthMenu.seq} + ');'" th:href="@{${twoDepthMenu.url}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p th:text="${twoDepthMenu.title}"></p>
