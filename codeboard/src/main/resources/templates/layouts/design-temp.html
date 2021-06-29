@@ -179,23 +179,25 @@
       <!-- Sidebar Menu -->
       <nav id="side-menu" class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li th:each="oneDepthMenu : ${session.menuList}" class="nav-item">
-            <a th:onclick="'fncSetMID(' + ${oneDepthMenu.seq} + ');'" th:href="@{${oneDepthMenu.url}}" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                <span th:text="${oneDepthMenu.title}" th:remove="tag"></span>
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="nav nav-treeview">
-              <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" th:classappend="${twoDepthMenu.url == session.viewMenuType} ? 'select'" class="nav-item">
-                <a th:onclick="'fncSetMID(' + ${twoDepthMenu.seq} + ');'" th:href="@{${twoDepthMenu.url}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p th:text="${twoDepthMenu.title}"></p>
-                </a>
-              </li>
-            </ul>
-          </li>          
+          <!--/* MenuType :: 메뉴  */-->
+            <li th:each="oneDepthMenu : ${session.menuList}" class="nav-item">
+              <a th:href="@{${#strings.isEmpty(oneDepthMenu.url)}? '#' : oneDepthMenu.url}" class="nav-link"
+                 th:classappend="${@menuUtil.checkMenuActive(oneDepthMenu.menuType, session.viewMenuType, oneDepthMenu.uuid, session.viewMenuUUID)} ? 'active'">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  <span th:text="${oneDepthMenu.title}" th:remove="tag"></span>
+                  <i th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="nav nav-treeview">
+                <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" th:classappend="${twoDepthMenu.url == session.viewMenuType} ? 'select'" class="nav-item">
+                  <a th:href="@{${twoDepthMenu.url}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p th:text="${twoDepthMenu.title}"></p>
+                  </a>
+                </li>
+              </ul>
+            </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

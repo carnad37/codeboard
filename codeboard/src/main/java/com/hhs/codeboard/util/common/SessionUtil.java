@@ -2,6 +2,7 @@ package com.hhs.codeboard.util.common;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 public class SessionUtil {
 
     public static void setSession (HttpServletRequest request, String key, Object value) {

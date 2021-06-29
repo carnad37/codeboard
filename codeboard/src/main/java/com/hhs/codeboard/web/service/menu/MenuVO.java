@@ -55,6 +55,7 @@ public class MenuVO implements Serializable{
         this.url =  MenuTypeEnum.getEnumByMenuType(menuEntity.getMenuType()).getUrl(menuEntity.getUuid());
         this.type = menuEntity.getMenuType();
         this.order = menuEntity.getMenuOrder();
+        this.uuid = menuEntity.getUuid();
     }
 
     /**
@@ -78,6 +79,8 @@ public class MenuVO implements Serializable{
     private Integer parentSeq;
 
     private String url;
+
+    private String uuid;
 
     private String type;
 
