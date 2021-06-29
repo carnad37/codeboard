@@ -182,7 +182,7 @@
           <!--/* MenuType :: 메뉴  */-->
             <li th:each="oneDepthMenu : ${session.menuList}" class="nav-item">
               <a th:href="@{${#strings.isEmpty(oneDepthMenu.url)}? '#' : oneDepthMenu.url}" class="nav-link"
-                 th:classappend="${@menuUtil.checkMenuActive(oneDepthMenu.menuType, session.viewMenuType, oneDepthMenu.uuid, session.viewMenuUUID)} ? 'active'">
+                 th:classappend="${@menuUtil.checkMenuActive(oneDepthMenu.type, session.viewMenuType, oneDepthMenu.uuid, session.viewMenuUUID)} ? 'active'">
                 <i class="nav-icon fas fa-copy"></i>
                 <p>
                   <span th:text="${oneDepthMenu.title}" th:remove="tag"></span>
