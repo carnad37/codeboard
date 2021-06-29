@@ -33,7 +33,7 @@ public class MenuController extends LoggerController {
         return "redirect:/main";
     }
 
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
+    @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("config")
     public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
             , Model model) {
