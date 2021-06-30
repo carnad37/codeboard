@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.hhs.codeboard.jpa.service.BoardDAO;
 import com.hhs.codeboard.jpa.service.MenuDAO;
 import com.hhs.codeboard.web.service.menu.MenuService;
 import com.hhs.codeboard.web.service.menu.MenuVO;

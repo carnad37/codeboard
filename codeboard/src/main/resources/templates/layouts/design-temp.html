@@ -191,7 +191,8 @@
               </a>
               <ul th:if="${not #lists.isEmpty(oneDepthMenu.childrenMenu)}" class="nav nav-treeview">
                 <li th:each="twoDepthMenu : ${oneDepthMenu.childrenMenu}" class="nav-item">
-                  <a th:href="@{${twoDepthMenu.url}}" class="nav-link" th:classappend="${@menuUtil.checkMenuActive(twoDepthMenu.type, session.viewMenuType, twoDepthMenu.uuid, session.viewMenuUUID)} ? 'active'">
+                  <a th:href="@{${twoDepthMenu.url}}" class="nav-link"
+                     th:classappend="${@menuUtil.checkMenuActive(twoDepthMenu.type, session.viewMenuType, twoDepthMenu.uuid, session.viewMenuUUID)} ? 'active'">
                     <i class="far fa-circle nav-icon"></i>
                     <p th:text="${twoDepthMenu.title}"></p>
                   </a>

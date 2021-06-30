@@ -7,10 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hhs.codeboard.jpa.entity.board.BoardManagerEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
-import com.hhs.codeboard.jpa.service.BoardDAO;
 import com.hhs.codeboard.web.service.menu.MenuService;
 import com.hhs.codeboard.web.service.menu.MenuVO;
 
@@ -22,9 +20,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 	@Autowired
 	MenuService menuService;
-
-	@Autowired
-	BoardDAO boardDAO; 
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

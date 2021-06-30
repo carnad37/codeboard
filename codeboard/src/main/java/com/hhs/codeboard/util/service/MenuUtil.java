@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 public class MenuUtil {
 
     public static boolean checkMenuActive(String menuType, String viewMenuType, String uuid, String viewMenuUUID) {
-        if (StringUtils.hasText(uuid)) {
+        if (StringUtils.hasText(uuid) && StringUtils.hasText(viewMenuUUID)) {
             //실제 게시판등 기능 메뉴일경우
             return viewMenuUUID.equals(uuid);
         } else {

@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
+import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,8 +28,8 @@ public class BoardCategoryEntity extends DefaultEntity {
     private String useF;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="boardSeq")
-    private BoardManagerEntity boardManager;
+    @JoinColumn(name="menuSeq")
+    private MenuEntity menu;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="categorySeq")
