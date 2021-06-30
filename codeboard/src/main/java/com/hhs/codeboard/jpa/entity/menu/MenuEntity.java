@@ -7,6 +7,7 @@ import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import java.util.Collection;
 
@@ -42,9 +43,6 @@ public class MenuEntity extends DefaultEntity {
     private String menuType;
 
     @Column 
-    private Integer boardSeq;
-
-    @Column 
     private Integer parentSeq;
 
     @Column(unique = true)
@@ -54,18 +52,13 @@ public class MenuEntity extends DefaultEntity {
     @Column(name="public_f")
     private String publicF;
 
-    /** 사용여부 */
-    @Column(name="use_f")
-    private String useF;
-
     /**
      * 해당 메뉴가 Board타입일때만 호출
      * 그냥 호출해도 상관없긴한데, 하위값은 없음.
      */
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="boardSeq")
+    @Where(clause = "delDate = false")
     private Collection<BoardArticleEntity> articleList;
-
-
 
 }

@@ -6,6 +6,7 @@ import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
+import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 
@@ -55,27 +56,23 @@ public class BoardController extends LoggerController {
         return "/board/write";
     }
 
-
     @RequestMapping("/{boardSeq}/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     public String list(@PathVariable(name = "boardSeq") String boardSeq
             , Model model) {
-        // Optional<BoardManagerEntity> boardManager = boardDAO.findBySeq(Integer.parseInt(boardSeq));
-        // model.addAttribute("articleList", articleList);
+
         return "/board/list";
     }
 
     @RequestMapping("/{boardSeq}/write")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     public String write() {
-        
         return "/board/write";
     }
 
     @RequestMapping("/{boardSeq}/read")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     public String read() {
-
         return "/board/write";
     }
     
