@@ -11,5 +11,4 @@ import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 public interface ArticleDAO extends JpaRepository<BoardArticleEntity, Long> {
     List<BoardArticleEntity> findAllByRegUserSeqAndDelDateIsNull(Integer regUserSeq);
 
-    List<BoardArticleEntity> findAllByRegUserSeqAndBoardSeqAndDelDateIsNull(Integer regUserSeq, Integer boardSeq);
 }

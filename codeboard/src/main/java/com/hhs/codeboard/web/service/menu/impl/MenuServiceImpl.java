@@ -13,10 +13,12 @@ import com.hhs.codeboard.enumeration.MenuTypeEnum;
 
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.jpa.service.MenuDAO;
+import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
 import com.hhs.codeboard.web.service.menu.MenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class MenuServiceImpl implements MenuService {
@@ -35,7 +37,10 @@ public class MenuServiceImpl implements MenuService {
     }
 
 
-    public List<MenuVO> initMenuList(List<MenuVO> dbMenuList) {
+    public List<MenuVO> initMenuList(MemberVO memberVO) {
+
+        List<MenuVO> dbMenuList = memberVO.getMenuList();
+        Map<String, MenuVO> menuMap = new HashMap<>();
 
         List<MenuVO> menuList = new ArrayList<>();
         List<MenuVO> setInnerList = new ArrayList<>();
@@ -55,6 +60,8 @@ public class MenuServiceImpl implements MenuService {
 
         //부모자식 구분하기
         for (MenuVO dbMenu : dbMenuList) {
+            //uuid로 map을 만든다
+            if (StringUtils.hasText(dbMenu.getUuid())) menuMap.put(dbMenu.getUuid(), dbMenu);
             if (dbMenu.getParentSeq() != null) {
                 //부모값이 있는 하위 메뉴의 경우.
                 List<MenuVO> tList = childrenMap.computeIfAbsent(dbMenu.getSeq(), (Integer parentBoard) -> new ArrayList<>());

@@ -41,4 +41,11 @@ public class MemberEntity extends DefaultDateEntity {
     @JoinColumn(name="regUserSeq")
 	private Collection<MenuEntity> menuList;
 
+//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinTable(name="menu",
+//		joinColumns = @JoinColumn(name="regUserSeq"),
+//		inverseJoinColumns = @JoinColumn(name="menuSeq")
+//	)
+//	private Collection<MenuEntity> menuList;
+
 }

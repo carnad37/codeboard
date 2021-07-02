@@ -1,8 +1,6 @@
 package com.hhs.codeboard.web.service.member;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import com.hhs.codeboard.enumeration.UserTypeEnum;
 import com.hhs.codeboard.jpa.entity.member.MemberEntity;
@@ -35,7 +33,8 @@ public class MemberVO extends User{
 	private static final long serialVersionUID = 3262283502601992796L;
 	
 	private Integer seq;
-	private List<MenuVO> menuList = new ArrayList<>();
+	private List<MenuVO> menuList = null;
+	private Map<String, MenuVO> menuMap = null;
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {

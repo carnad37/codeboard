@@ -10,10 +10,12 @@ import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 
+import com.hhs.codeboard.web.service.menu.MenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -36,10 +38,11 @@ public class BoardController extends LoggerController {
 
     @RequestMapping("/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
-    public String managerList(@AuthenticationPrincipal MemberVO memberVO, Model model, HttpServletRequest request) {
+    public String managerList(@AuthenticationPrincipal MemberVO memberVO,
+              @ModelAttribute MenuVO menuVO, Model model) {
         //regUserSeq 랑 delDate로 조건을 건다.(모든 게시물)
-        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndDelDateIsNull(memberVO.getSeq());
-        model.addAttribute("articleList", articleList);
+//        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), menuVO.getSeq());
+//        model.addAttribute("articleList", articleList);
         return "/board/list";
     }
 
@@ -56,11 +59,12 @@ public class BoardController extends LoggerController {
         return "/board/write";
     }
 
-    @RequestMapping("/{boardSeq}/list")
+    @RequestMapping("/{uuid}/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
-    public String list(@PathVariable(name = "boardSeq") String boardSeq
-            , Model model) {
-
+    public String list(@AuthenticationPrincipal MemberVO memberVO,
+           @PathVariable(name = "uuid") String uuid, Model model) {
+//        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), uuid);
+//        model.addAttribute("articleList", articleList);
         return "/board/list";
     }
 
