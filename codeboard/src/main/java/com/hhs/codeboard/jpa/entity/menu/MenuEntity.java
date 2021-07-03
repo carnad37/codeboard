@@ -58,7 +58,7 @@ public class MenuEntity extends DefaultEntity {
      */
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="boardSeq")
-    @Where(clause = "delDate = false")
+    @Where(clause = "del_date is null")
     private Collection<BoardArticleEntity> articleList;
 
 }

@@ -7,6 +7,7 @@ import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
+import com.hhs.codeboard.jpa.service.MenuDAO;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 
@@ -27,6 +28,9 @@ public class BoardController extends LoggerController {
 
     @Autowired
     ArticleDAO articleDAO;
+
+    @Autowired
+    MenuDAO menuDAO;
 
     //TODO :: 테스트 페이지. 추후엔 기본을 list로 한다.
     @RequestMapping("/config")
@@ -63,8 +67,9 @@ public class BoardController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     public String list(@AuthenticationPrincipal MemberVO memberVO,
            @PathVariable(name = "uuid") String uuid, Model model) {
-//        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), uuid);
-//        model.addAttribute("articleList", articleList);
+        //해당 게시판의 Entity
+        MenuEntity menu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq()).orElse(new MenuEntity());
+        model.addAttribute("articleList", menu.getArticleList());
         return "/board/list";
     }
 

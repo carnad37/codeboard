@@ -4,13 +4,13 @@ import java.util.function.Function;
 
 public enum MenuTypeEnum {
     
-    BOARD("B", (uuid) -> "board/" + uuid + "link")
+    BOARD("B", (uuid) -> "/board/" + uuid + "/list")
     , MENU("M", (uuid) -> null)
-    , BOARD_CONFIG("D", null)
-    , MENU_CONFIG("U", null)
-    , COMMON_BOARD("C", null)
-    , STATIC_MENU("S", null)
-    , CATEGORY_CONFIG("Y", null);
+    , BOARD_CONFIG("D", (uuid) -> "/board/config")
+    , MENU_CONFIG("U", (uuid) -> "/menu/config")
+    , COMMON_BOARD("C", (uuid) -> "/common/board")
+    , STATIC_MENU("S", (uuid) -> null)
+    , CATEGORY_CONFIG("Y", (uuid) -> "/category/config");
 
     private String menuType;
     private Function<String, String> url;

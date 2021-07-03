@@ -30,7 +30,7 @@ public class BoardArticleEntity extends DefaultEntity{
     @Column
     private Integer boardSeq;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="articleSeq")
     private Collection<BoardCateArticleEntity> categorys;
 
