@@ -181,7 +181,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!--/* MenuType :: 메뉴  */-->
           <li th:each="oneDepthMenu : ${session.menuList}" class="nav-item">
-            <a th:href="@{${#strings.isEmpty(oneDepthMenu.url)}? '#' : oneDepthMenu.url}" class="nav-link"
+            <a th:href="@{${#strings.isEmpty(oneDepthMenu.url)}? '#' : ${oneDepthMenu.url}}" class="nav-link"
                th:classappend="${@menuUtil.checkMenuActive(oneDepthMenu.type, session.viewMenuType, oneDepthMenu.uuid, session.viewMenuUUID)} ? 'active'">
               <i class="nav-icon fas fa-copy"></i>
               <p>

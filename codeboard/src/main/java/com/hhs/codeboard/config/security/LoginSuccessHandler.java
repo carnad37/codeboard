@@ -28,17 +28,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         MemberVO memberVO = (MemberVO) authentication.getPrincipal();
 		menuService.initMenuList(memberVO);
 
-//		List<BoardManagerEntity> boardManagerList = boardDAO.findAllByRegUserSeq(memberVO.getSeq());
-
-		//boardList를 얻어야함. 해당 boardSeq들이 필요.
-		//정렬에 관해선 나중에 boardManager 테이블에 order 추가.
-//		boardManagerList.forEach(
-//			boardManager -> menuList.add(new MenuVO(boardManager))
-//		);
-
 		//가공된 MenuList를 memberVO와 session에 담는다.
 //		memberVO.setMenuList(menuList);
-//		SessionUtil.setSession(request, "menuList", menuList);
+		SessionUtil.setSession(request, "menuList", memberVO.getMenuList());
 		response.sendRedirect("/main");
 	}
 	

@@ -33,8 +33,8 @@ public class MemberVO extends User{
 	private static final long serialVersionUID = 3262283502601992796L;
 	
 	private Integer seq;
-	private List<MenuVO> menuList = null;
-	private Map<String, MenuVO> menuMap = null;
+	private List<MenuVO> menuList = new ArrayList<>();
+	private Map<String, MenuVO> menuMap = new HashMap<>();
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {

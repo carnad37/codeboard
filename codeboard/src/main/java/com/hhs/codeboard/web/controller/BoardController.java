@@ -15,6 +15,7 @@ import com.hhs.codeboard.web.service.menu.MenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +66,7 @@ public class BoardController extends LoggerController {
 
     @RequestMapping("/{uuid}/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
+    @Transactional
     public String list(@AuthenticationPrincipal MemberVO memberVO,
            @PathVariable(name = "uuid") String uuid, Model model) {
         //해당 게시판의 Entity
