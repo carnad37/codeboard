@@ -75,15 +75,17 @@ public class BoardController extends LoggerController {
         return "/board/list";
     }
 
-    @RequestMapping("/{boardSeq}/write")
+    @RequestMapping("/{uuid}/write")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
-    public String write() {
+    public String write(@AuthenticationPrincipal MemberVO memberVO,
+            @PathVariable(name = "uuid") String uuid, Model model) {
         return "/board/write";
     }
 
-    @RequestMapping("/{boardSeq}/read")
+    @RequestMapping("/{uuid}/read")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
-    public String read() {
+    public String read(@AuthenticationPrincipal MemberVO memberVO,
+           @PathVariable(name = "uuid") String uuid, Model model) {
         return "/board/write";
     }
     

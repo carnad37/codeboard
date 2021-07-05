@@ -8,8 +8,92 @@
     </th:block>
     <!-- 고유 script -->
     <th:block layout:fragment="script">
+        <script>
+            $("#writeForm").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        passwordAlgorithm: true,
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "이메일이 입력되지 않았습니다",
+                        email: "이메일 형식으로 입력해주세요",
+                    },
+                    password: {
+                        required: "비밀번호가 입력되지 않았습니다",
+                        minlength: "비밀번호는 8글자",
+                        passwordAlgorithm: "영문 대소문자,숫자,특수문자(@$!%*#?&)를 섞어주세요"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.input-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-valid');
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                    $(element).addClass('is-valid');
+                },
+            });
+        </script>
     </th:block>
     <div layout:fragment="content">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title">Horizontal Form</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form id="writeForm" name="writeForm" action="" method="post" class="form-horizontal">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputTitle" name="title" placeholder="제목을 입력해주세요">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputSummary" class="col-sm-2 col-form-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputSummary" name="summary" placeholder="요약을 입력해주세요">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputContent" class="col-sm-2 col-form-label">내용</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" id="inputContent" name="content">
+                                            </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-info">등록</button>
+                                    <button type="submit" class="btn btn-default float-right">취소</button>
+                                </div>
+                                <!-- /.card-footer -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
     </div>
 </html>
