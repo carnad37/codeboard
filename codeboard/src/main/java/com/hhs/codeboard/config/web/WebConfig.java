@@ -28,6 +28,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/plugins/**")
             .addResourceLocations("classpath:/plugins/")
             .setCachePeriod(20);
+        registry.addResourceHandler("/ckeditor/**")
+            .addResourceLocations("classpath:/ckeditor/")
+            .setCachePeriod(20);
     }
 
     @Override
