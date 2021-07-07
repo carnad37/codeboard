@@ -24,6 +24,9 @@ public class BoardArticleEntity extends DefaultEntity{
     @Column
     private String content;
 
+    @Column
+    private String summary;
+
     @Column(name="display_f")
     private String displayF;
     

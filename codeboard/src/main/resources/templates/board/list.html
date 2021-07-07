@@ -35,15 +35,15 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <th:block th:each="article : ${articleList}">
+                                    <th:block th:each="article, iter : ${articleList}">
                                         <tr data-widget="expandable-table" aria-expanded="false">
-                                            <td class="text-center">#</td>
-                                            <td th:text="${article.getTitle()}"></td>
-                                            <td class="text-center" th:text="${@formatUtil.formatDate(article.getRegDate(), 'yyyy-MM-dd')}"></td>
+                                            <td class="text-center" th:text="${iter.index + 1}"></td>
+                                            <td th:text="${article.title}"></td>
+                                            <td class="text-center" th:text="${@formatUtil.formatDate(article.regDate, 'yyyy-MM-dd')}"></td>
                                         </tr>
-                                        <tr class="expandable-body d-none">
+                                        <tr class="expandable-body d-none" th:if="${not #strings.isEmpty(article.summary)}">
                                             <td colspan="5">
-                                                <p style="display: none;" th:text="${article.getContent()}"></p>
+                                                <p style="display: none;" th:text="${article.summary}"></p>
                                             </td>
                                         </tr>
                                     </th:block>

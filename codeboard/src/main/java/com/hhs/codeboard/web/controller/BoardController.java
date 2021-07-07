@@ -1,5 +1,6 @@
 package com.hhs.codeboard.web.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.hhs.codeboard.config.anno.AspectMenuActive;
@@ -12,11 +13,13 @@ import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 
 import com.hhs.codeboard.web.service.menu.MenuVO;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +71,7 @@ public class BoardController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     @Transactional
     public String list(@AuthenticationPrincipal MemberVO memberVO,
-           @PathVariable(name = "uuid") String uuid, Model model) {
+           @ModelAttribute @PathVariable(name = "uuid") String uuid, Model model) {
         //해당 게시판의 Entity
         MenuEntity menu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq()).orElse(new MenuEntity());
         model.addAttribute("articleList", menu.getArticleList());
@@ -78,14 +81,71 @@ public class BoardController extends LoggerController {
     @RequestMapping("/{uuid}/write")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     public String write(@AuthenticationPrincipal MemberVO memberVO,
-            @PathVariable(name = "uuid") String uuid, Model model) {
+            @ModelAttribute @PathVariable(name = "uuid") String uuid
+            , Model model
+            , BoardArticleEntity articleEntity) throws Exception {
+        if (articleEntity.getSeq() != null) {
+            //수정페이지일경우 seq값이 주어짐. 해당 글이 해당유저의 글인지 확인.
+            BoardArticleEntity targetEntity = articleDAO.findBySeqAndRegUserSeqAndDelDateIsNull(articleEntity.getSeq(), memberVO.getSeq())
+                .orElseThrow(() -> new Exception("잘못된 접근입니다"));
+            model.addAttribute("article", targetEntity);
+        }
         return "/board/write";
+    }
+
+    @RequestMapping("/{uuid}/insert")
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
+    public String insert(@AuthenticationPrincipal MemberVO memberVO,
+            @PathVariable(name = "uuid") String uuid
+            , BoardArticleEntity articleEntity) throws Exception {
+
+        //회원에게 타겟 메뉴가 있는지 확인
+        MenuEntity targetMenu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq())
+                .orElseThrow(() -> new ServiceException("잘못된 요청입니다."));
+
+        //게시글 정보 입력
+        BoardArticleEntity insertEntity = new BoardArticleEntity();
+        insertEntity.setBoardSeq(targetMenu.getSeq());
+        insertEntity.setRegUserSeq(memberVO.getSeq());
+        insertEntity.setRegDate(LocalDateTime.now());
+
+        insertEntity.setTitle(articleEntity.getTitle());
+        insertEntity.setContent(articleEntity.getContent());
+        insertEntity.setDisplayF(articleEntity.getDisplayF() == null ? "Y" : articleEntity.getDisplayF());
+        insertEntity.setSummary(articleEntity.getSummary());
+
+        articleDAO.save(insertEntity);
+
+        return "redirect:/board/" + uuid + "/list";
+    }
+
+    @RequestMapping("/{uuid}/update")
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
+    public String update(@AuthenticationPrincipal MemberVO memberVO,
+             @PathVariable(name = "uuid") String uuid
+            , BoardArticleEntity articleEntity) throws Exception {
+
+        //본인 글인지 체크할 필요가 있음. update의 where조건으로 seq와 userSeq둘다 둘 필요가 있음.
+        BoardArticleEntity targetEntity = articleDAO.findBySeqAndRegUserSeqAndDelDateIsNull(articleEntity.getSeq(), memberVO.getSeq())
+                .orElseThrow(() -> new Exception("잘못된 접근입니다"));
+        //내용만 변경해준다.
+        targetEntity.setTitle(articleEntity.getTitle());
+        targetEntity.setSummary(articleEntity.getSummary());
+        targetEntity.setContent(articleEntity.getContent());
+        targetEntity.setDisplayF(articleEntity.getDisplayF());
+
+        targetEntity.setModUserSeq(memberVO.getSeq());
+        targetEntity.setModDate(LocalDateTime.now());
+        articleDAO.save(targetEntity);
+
+        return "redirect:/board/" + uuid + "/list";
     }
 
     @RequestMapping("/{uuid}/read")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     public String read(@AuthenticationPrincipal MemberVO memberVO,
-           @PathVariable(name = "uuid") String uuid, Model model) {
+           @ModelAttribute @PathVariable(name = "uuid") String uuid,
+           Model model) {
         return "/board/write";
     }
     
