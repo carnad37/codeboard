@@ -31,7 +31,7 @@ public class MemberVO extends User{
 	}
 
 	private static final long serialVersionUID = 3262283502601992796L;
-	
+
 	private Integer seq;
 	private List<MenuVO> menuList = new ArrayList<>();
 	private Map<String, MenuVO> menuMap = new HashMap<>();
@@ -86,6 +86,5 @@ public class MemberVO extends User{
 	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
-
 
 }

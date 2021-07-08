@@ -9,6 +9,7 @@ import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.jpa.service.MenuDAO;
+import com.hhs.codeboard.web.service.board.BoardArticleService;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 
@@ -30,11 +31,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class BoardController extends LoggerController {
 
-    @Autowired
-    ArticleDAO articleDAO;
+    private final BoardArticleService articleService;
 
     @Autowired
-    MenuDAO menuDAO;
+    public BoardController(BoardArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     //TODO :: 테스트 페이지. 추후엔 기본을 list로 한다.
     @RequestMapping("/config")
@@ -71,10 +73,9 @@ public class BoardController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
     @Transactional
     public String list(@AuthenticationPrincipal MemberVO memberVO,
-           @ModelAttribute @PathVariable(name = "uuid") String uuid, Model model) {
+           @ModelAttribute @PathVariable(name = "uuid") String uuid, Model model) throws Exception {
         //해당 게시판의 Entity
-        MenuEntity menu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq()).orElse(new MenuEntity());
-        model.addAttribute("articleList", menu.getArticleList());
+        model.addAttribute("articleList", articleService.selectArticleList(memberVO, uuid));
         return "/board/list";
     }
 
@@ -85,10 +86,7 @@ public class BoardController extends LoggerController {
             , Model model
             , BoardArticleEntity articleEntity) throws Exception {
         if (articleEntity.getSeq() != null) {
-            //수정페이지일경우 seq값이 주어짐. 해당 글이 해당유저의 글인지 확인.
-            BoardArticleEntity targetEntity = articleDAO.findBySeqAndRegUserSeqAndDelDateIsNull(articleEntity.getSeq(), memberVO.getSeq())
-                .orElseThrow(() -> new Exception("잘못된 접근입니다"));
-            model.addAttribute("article", targetEntity);
+            model.addAttribute("article", articleService.selectArticle(articleEntity, memberVO));
         }
         return "/board/write";
     }
@@ -99,22 +97,7 @@ public class BoardController extends LoggerController {
             @PathVariable(name = "uuid") String uuid
             , BoardArticleEntity articleEntity) throws Exception {
 
-        //회원에게 타겟 메뉴가 있는지 확인
-        MenuEntity targetMenu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq())
-                .orElseThrow(() -> new ServiceException("잘못된 요청입니다."));
-
-        //게시글 정보 입력
-        BoardArticleEntity insertEntity = new BoardArticleEntity();
-        insertEntity.setBoardSeq(targetMenu.getSeq());
-        insertEntity.setRegUserSeq(memberVO.getSeq());
-        insertEntity.setRegDate(LocalDateTime.now());
-
-        insertEntity.setTitle(articleEntity.getTitle());
-        insertEntity.setContent(articleEntity.getContent());
-        insertEntity.setDisplayF(articleEntity.getDisplayF() == null ? "Y" : articleEntity.getDisplayF());
-        insertEntity.setSummary(articleEntity.getSummary());
-
-        articleDAO.save(insertEntity);
+        articleService.insertArticle(articleEntity, memberVO, uuid);
 
         return "redirect:/board/" + uuid + "/list";
     }
@@ -125,18 +108,7 @@ public class BoardController extends LoggerController {
              @PathVariable(name = "uuid") String uuid
             , BoardArticleEntity articleEntity) throws Exception {
 
-        //본인 글인지 체크할 필요가 있음. update의 where조건으로 seq와 userSeq둘다 둘 필요가 있음.
-        BoardArticleEntity targetEntity = articleDAO.findBySeqAndRegUserSeqAndDelDateIsNull(articleEntity.getSeq(), memberVO.getSeq())
-                .orElseThrow(() -> new Exception("잘못된 접근입니다"));
-        //내용만 변경해준다.
-        targetEntity.setTitle(articleEntity.getTitle());
-        targetEntity.setSummary(articleEntity.getSummary());
-        targetEntity.setContent(articleEntity.getContent());
-        targetEntity.setDisplayF(articleEntity.getDisplayF());
-
-        targetEntity.setModUserSeq(memberVO.getSeq());
-        targetEntity.setModDate(LocalDateTime.now());
-        articleDAO.save(targetEntity);
+        articleService.updateArticle(articleEntity, memberVO);
 
         return "redirect:/board/" + uuid + "/list";
     }
