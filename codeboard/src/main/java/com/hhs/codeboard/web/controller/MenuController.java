@@ -8,7 +8,6 @@ import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
-import com.hhs.codeboard.web.service.menu.MenuVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

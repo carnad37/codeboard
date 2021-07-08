@@ -5,7 +5,6 @@ import java.util.*;
 import com.hhs.codeboard.enumeration.UserTypeEnum;
 import com.hhs.codeboard.jpa.entity.member.MemberEntity;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.hhs.codeboard.web.service.menu.MenuVO;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,7 +20,7 @@ public class MemberVO extends User{
 			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
 		this.seq = memberVO.getSeq();
 		memberVO.getMenuList().forEach(
-			(MenuEntity entity) -> menuList.add(new MenuVO(entity))
+			(MenuEntity entity) -> menuList.add(new MenuEntity())
 		);
 	}
 
@@ -33,8 +32,8 @@ public class MemberVO extends User{
 	private static final long serialVersionUID = 3262283502601992796L;
 
 	private Integer seq;
-	private List<MenuVO> menuList = new ArrayList<>();
-	private Map<String, MenuVO> menuMap = new HashMap<>();
+	private List<MenuEntity> menuList = new ArrayList<>();
+	private Map<String, MenuEntity> menuMap = new HashMap<>();
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
@@ -71,11 +70,11 @@ public class MemberVO extends User{
 		return isEnabled();
 	}
 
-	public List<MenuVO> getMenuList() {
+	public List<MenuEntity> getMenuList() {
 		return this.menuList;
 	}
 
-	public void setMenuList(List<MenuVO> menuList) {
+	public void setMenuList(List<MenuEntity> menuList) {
 		this.menuList = menuList;
 	}
 

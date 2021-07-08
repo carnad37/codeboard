@@ -2,6 +2,7 @@ package com.hhs.codeboard.jpa.entity.menu;
 
 import javax.persistence.*;
 
+import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
@@ -9,7 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
+import java.awt.*;
 import java.util.Collection;
+import java.util.List;
 
 
 @Getter
@@ -18,6 +21,16 @@ import java.util.Collection;
 @Table(name = "menu")
 @SequenceGenerator(name = "seqGenerator", sequenceName = "seqMenu", allocationSize = 1, initialValue = 1)
 public class MenuEntity extends DefaultEntity {
+
+    public MenuEntity() {
+        super();
+    }
+
+    public MenuEntity(Integer seq, String title, String menuType) {
+        this.setSeq(seq);
+        this.setTitle(title);
+        this.setMenuType(menuType);
+    }
 
     private static final long serialVersionUID = 6217465463857529869L;
 
@@ -60,5 +73,4 @@ public class MenuEntity extends DefaultEntity {
     @JoinColumn(name="boardSeq")
     @Where(clause = "del_date is null")
     private Collection<BoardArticleEntity> articleList;
-
 }

@@ -27,7 +27,7 @@ public class SiteInterceptorHandler implements HandlerInterceptor {
 //        if (!(auth instanceof AnonymousAuthenticationToken)) {
 //            MemberVO memberVO = (MemberVO) auth.getPrincipal();
 //            if (memberVO != null) {
-//                List<MenuVO> menuList =  memberVO.getMenuList();
+//                List<MenuEntity> menuList =  memberVO.getMenuList();
 //                model.addObject("menuList", menuList);
 //
 //                //쿠키값에서 메뉴 seq를 구해야함.

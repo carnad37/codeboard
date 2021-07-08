@@ -8,7 +8,7 @@ import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.member.MemberService;
 
-import com.hhs.codeboard.web.service.menu.MenuVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

@@ -13,7 +13,6 @@ import com.hhs.codeboard.web.service.board.BoardArticleService;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
 
-import com.hhs.codeboard.web.service.menu.MenuVO;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,9 +48,9 @@ public class BoardController extends LoggerController {
     @RequestMapping("/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
     public String managerList(@AuthenticationPrincipal MemberVO memberVO,
-              @ModelAttribute MenuVO menuVO, Model model) {
+              @ModelAttribute MenuEntity MenuEntity, Model model) {
         //regUserSeq 랑 delDate로 조건을 건다.(모든 게시물)
-//        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), menuVO.getSeq());
+//        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), MenuEntity.getSeq());
 //        model.addAttribute("articleList", articleList);
         return "/board/list";
     }
