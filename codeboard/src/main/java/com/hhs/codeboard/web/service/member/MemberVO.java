@@ -9,7 +9,7 @@ import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-public class MemberVO extends User{
+public class MemberVO extends User {
 
 	public  MemberVO(String username, String password, Collection<GrantedAuthority> authorities) {
 		super(username, password, authorities);

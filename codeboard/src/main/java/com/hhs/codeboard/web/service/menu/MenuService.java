@@ -32,37 +32,38 @@ public class MenuService {
     }
 
 
-    public List<MenuEntity> initMenuList(MemberVO memberVO) {
+    public List<MenuVO> initMenuList(MemberVO memberVO) {
 
         List<MenuEntity> dbMenuList = memberVO.getMenuList();
         Map<String, MenuEntity> menuMap = new HashMap<>();
 
-        List<MenuEntity> menuList = new ArrayList<>();
-        List<MenuEntity> setInnerList = new ArrayList<>();
+        List<MenuVO> menuList = new ArrayList<>();
+        List<MenuVO> setInnerList = new ArrayList<>();
 
         //공통 설정
-        MenuEntity setMenu = new MenuEntity(0, "설정메뉴", MenuTypeEnum.STATIC_MENU.getMenuType());
+        MenuVO setMenu = new MenuVO(new MenuEntity(0, "설정메뉴", MenuTypeEnum.STATIC_MENU.getMenuType()));
         //공통게시판 내용추가
-        setInnerList.add(new MenuEntity(0, "게시판 설정", MenuTypeEnum.BOARD_CONFIG.getMenuType()));
-        setInnerList.add(new MenuEntity(0, "메뉴 설정", MenuTypeEnum.MENU_CONFIG.getMenuType()));
-        setInnerList.add(new MenuEntity(0, "카테고리 설정", MenuTypeEnum.CATEGORY_CONFIG.getMenuType()));
+        setInnerList.add(new MenuVO(new MenuEntity(0, "게시판 설정", MenuTypeEnum.BOARD_CONFIG.getMenuType())));
+        setInnerList.add(new MenuVO(new MenuEntity(0, "메뉴 설정", MenuTypeEnum.MENU_CONFIG.getMenuType())));
+        setInnerList.add(new MenuVO(new MenuEntity(0, "카테고리 설정", MenuTypeEnum.CATEGORY_CONFIG.getMenuType())));
 
         menuList.add(setMenu);
 
         //공통 게시판
-        Map<Integer, List<MenuEntity>> childrenMap = new HashMap<>();
+        Map<Integer, List<MenuVO>> childrenMap = new HashMap<>();
 
         //부모자식 구분하기
         for (MenuEntity dbMenu : dbMenuList) {
+            MenuVO menuVO = new MenuVO(dbMenu);
             //uuid로 map을 만든다
             if (StringUtils.hasText(dbMenu.getUuid())) menuMap.put(dbMenu.getUuid(), dbMenu);
             if (dbMenu.getParentSeq() != null) {
                 //부모값이 있는 하위 메뉴의 경우.
-                List<MenuEntity> tList = childrenMap.computeIfAbsent(dbMenu.getSeq(), (Integer parentBoard) -> new ArrayList<>());
-                dbMenu.setChildrenMenu(tList);
-            } else if (MenuTypeEnum.MENU.getMenuType().equals(dbMenu.getType())) {
+                List<MenuVO> tList = childrenMap.computeIfAbsent(dbMenu.getSeq(), (Integer parentBoard) -> new ArrayList<>());
+                menuVO.setChildrenMenu(tList);
+            } else if (MenuTypeEnum.MENU.getMenuType().equals(dbMenu.getMenuType())) {
                 //부모값이 없고, 단순메뉴인경우.
-                menuList.add(dbMenu);
+                menuList.add(menuVO);
             }
         }
 
@@ -73,28 +74,28 @@ public class MenuService {
     };
 
 
-    public Integer getMenuSeq(HttpServletRequest request) throws Exception {
-        Cookie[] cookies = request.getCookies();
-        for(int i = 0; i < cookies.length; i++) {
-            if (MenuEntity.MENU_SEQ_COOKIE_NAME.equals(cookies[i].getName())) return Integer.parseInt(cookies[i].getValue());
-        }
-        return null;
-    }
+//    public Integer getMenuSeq(HttpServletRequest request) throws Exception {
+//        Cookie[] cookies = request.getCookies();
+//        for(int i = 0; i < cookies.length; i++) {
+//            if (MenuEntity.MENU_SEQ_COOKIE_NAME.equals(cookies[i].getName())) return Integer.parseInt(cookies[i].getValue());
+//        }
+//        return null;
+//    }
 
     public String getBoardUrl(Integer boardSeq) {
         return "/board/" + boardSeq + "/list";
     }
 
-    public void sortMenuList (List<MenuEntity> menuList) {
-        //메뉴리스트가 있으면 sort. 없으면 종료.
-        if (menuList.size() > 1) {
-            menuList.stream().sorted(Comparator.comparing((MenuEntity::getMenuOrder)));
-            //자식들도 다 sort
-            for(MenuEntity tMenu : menuList) {
-                sortMenuList(tMenu.getChildrenMenu());
-            }
-        }
-    }
+//    public void sortMenuList (List<MenuEntity> menuList) {
+//        //메뉴리스트가 있으면 sort. 없으면 종료.
+//        if (menuList.size() > 1) {
+//            menuList.stream().sorted(Comparator.comparing((MenuEntity::getMenuOrder)));
+//            //자식들도 다 sort
+//            for(MenuEntity tMenu : menuList) {
+//                sortMenuList(tMenu.getChildrenMenu());
+//            }
+//        }
+//    }
 
     // public List<Integer> getSiteAcitveByDepth (List<MenuEntity> menuList, Integer activeSeq) {
     //     List<Integer> activeList = new ArrayList<Integer>();
