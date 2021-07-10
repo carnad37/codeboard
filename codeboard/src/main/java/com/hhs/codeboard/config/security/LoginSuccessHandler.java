@@ -26,11 +26,10 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			Authentication authentication) throws ServletException, IOException {
         
         MemberVO memberVO = (MemberVO) authentication.getPrincipal();
-		menuService.initMenuList(memberVO);
 
-		//가공된 MenuList를 memberVO와 session에 담는다.
+			//가공된 MenuList를 memberVO와 session에 담는다.
 //		memberVO.setMenuList(menuList);
-		SessionUtil.setSession(request, "menuList", memberVO.getMenuList());
+		SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO));
 		response.sendRedirect("/main");
 	}
 	

@@ -28,7 +28,7 @@ public class MenuController extends LoggerController {
     public String menuRefresh(@AuthenticationPrincipal MemberVO memberVO
             , HttpServletRequest request) {
         //로그인한 회원정보로 menu정보 리셋.
-        SessionUtil.setSession(request, "menuList", menuService.selectAllBoardMenu(memberVO.getSeq()));
+        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO));
         return "redirect:/main";
     }
 

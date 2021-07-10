@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 
 @Service
 public class MenuService {
@@ -24,13 +25,40 @@ public class MenuService {
 
     public List<MenuEntity> selectAllBoardMenu(int regUserSeq) {
         List<MenuEntity> resultList = new ArrayList<>();
-        List<MenuEntity> menuList = menuDAO.findAllByRegUserSeq(regUserSeq);
+        List<MenuEntity> menuList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(regUserSeq);
         menuList.forEach(
                 MenuEntity -> resultList.add(new MenuEntity())
         );
         return resultList;
     }
 
+    public List<MenuEntity> selectMenuList(int regUserSeq, MenuTypeEnum menuType) {
+        List<MenuEntity> menuList = menuDAO.findAllByRegUserSeqAndMenuTypeAndDelDateIsNull(regUserSeq, menuType.getMenuType());
+        return menuList;
+    }
+
+    public MenuEntity selectMenu(int regUserSeq, int menuSeq) throws Exception{
+        return menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menuSeq, regUserSeq).orElseThrow(()->new Exception("잘못된 접근입니다."));
+    }
+
+    public void insertMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum menuType) throws Exception {
+        MenuEntity insert = new MenuEntity();
+        insert.setPublicF("N");
+        insert.setTitle(menu.getTitle());
+        insert.setMenuType(menuType.getMenuType());
+        insert.setRegUserSeq(memberVO.getSeq());
+        insert.setRegDate(LocalDateTime.now());
+        insert.setUuid(UUID.randomUUID().toString().replaceAll("-", ""));
+        menuDAO.save(insert);
+    }
+
+    public void updateMenu(MenuEntity menu, MemberVO memberVO) throws Exception {
+        MenuEntity update = menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), memberVO.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));
+        update.setTitle(menu.getTitle());
+        update.setModUserSeq(memberVO.getSeq());
+        update.setModDate(LocalDateTime.now());
+        menuDAO.save(update);
+    }
 
     public List<MenuVO> initMenuList(MemberVO memberVO) {
 
@@ -41,12 +69,13 @@ public class MenuService {
         List<MenuVO> setInnerList = new ArrayList<>();
 
         //공통 설정
-        MenuVO setMenu = new MenuVO(new MenuEntity(0, "설정메뉴", MenuTypeEnum.STATIC_MENU.getMenuType()));
+        MenuVO setMenu = new MenuVO(new MenuEntity(0, "공통메뉴", MenuTypeEnum.STATIC_MENU.getMenuType()));
         //공통게시판 내용추가
-        setInnerList.add(new MenuVO(new MenuEntity(0, "게시판 설정", MenuTypeEnum.BOARD_CONFIG.getMenuType())));
-        setInnerList.add(new MenuVO(new MenuEntity(0, "메뉴 설정", MenuTypeEnum.MENU_CONFIG.getMenuType())));
-        setInnerList.add(new MenuVO(new MenuEntity(0, "카테고리 설정", MenuTypeEnum.CATEGORY_CONFIG.getMenuType())));
+        setInnerList.add(new MenuVO(new MenuEntity(0, "게시판 목록", MenuTypeEnum.BOARD_CONFIG.getMenuType())));
+        setInnerList.add(new MenuVO(new MenuEntity(0, "메뉴 목록", MenuTypeEnum.MENU_CONFIG.getMenuType())));
+//        setInnerList.add(new MenuVO(new MenuEntity(0, "카테고리 설정", MenuTypeEnum.CATEGORY_CONFIG.getMenuType())));
 
+        setMenu.setChildrenMenu(setInnerList);
         menuList.add(setMenu);
 
         //공통 게시판

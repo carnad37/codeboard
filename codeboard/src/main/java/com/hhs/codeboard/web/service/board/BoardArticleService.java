@@ -3,7 +3,6 @@ package com.hhs.codeboard.web.service.board;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.jpa.service.ArticleDAO;
-import com.hhs.codeboard.jpa.service.MemberDAO;
 import com.hhs.codeboard.jpa.service.MenuDAO;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import org.hibernate.service.spi.ServiceException;
@@ -29,7 +28,7 @@ public class BoardArticleService {
     }
 
     public List<BoardArticleEntity> selectArticleList(MemberVO memberVO, String uuid) throws Exception {
-        MenuEntity menu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq()).orElse(new MenuEntity());
+        MenuEntity menu = menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(uuid, memberVO.getSeq()).orElse(new MenuEntity());
         return menu.getArticleList().stream().collect(Collectors.toList());
     }
 
@@ -42,7 +41,7 @@ public class BoardArticleService {
 
     public void insertArticle(BoardArticleEntity articleEntity, MemberVO memberVO, String uuid) throws Exception {
         //회원에게 타겟 메뉴가 있는지 확인
-        MenuEntity targetMenu = menuDAO.findByUuidAndRegUserSeq(uuid, memberVO.getSeq())
+        MenuEntity targetMenu = menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(uuid, memberVO.getSeq())
                 .orElseThrow(() -> new ServiceException("잘못된 요청입니다."));
 
         //게시글 정보 입력

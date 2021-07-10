@@ -20,9 +20,22 @@ public class MenuVO implements Serializable {
     public MenuVO(MenuEntity menu) {
         super();
         this.menu = menu;
+        this.uuid = menu.getUuid();
+        this.menuType = menu.getMenuType();
+    }
+
+    public MenuVO(MenuEntity menu, String url) {
+        super();
+        this.menu = menu;
+        this.url = url;
+        this.uuid = menu.getUuid();
+        this.menuType = menu.getMenuType();
     }
 
     private List<MenuVO> childrenMenu;
     private MenuEntity menu;
+    private String url;
+    private String uuid;
+    private String menuType;
 
 }
