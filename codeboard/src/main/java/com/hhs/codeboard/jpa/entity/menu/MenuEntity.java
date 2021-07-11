@@ -27,6 +27,7 @@ public class MenuEntity extends DefaultEntity {
     }
 
     public MenuEntity(Integer seq, String title, String menuType) {
+        super();
         this.setSeq(seq);
         this.setTitle(title);
         this.setMenuType(menuType);

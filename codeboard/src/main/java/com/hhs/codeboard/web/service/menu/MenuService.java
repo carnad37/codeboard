@@ -6,12 +6,15 @@ import com.hhs.codeboard.jpa.service.MenuDAO;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -82,6 +85,8 @@ public class MenuService {
         Map<Integer, List<MenuVO>> childrenMap = new HashMap<>();
 
         //부모자식 구분하기
+        //게시판 같은경우 기본적으론 게시판 공통 메뉴 하위에 들어간다.
+        //게시판 공통 메뉴 같은 경우 하위에 게시판이 있어야지만 활성화된다.
         for (MenuEntity dbMenu : dbMenuList) {
             MenuVO menuVO = new MenuVO(dbMenu);
             //uuid로 map을 만든다
@@ -101,6 +106,47 @@ public class MenuService {
 
         return menuList;
     };
+
+    @Transactional
+    public void txUpdateDepth(List<List<MenuEntity>> targetList, String[] delSeqs, int regUserSeq) throws Exception {
+
+        List<MenuEntity> beforeList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(regUserSeq);
+        //seq로 Map생성
+        Map<Integer, MenuEntity> beforeMap = beforeList.stream()
+                .collect(Collectors.toMap(
+                    MenuEntity::getSeq,
+                    Function.identity()
+                ));
+
+        for(List<MenuEntity> unitList : targetList) {
+            for(MenuEntity target : unitList) {
+                MenuEntity updateEntity = null;
+                if (target.getSeq() > 0) {
+                    //수정된 데이터
+                    updateEntity = beforeMap.get(target.getSeq());
+                    updateEntity.setModDate(LocalDateTime.now());
+                    updateEntity.setModUserSeq(regUserSeq);
+                    updateEntity.setMenuOrder(target.getMenuOrder());
+                    updateEntity.setPublicF(target.getPublicF());
+                    updateEntity.setTitle(target.getTitle());
+                    updateEntity.setParentSeq(target.getParentSeq());
+                } else {
+                    //새로 입력된 데이터
+                    updateEntity = new MenuEntity();
+                    updateEntity.setRegDate(LocalDateTime.now());
+                    updateEntity.setRegUserSeq(regUserSeq);
+                    updateEntity.setMenuOrder(target.getMenuOrder());
+                    updateEntity.setPublicF(target.getPublicF());
+                    updateEntity.setTitle(target.getTitle());
+                    updateEntity.setParentSeq(target.getParentSeq());
+                }
+                menuDAO.save(updateEntity);
+            }
+        }
+
+        //TODO :: 삭제는 차후에 추가
+
+    }
 
 
 //    public Integer getMenuSeq(HttpServletRequest request) throws Exception {
