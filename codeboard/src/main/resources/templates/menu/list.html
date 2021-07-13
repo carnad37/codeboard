@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layouts/design-temp">
+    <!-- 고유 css -->
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" href="/dist/css/jquery.gridstrap.min.css"> 
+        <style>
+            .font-size-20 {
+                font-size: 20px;
+            }
+            .font-size-25 {
+                font-size: 28px;
+            }
+            .font-size-30 {
+                font-size: 30px;
+            }
+            .align-middle{
+                line-height: inherit;
+            } 
+            .board-width-3 {
+                border-width: 3px !important;
+            }           
+            .fas.fa-plus-square, .fas.fa-minus-square {
+                cursor: pointer;
+            }
+
+            .menu-tab { min-width: 100%; }
+            /* Small devices (tablets, 768px and up) */
+            @media (min-width: 768px) {
+                .menu-tab {
+                    min-width: 100%;
+                }
+            }
+
+            /* Medium devices (desktops,  and up) */
+            @media (min-width: 992px) {
+                .menu-tab {
+                    min-width: 500px;
+                }
+            }
+
+            /* Large devices (large desktops,  and up) */
+            @media (min-width: 1200px) {
+                .menu-tab {
+                    min-width: 500px;
+                }
+            }
+        </style>
+    </th:block>
+    <!-- 고유 script -->
+    <th:block layout:fragment="script">
+        <!-- <script src="/dist/js/jquery.gridstrap.min.js"></script> -->
+        <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script th:inline="javascript">
+            var gripTab = null;
+            var twoDepthList = [[${twoDepthList}]];
+            $(function(){
+                // gripTab = $('.menu-group').gridstrap({
+                //     gridCellSelector: ">div"
+                //     /* default options */
+                // });
+                $(".menu-group").sortable().disableSelection();
+                // $(".menu-group");
+                $(document).on("click", ".menu-button", function(){
+                    var $this = $(this);
+                    var $parentRow = $(this).closest(".menu-tab");
+                    var $children = $parentRow.not($this).find(".menu-button");                    
+                    selectTarget($this, $children);
+                    //1탭일 경우, 2탭을 초기화 및 다시 불러옴.
+                    if ($parentRow.hasClass("tab-1")) {
+                        // unselectTarget($(".menu-tab.tab-2").find(".menu-button"));
+                        var uuid = $this.data("uuid");
+                        if (uuid != null) {
+                            
+                        } else {
+                            deleteTargetChildrenList($(".menu-tab.tab-2"));
+                        }              
+                    }
+                });
+
+                $(document).on("click", ".fas.fa-plus-square", function(){
+                    let html = '<li class="row m-0 p-0 ui-sortable-handle">';
+                    html += '<p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">새로운 메뉴</p>';
+                    html += '<p class="mb-0 col-3">';
+                    html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
+                    html += '</p></li>';
+                    $(this).closest(".menu-tab").find(".menu-group").append($(html));
+                });
+                $(document).on("click", ".fas.fa-minus-square", function(){
+                    //1Depth 클릭시, 2Depth 삭제 및 선택한 1Depth불러오기
+                    //추가 validate : 현재 하위 뎁스에 새로 추가한 메뉴가 없는지 확인.
+                    //만약 있을시 적용하기를 누르지 않으면 삭제된다는 경고창 필요.
+                    //수정된 내역은 상세정보보기에서 그때그때 수정할 필요가 있음.
+                    $(this).closest("li").remove();
+                });
+
+            });
+
+            function resetChildrenList (uuid) {
+                var result = null;
+                var storage = window.sessionStorage;
+                var menuList = storage.getItem("menuList");
+                $.each(menuList, function(index, item){
+                    var tUUID = item.uuid;
+                    if (uuid == tUUID) {
+                        result = item;
+                        return false;
+                    }
+                });
+                deleteTargetChildrenList($(".menu-tab.tab-2"));
+                result.childrenList;
+            }
+
+            function addMenuBar($target, menuTitle, uuid) {
+                menuTitle = menuTitle != null ? menuTitle : '새로운 메뉴';
+                uuid = uuid != "new" ? 'data-uuid="'+uuid+'"' : '';
+                html = '<li class="row m-0 p-0 ui-sortable-handle" '+uuid+'>';
+                html += '<p class="mb-0 col-9 rounded border border-white text-white p-2 menu-button bg-secondary">'+menuTitle+'</p>';
+                html += '<p class="mb-0 col-3">';
+                html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
+                html += '</p>';
+                html += '</li>';
+                $target.append($(html));
+            }
+
+            function selectTarget($target, $siblings) {
+                unselectTarget($siblings);
+                $target.removeClass("bg-secondary");
+                $target.addClass("bg-primary");
+            }
+
+            function unselectTarget($target) {
+                $target.removeClass("bg-primary");
+                $target.addClass("bg-secondary");
+            }
+
+            function deleteTargetChildrenList($target) {
+                $target.find("li").remove();
+            }
+        </script>
+    </th:block>
+    <div layout:fragment="content">
+        <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">메뉴 관리</h3>
+        </div>
+        <div class="row justify-content-center pt-2">
+            <div class="menu-tab tab-1 justify-content-center mb-3" alt="가장 테두리">
+                <p class="text-center mb-3">1 Depth &nbsp;&nbsp;&nbsp; 
+                    <i class="fas fa-plus-square text-info font-size-25 align-middle mr-1"></i>
+                </p>      
+                <ul class="menu-group col-md-9 col-12 rounded text-center border mx-auto border-dark board-width-3 p-3">                    
+                    <li th:each="menu : ${menuList}" class="row m-0 p-0">
+                        <p th:text="${menu.title}" class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button"></p>
+                        <p class="mb-0 col-3">
+                            <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                        </p>
+                    </li>                   
+                </ul>
+                <!-- 한셀마다 메뉴가 주르륵 들어가있어야함. -->
+            </div>
+
+            <div class="menu-tab tab-2 mb-3">        
+                <p class="text-center mb-3">2 Depth &nbsp;&nbsp;&nbsp; 
+                    <i class="fas fa-plus-square text-info font-size-25 align-middle mr-1"></i>
+                </p>       
+                <ul class="menu-group col-md-9 col-12 rounded text-center mx-auto border border-dark board-width-3 p-3">
+                    <li class="row m-0 p-0">
+                        <p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴1</p>
+                        <p class="mb-0 col-3">
+                            <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                        </p>
+                    </li>
+                    <li class="row m-0 p-0">
+                        <p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴1</p>
+                        <p class="mb-0 col-3">
+                            <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                        </p>
+                    </li>
+                    <li class="row m-0 p-0">
+                        <p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴1</p>
+                        <p class="mb-0 col-3">
+                            <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                        </p>
+                    </li>
+                    <li class="row m-0 p-0">
+                        <p class="mb-0 col-9 rounded border border-white bg-primary text-white p-2 menu-button">메뉴1</p>
+                        <p class="mb-0 col-3">                           
+                            <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</html>

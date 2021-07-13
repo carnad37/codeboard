@@ -39,10 +39,10 @@ public class MenuController extends LoggerController {
     }
 
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
-    @RequestMapping("/config")
+    @RequestMapping("/list")
     public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
             , Model model) {
-        return "/main";
+        return "/menu/list";
     }
 
     //ajax :: 게시판 정보 불러옴
