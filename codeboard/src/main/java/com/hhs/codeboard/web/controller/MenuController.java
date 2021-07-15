@@ -27,6 +27,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/menu")
 public class MenuController extends LoggerController {
 
+    /**
+     * 게시판 및 모든 메뉴 구조도가 나온다.
+     * 드래그로 변경가능한건 어디까지나 수정시에만.
+     * 추가할시엔 모달창으로 입력창이 뜨며 해당 내용을 전부 입력시에만 추가됨.
+     * 게시판은 삭제는 불가능하고 이동만 가능.
+     */
+
     @Autowired
     MenuService menuService;
 

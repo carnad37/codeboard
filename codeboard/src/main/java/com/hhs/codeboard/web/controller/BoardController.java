@@ -36,6 +36,8 @@ public class BoardController extends LoggerController {
 
     /**
      * BoardController의 경우 uuid는 @ModelAttribute로 담겨서 전달된다.
+     * 해당 게시판은 menu랑 공유된다.
+     * 해당 게시판(메뉴)는 메뉴위치 변경 UI에서 삭제가 되지 않음.
      */
 
     @Autowired
