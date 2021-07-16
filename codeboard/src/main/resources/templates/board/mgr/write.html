@@ -56,42 +56,42 @@
     </th:block>
     <div layout:fragment="content">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title">게시물 입력</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <!-- form start -->
-                            <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/list'">
-                                <input name="page" th:value="${#strings.isEmpty(page) ? 0 : page}"/>
-                                <input name="searchKeyword" th:value="${#strings.isEmpty(searchKeyword) ? 0 : searchKeyword}"/>
-                            </form>
-
-                            <form id="writeForm" name="writeForm" method="post" class="form-horizontal" th:action="'/'">
-                                <input type="hidden" name="seq" th:value="${board?.seq}">
-<!--                              /*  <input type="hidden" name="displayF" th:value="${board?.displayF}">*/-->
-                                <div class="card-body">
-                                    <div class="form-group row">
-                                        <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="inputTitle" name="title" placeholder="제목을 입력해주세요" th:value="${board?.title}">
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <!-- /.card-body -->
-                                <div class="card-footer">
-                                    <button th:if="${#strings.isEmpty(board?.seq)}" type="button" onclick="fncWrite();" class="btn btn-info">등록</button>
-                                    <button th:unless="${#strings.isEmpty(board?.seq)}" type="button" onclick="fncEdit();" class="btn btn-info">수정</button>
-                                    <button type="button" onclick="fncList();" class="btn btn-default float-right">목록</button>
-                                </div>
-                                <!-- /.card-footer -->
-                            </form>
-                        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">게시물 입력</h3>
                     </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/list'">
+                        <input name="page" th:value="${#strings.isEmpty(page) ? 0 : page}"/>
+                        <input name="searchKeyword" th:value="${#strings.isEmpty(searchKeyword) ? 0 : searchKeyword}"/>
+                    </form>
+
+                    <form id="writeForm" name="writeForm" method="post" class="form-horizontal" th:action="'/'">
+                        <input type="hidden" name="seq" th:value="${board?.seq}">
+<!--                              /*  <input type="hidden" name="displayF" th:value="${board?.displayF}">*/-->
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="inputTitle" class="col-sm-2 col-form-label">제목</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputTitle" name="title" placeholder="제목을 입력해주세요" th:value="${board?.title}">
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button th:if="${#strings.isEmpty(board?.seq)}" type="button" onclick="fncWrite();" class="btn btn-info">등록</button>
+                            <button th:unless="${#strings.isEmpty(board?.seq)}" type="button" onclick="fncEdit();" class="btn btn-info">수정</button>
+                            <button type="button" onclick="fncList();" class="btn btn-default float-right">목록</button>
+                        </div>
+                        <!-- /.card-footer -->
+                    </form>
                 </div>
+            </div>
+        </div>
 
     </div>
 </html>

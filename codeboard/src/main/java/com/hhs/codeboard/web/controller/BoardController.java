@@ -72,7 +72,7 @@ public class BoardController extends LoggerController {
 //        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), MenuEntity.getSeq());
 //        model.addAttribute("articleList", articleList);
         model.addAttribute("boardList", menuService.selectMenuList(memberVO.getSeq(), MenuTypeEnum.BOARD));
-        return "/board/mgr/list";
+        return "board/mgr/list";
     }
 
     /**
@@ -101,7 +101,7 @@ public class BoardController extends LoggerController {
         if (menuEntity.getSeq() != null) {
             model.addAttribute("board", menuService.selectMenu(memberVO.getSeq(), menuEntity.getSeq()));
         }
-        return "/board/mgr/write";
+        return "board/mgr/write";
     }
 
     /**
@@ -153,7 +153,7 @@ public class BoardController extends LoggerController {
            @ModelAttribute @PathVariable(name = "uuid") String uuid, Model model) throws Exception {
         //해당 게시판의 Entity
         model.addAttribute("articleList", articleService.selectArticleList(memberVO, uuid));
-        return "/board/article/list";
+        return "board/article/list";
     }
 
     /**
@@ -174,7 +174,7 @@ public class BoardController extends LoggerController {
         if (articleEntity.getSeq() != null) {
             model.addAttribute("article", articleService.selectArticle(articleEntity, memberVO));
         }
-        return "/board/article/write";
+        return "board/article/write";
     }
 
     /**
@@ -233,7 +233,7 @@ public class BoardController extends LoggerController {
 
         model.addAttribute("article", articleService.selectArticle(articleEntity, memberVO));
 
-        return "/board/article/read";
+        return "board/article/read";
     }
     
 }

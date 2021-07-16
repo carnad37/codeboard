@@ -34,8 +34,12 @@ public class MenuController extends LoggerController {
      * 게시판은 삭제는 불가능하고 이동만 가능.
      */
 
+    private final MenuService menuService;
+
     @Autowired
-    MenuService menuService;
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     @RequestMapping("/refresh")
     public String menuRefresh(@AuthenticationPrincipal MemberVO memberVO
@@ -49,7 +53,7 @@ public class MenuController extends LoggerController {
     @RequestMapping("/list")
     public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
             , Model model) {
-        return "/menu/list";
+        return "menu/list";
     }
 
     //ajax :: 게시판 정보 불러옴

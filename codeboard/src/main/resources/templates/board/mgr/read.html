@@ -16,44 +16,44 @@
     </th:block>
     <div layout:fragment="content">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-info">
-                            <div class="card-header">
-                                <h3 class="card-title">게시판</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <!-- form start -->
-                            <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/' + ${uuid} + '/list'">
-                                <input name="page" th:value="${#strings.isEmpty(page) ? 0 : page}"/>
-                                <input name="searchKeyword" th:value="${#strings.isEmpty(searchKeyword) ? 0 : searchKeyword}"/>
-                            </form>
-
-                            <div class="card-body">
-                                <div class="row">
-                                    <h4 class="col-sm-12 mb-0" th:text="${article?.title}">
-                                    </h4>
-                                </div>
-                                <hr>
-                                <div class="row" >
-                                    <div class="col-sm-12 font-italic" th:text="${article?.summary}">
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-sm-12" th:utext="${article?.content}">
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button type="button" onclick="fncList();" class="btn btn-default float-right">목록</button>
-                            </div>
-                            <!-- /.card-footer -->
-                        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">게시판</h3>
                     </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/' + ${uuid} + '/list'">
+                        <input name="page" th:value="${#strings.isEmpty(page) ? 0 : page}"/>
+                        <input name="searchKeyword" th:value="${#strings.isEmpty(searchKeyword) ? 0 : searchKeyword}"/>
+                    </form>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <h4 class="col-sm-12 mb-0" th:text="${article?.title}">
+                            </h4>
+                        </div>
+                        <hr>
+                        <div class="row" >
+                            <div class="col-sm-12 font-italic" th:text="${article?.summary}">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12" th:utext="${article?.content}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="button" onclick="fncList();" class="btn btn-default float-right">목록</button>
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
+            </div>
+        </div>
 
     </div>
 </html>
