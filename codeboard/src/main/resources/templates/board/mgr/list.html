@@ -39,56 +39,53 @@
         <form id="listForm" name="listForm" method="post" th:action="@{'/'}" style="display: none;">
             <input name="seq" type="hidden" value="0"/>
         </form>
-
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">게시판 목록</h3>
-                        </div>
-                        <!-- ./card-header -->
-                        <div class="card-body table-responsive">
-                            <table class="table table-hover text-nowrap">
-                                <colgroup>
-                                    <col class="col-1"/>
-                                    <col class="col-7"/>
-                                    <col class="col-2"/>
-                                    <col class="col-2"/>
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th class="text-center">번호</th>
-                                    <th class="text-center">게시판명</th>
-                                    <th class="text-center">등록일</th>
-                                    <th class="text-center"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <th:block th:each="board, iter : ${boardList}">
-                                    <tr>
-                                        <td class="text-center align-middle" th:text="${iter.index + 1}"></td>
-                                        <td class="align-middle" th:text="${board.title}" th:onclick="'location.href=\'/board/'+ @{${board.uuid}} + '/list\''" role="button">
-                                        </td>
-                                        <td class="text-center align-middle" th:text="${@formatUtil.formatDate(board.regDate, 'yyyy-MM-dd')}"></td>
-                                        <td class="text-center">
-                                            <button type="button" th:onclick="fncEdit([[${board.seq}]]);" class="btn btn-primary">수정</button>
-                                            <button type="button" th:onclick="fncDelete([[${board.seq}]]);" class="btn btn-danger">삭제</button>
-                                        </td>
-                                    </tr>
-                                </th:block>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer">
-                            <button type="button" onclick="fncWrite();" class="btn btn-primary float-right">등록</button>
-                        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">게시판 목록</h3>
                     </div>
-                    <!-- /.card -->
+                    <!-- ./card-header -->
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover text-nowrap">
+                            <colgroup>
+                                <col class="col-1"/>
+                                <col class="col-7"/>
+                                <col class="col-2"/>
+                                <col class="col-2"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th class="text-center">번호</th>
+                                <th class="text-center">게시판명</th>
+                                <th class="text-center">등록일</th>
+                                <th class="text-center"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="board, iter : ${boardList}">
+                                <tr>
+                                    <td class="text-center align-middle" th:text="${iter.index + 1}"></td>
+                                    <td class="align-middle" th:text="${board.title}" th:onclick="'location.href=\'/board/'+ @{${board.uuid}} + '/list\''" role="button">
+                                    </td>
+                                    <td class="text-center align-middle" th:text="${@formatUtil.formatDate(board.regDate, 'yyyy-MM-dd')}"></td>
+                                    <td class="text-center">
+                                        <button type="button" th:onclick="fncEdit([[${board.seq}]]);" class="btn btn-primary">수정</button>
+                                        <button type="button" th:onclick="fncDelete([[${board.seq}]]);" class="btn btn-danger">삭제</button>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="button" onclick="fncWrite();" class="btn btn-primary float-right">등록</button>
+                    </div>
                 </div>
+                <!-- /.card -->
             </div>
-
-    </div>
+        </div>
     </div>
 </html>

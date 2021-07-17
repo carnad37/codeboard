@@ -32,7 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         		// .antMatchers("/admin/**").hasRole("ADMIN")        		
                 // .antMatchers("/open/**").permitAll()
                 // .antMatchers("/**").authenticated();
-         
+
+//        http.csrf().disable();
+
         http.formLogin()
             .loginPage("/open/login")
             .usernameParameter("email")

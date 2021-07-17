@@ -2,10 +2,12 @@ package com.hhs.codeboard.jpa.entity.menu;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
@@ -56,7 +58,8 @@ public class MenuEntity extends DefaultEntity {
     @Column
     private String menuType;
 
-    @Column 
+    @Column
+    @NotNull
     private Integer parentSeq;
 
     @Column(unique = true)
@@ -70,6 +73,7 @@ public class MenuEntity extends DefaultEntity {
      * 해당 메뉴가 Board타입일때만 호출
      * 그냥 호출해도 상관없긴한데, 하위값은 없음.
      */
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="boardSeq")
     @Where(clause = "del_date is null")

@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title>AdminLTE 3 | Dashboard 2</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -283,8 +285,17 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="/dist/js/pages/dashboard2.js"></script>
 
-<script>
+<script th:inline="javascript">
+
+
   $(function(){
+    //ajax 셋팅
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+      xhr.setRequestHeader(header, token);
+    });
+
     //선택된 메뉴를 활성화
     let $menu_ul = $(".nav-item.select").parent("ul");
     let $parent_li = $menu_ul.parent("li");
@@ -297,6 +308,8 @@
     } while ($parent_li.parent("li").length > 0);
 
   });
+
+
 
   // function fncSetMID (menuSeq) {
   //   $.cookie('MID', menuSeq, { path: '/' })

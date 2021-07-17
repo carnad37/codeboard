@@ -29,7 +29,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 			//가공된 MenuList를 memberVO와 session에 담는다.
 //		memberVO.setMenuList(menuList);
-		SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO));
+		menuService.initMenuList(memberVO, request);
 		response.sendRedirect("/main");
 	}
 	

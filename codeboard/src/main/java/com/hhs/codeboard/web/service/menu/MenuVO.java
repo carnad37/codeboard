@@ -17,6 +17,11 @@ public class MenuVO implements Serializable {
         super();
     }
 
+    public MenuVO(List<MenuVO> childrenMenu) {
+        super();
+        this.childrenMenu = childrenMenu;
+    }
+
     public MenuVO(MenuEntity menu) {
         super();
         this.menu = menu;
@@ -32,10 +37,12 @@ public class MenuVO implements Serializable {
         this.menuType = menu.getMenuType();
     }
 
+    private MenuVO parentMenu;
     private List<MenuVO> childrenMenu;
     private MenuEntity menu;
     private String url;
     private String uuid;
     private String menuType;
+    private Integer depth;
 
 }

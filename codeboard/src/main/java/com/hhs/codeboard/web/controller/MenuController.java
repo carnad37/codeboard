@@ -13,13 +13,18 @@ import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
 
+import com.hhs.codeboard.web.service.menu.MenuVO;
+import com.hhs.codeboard.web.service.menu.TestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,23 +50,45 @@ public class MenuController extends LoggerController {
     public String menuRefresh(@AuthenticationPrincipal MemberVO memberVO
             , HttpServletRequest request) {
         //로그인한 회원정보로 menu정보 리셋.
-        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO));
-        return "redirect:/main";
+        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO, request));
+        return "redirect:/menu/list";
     }
 
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/list")
     public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
+            , HttpServletRequest request
             , Model model) {
+
+        List<MenuVO> menuList = SessionUtil.getSession(request, "menuList");
+        List<MenuVO> parentList = new ArrayList<>();
+        Integer maxDepth = SessionUtil.getSession(request, "maxDepth");
+
+        menuList.forEach(menuVO -> {
+            if (menuVO.getDepth() == maxDepth) {
+                parentList.add(menuVO);
+            }
+        });
+        model.addAttribute("parentList", parentList);
         return "menu/list";
     }
 
+    @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
+    @RequestMapping("/insert")
+    public String insert(@AuthenticationPrincipal MemberVO memberVO
+            , @Validated MenuEntity insertMenu, Integer parentSeq, TestVO testVO
+        , HttpServletRequest request) throws Exception {
+        menuService.insertMenu(insertMenu, memberVO, MenuTypeEnum.MENU);
+        return "redirect:/menu/refresh";
+    }
+
     //ajax :: 게시판 정보 불러옴
+    @ResponseBody
     @RequestMapping("/getMenuInfo")
     public ResponseEntity<MenuEntity> getMenuInfo(
             @AuthenticationPrincipal MemberVO memberVO,
-            @RequestBody MenuEntity menu) throws Exception {
-        MenuEntity targetMenu = menuService.selectMenu(memberVO.getSeq(), menu.getSeq());
+            @ModelAttribute MenuEntity menu) throws Exception {
+        MenuEntity targetMenu = menuService.selectMenu(memberVO.getSeq(), menu.getUuid());
         return ResponseEntity.ok(targetMenu);
     }
 
