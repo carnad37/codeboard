@@ -80,34 +80,31 @@
                         }              
                     }
                     selectTarget($this, $children);
+                    if (tabDepth < [[${session.maxDepth}]]) {
+                        getMenuChildrenList($parentRow, $(this).closest("li").data("seq"));
+                    }
+
                 });
 
                 //plus 버튼 클릭시(메뉴추가)
                 $(document).on("click", ".fas.fa-plus-square", function(){
                     //모달창->메뉴정보 입력->등록
+                    $("#modal-lg").find(".modal-footer").children(".btn-primary").text("등록");
+                    $("#modal-lg").find("form")[0].action = "/menu/insert";
                     $("#modal-lg").modal("show");
-
-                    // let html = '<li class="row m-0 p-0 ui-sortable-handle">';
-                    // html += '<p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">새로운 메뉴</p>';
-                    // html += '<p class="mb-0 col-3">';
-                    // html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
-                    // html += '</p></li>';
-                    // $(this).closest(".menu-tab").find(".menu-group").append($(html));
                 });
 
-                //plus 버튼 클릭시(메뉴추가)
+                //minus 버튼 클릭시(삭제기능)
                 $(document).on("click", ".fas.fa-minus-square", function(){
-                    //1Depth 클릭시, 2Depth 삭제 및 선택한 1Depth불러오기
-                    //추가 validate : 현재 하위 뎁스에 새로 추가한 메뉴가 없는지 확인.
-                    //만약 있을시 적용하기를 누르지 않으면 삭제된다는 경고창 필요.
-                    //수정된 내역은 상세정보보기에서 그때그때 수정할 필요가 있음.
                     $(this).closest("li").remove();
                 });
 
                 //수정버튼 클릭
                 $(document).on("click", ".fas.fa-pen-square", function(){
-                    // $(this).closest("li").remove();
-                    getMenuData($("#modal-lg"), $(this).data("uuid"));
+                    $("#modal-lg").find(".modal-footer").children(".btn-primary").text("수정");
+                    $("#modal-lg").find("form")[0].action = "/menu/update";
+                    $(this).closest("p").siblings().trigger("click");
+                    getMenuData($("#modal-lg"), $(this).closest("li").data("seq"));
                 });
 
             });
@@ -127,15 +124,13 @@
                 result.childrenList;
             }
 
-            function addMenuBar($target, menuTitle, uuid) {
-                menuTitle = menuTitle != null ? menuTitle : '새로운 메뉴';
-                uuid = uuid != "new" ? 'data-uuid="'+uuid+'"' : '';
-                html = '<li class="row m-0 p-0 ui-sortable-handle" '+uuid+'>';
-                html += '<p class="mb-0 col-9 rounded border border-white text-white p-2 menu-button bg-secondary">'+menuTitle+'</p>';
+            function addMenuBar($target, menuTitle, seq) {
+                let html = '<li class="row m-0 p-0 ui-sortable-handle" data-seq="'+seq+'">';
+                html += '<p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">'+menuTitle+'</p>';
                 html += '<p class="mb-0 col-3">';
                 html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
-                html += '</p>';
-                html += '</li>';
+                html += '</p></li>';
+                $(this).closest(".menu-tab").find(".menu-group").append($(html));
                 $target.append($(html));
             }
 
@@ -166,40 +161,36 @@
                 writeForm.parentSeq.value = parentSeq;
             }
 
-            function getMenuData($target, uuid) {
+            function getMenuData($target, seq) {
                 $.ajax({
                     type: "POST",
                     dataType: "json",
-                    async: false,
                     url: "/menu/getMenuInfo",
-                    data: {uuid : uuid},
-                }).done(function(menuInfo) {
+                    data: {seq : seq},
+                }).done(function(menuVO) {
+                    const menuInfo = menuVO.menu;
                     setMenuModal($target, menuInfo.title, menuInfo.menuOrder, menuInfo.publicF, menuInfo.uuid, menuInfo.parentSeq)
                     $("#modal-lg").modal("show");
                 }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert("Failed.");
+                    alert("통신실패!");
                 });
+            }
 
-                // $.ajax({
-                //     url: "/menu/getMenuInfo",
-                //     type: "POST",
-                //     data : {uuid : uuid},
-                //     contentType: "application/json",
-                //     dataType : 'json',
-                //     success: function (menuInfo) {
-                //         setMenuModal($target, menuInfo.title, menuInfo.menuOrder, menuInfo.publicF, menuInfo.uuid, menuInfo.parentSeq)
-                //     },
-                //     error: function (data) {
-                //         //TODO :: 차후세팅
-                //         alert("통신실패!");
-                //     }
-                // });
-
-                // $.post("/menu/getMenuInfo", {uuid : uuid},
-                //     function(menuInfo) {
-                //         setMenuModal($target, menuInfo.title, menuInfo.menuOrder, menuInfo.publicF, menuInfo.uuid, menuInfo.parentSeq)
-                //     }
-                // );
+            function getMenuChildrenList($target, seq) {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/menu/getChildrenList",
+                    data: {seq : seq},
+                }).done(function(childrenList) {
+                    let tabNum = $target.data("tab") + 1;
+                    const $parent = $("div[data-tab="+tabNum+"]").find(".menu-group");
+                    $.each(childrenList, function(index, item){
+                        addMenuBar($parent, item.menu.title, item.menu.seq);
+                    });
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert("통신실패!");
+                });
             }
 
         </script>
@@ -216,10 +207,10 @@
                     </p>
                     <ul class="menu-group col-md-9 col-12 rounded text-center border mx-auto border-dark board-width-3 p-3">
                         <th:block th:each="menuVO : ${session.menuList}" th:with="menu=${menuVO.menu}">
-                        <li th:if="${menu.menuType != T(com.hhs.codeboard.enumeration.MenuTypeEnum).STATIC_MENU.menuType}" class="row m-0 p-0">
+                        <li th:if="${menu.menuType != T(com.hhs.codeboard.enumeration.MenuTypeEnum).STATIC_MENU.menuType}" th:data-seq="${menu.seq}" class="row m-0 p-0">
                             <p th:text="${menu.title}" class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button"></p>
                             <p class="mb-0 col-3">
-                                <i th:if="${not #strings.isEmpty(menu.uuid)}" th:data-uuid="${menu.uuid}" class="fas fa-pen-square text-info font-size-25 align-middle"></i>
+                                <i th:if="${not #strings.isEmpty(menu.uuid)}" class="fas fa-pen-square text-info font-size-25 align-middle"></i>
                                 <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
                             </p>
                         </li>
@@ -233,34 +224,10 @@
                         <i class="fas fa-plus-square text-info font-size-25 align-middle mr-1"></i>
                     </p>
                     <ul class="menu-group col-md-9 col-12 rounded text-center mx-auto border border-dark board-width-3 p-3">
-                        <li class="row m-0 p-0">
-                            <p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴1</p>
-                            <p class="mb-0 col-3">
-                                <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
-                            </p>
-                        </li>
-                        <li class="row m-0 p-0">
-                            <p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴1</p>
-                            <p class="mb-0 col-3">
-                                <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
-                            </p>
-                        </li>
-                        <li class="row m-0 p-0">
-                            <p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">메뉴1</p>
-                            <p class="mb-0 col-3">
-                                <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
-                            </p>
-                        </li>
-                        <li class="row m-0 p-0">
-                            <p class="mb-0 col-9 rounded border border-white bg-primary text-white p-2 menu-button">메뉴1</p>
-                            <p class="mb-0 col-3">
-                                <i class="fas fa-pen-square text-info font-size-25 align-middle"></i>
-                                <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
-                            </p>
-                        </li>
                     </ul>
                 </div>
             </div>
+
         </div>
         <div class="modal fade" id="modal-lg">
             <div class="modal-dialog modal-dialog-centered modal-lg">

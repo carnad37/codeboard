@@ -76,7 +76,9 @@ public class MenuService {
             selectMenu(memberVO.getSeq(), menu.getParentSeq());
         }
 
-        MenuEntity update = menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), memberVO.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));
+        MenuEntity update = StringUtils.hasText(menu.getUuid()) ?
+                menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(menu.getUuid(), memberVO.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."))
+                : menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), memberVO.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));
         update.setTitle(menu.getTitle());
         update.setModUserSeq(memberVO.getSeq());
         update.setMenuOrder(menu.getMenuOrder());
@@ -86,6 +88,16 @@ public class MenuService {
         menuDAO.save(update);
     }
 
+    public void deleteMenu(MenuEntity menu, MemberVO memberVO) throws Exception {
+
+    }
+
+    /**
+     * 메뉴 초기화
+     * @param memberVO
+     * @param request
+     * @return
+     */
     public List<MenuVO> initMenuList(MemberVO memberVO, HttpServletRequest request) {
 
         List<MenuEntity> dbMenuList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(memberVO.getSeq(), Sort.by(Sort.Direction.ASC, "menuOrder"));
@@ -112,15 +124,15 @@ public class MenuService {
         //게시판 공통 메뉴 같은 경우 하위에 게시판이 있어야지만 활성화된다.
         for (MenuEntity dbMenu : dbMenuList) {
             MenuVO menuVO = new MenuVO(dbMenu);
-            //중복키가 있을경우 childrenList 얻어오기. 임시값과 교체.
-            menuMap.computeIfPresent(dbMenu.getSeq(), (key, tempVO) -> {
-                menuVO.setChildrenMenu(tempVO.getChildrenMenu());
-                return menuVO;
-            });
-            if (dbMenu.getParentSeq() != null && dbMenu.getParentSeq() > 0) {
+            if (menuMap.containsKey(menuVO.getSeq())) {
+                MenuVO targetVO = menuMap.get(menuVO.getSeq());
+                menuVO.setChildrenMenu(targetVO.getChildrenMenu());
+            }
+            menuMap.put(menuVO.getSeq(), menuVO);
+            if (menuVO.getParentSeq() != null && menuVO.getParentSeq() > 0) {
                 //부모값이 있는경우
                 //부모메뉴가 menuMap에 없을경우 임시값 생성
-                MenuVO parentVO = menuMap.computeIfAbsent(dbMenu.getParentSeq(), key -> new MenuVO());
+                MenuVO parentVO = menuMap.computeIfAbsent(menuVO.getParentSeq(), key -> new MenuVO());
                 //childrenList 초기화
                 List<MenuVO> childrenList = parentVO.getChildrenMenu() == null ? new ArrayList<>() : parentVO.getChildrenMenu();
                 childrenList.add(menuVO);

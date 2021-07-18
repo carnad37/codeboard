@@ -2,6 +2,7 @@ package com.hhs.codeboard.web.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,20 +77,55 @@ public class MenuController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/insert")
     public String insert(@AuthenticationPrincipal MemberVO memberVO
-            , @Validated MenuEntity insertMenu, Integer parentSeq, TestVO testVO
-        , HttpServletRequest request) throws Exception {
+            , MenuEntity insertMenu) throws Exception {
         menuService.insertMenu(insertMenu, memberVO, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
 
-    //ajax :: 게시판 정보 불러옴
+    @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
+    @RequestMapping("/update")
+    public String update(@AuthenticationPrincipal MemberVO memberVO
+            , MenuEntity updateMenu) throws Exception {
+        menuService.updateMenu(updateMenu, memberVO);
+        return "redirect:/menu/refresh";
+    }
+
+    /**
+     * menuVO정보 호출
+     * @param memberVO
+     * @param menu
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/getMenuInfo")
-    public ResponseEntity<MenuEntity> getMenuInfo(
+    public ResponseEntity<MenuVO> getMenuInfo(
             @AuthenticationPrincipal MemberVO memberVO,
-            @ModelAttribute MenuEntity menu) throws Exception {
-        MenuEntity targetMenu = menuService.selectMenu(memberVO.getSeq(), menu.getUuid());
-        return ResponseEntity.ok(targetMenu);
+            @ModelAttribute MenuEntity menu,
+            HttpServletRequest request) throws Exception {
+        Map<Integer, MenuVO> menuMap = SessionUtil.getSession(request, "menuMap");
+        return ResponseEntity.ok(menuMap.get(menu.getSeq()));
+    }
+
+    /**
+     * 자식 메뉴 호출
+     * (관리자에서는 menuMap에서 꺼내씀)
+     * @param memberVO
+     * @param menu
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping("/getChildrenList")
+    public ResponseEntity<List<MenuVO>> getChildrenList(
+            @AuthenticationPrincipal MemberVO memberVO,
+            @ModelAttribute MenuEntity menu,
+            HttpServletRequest request) throws Exception {
+        Map<Integer, MenuVO> menuMap = SessionUtil.getSession(request, "menuMap");
+        List<MenuVO> returnList = menuMap.get(menu.getSeq()).getChildrenMenu();
+        return ResponseEntity.ok(returnList == null ? new ArrayList<>() : returnList);
     }
 
     @RequestMapping("/setMenuInfo")
