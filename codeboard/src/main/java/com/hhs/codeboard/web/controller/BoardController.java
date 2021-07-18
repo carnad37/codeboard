@@ -115,7 +115,7 @@ public class BoardController extends LoggerController {
     @RequestMapping("/insert")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
     public String managerInsert(@AuthenticationPrincipal MemberVO memberVO,
-            Model model, MenuEntity menuEntity
+            Model model,@ModelAttribute MenuEntity menuEntity
     ) throws Exception {
         menuService.insertMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
         return "redirect:/board/list";

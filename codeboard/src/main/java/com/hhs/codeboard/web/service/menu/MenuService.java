@@ -50,7 +50,7 @@ public class MenuService {
     }
 
     public void insertMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum menuType) throws Exception {
-        if (menu.getParentSeq() > 0) {
+        if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
             selectMenu(memberVO.getSeq(), menu.getParentSeq());
         }
