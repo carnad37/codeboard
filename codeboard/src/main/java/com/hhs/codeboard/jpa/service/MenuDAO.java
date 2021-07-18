@@ -18,4 +18,6 @@ public interface MenuDAO extends JpaRepository<MenuEntity, Long> {
 
     List<MenuEntity> findAllByRegUserSeqAndMenuTypeAndDelDateIsNull(Integer regUserSeq, String menuType);
 
+    List<MenuEntity> findAllByParentSeqAndDelDateIsNull(Integer parentSeq);
+
 }

@@ -11,8 +11,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Component
 @Aspect
@@ -30,7 +32,8 @@ public class AspectMenuConfig {
         //기본적으로 현재 메뉴가 유저가 등록한 컨텐츠일때만 uuid를 부여
         //그 외에는 null로 초기화
         if (MenuTypeEnum.MENU.equals(targetEnum) || MenuTypeEnum.BOARD.equals(targetEnum)) {
-            SessionUtil.setSession(request, "viewMenuUUID", request.getParameter("menuUUID"));
+            Map<String, String> pathVariable = (Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+            SessionUtil.setSession(request, "viewMenuUUID", pathVariable.get("uuid"));
         } else {
             SessionUtil.setSession(request, "viewMenuUUID", null);
         }

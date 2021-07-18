@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hhs.codeboard.jpa.entity.member.MemberEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
@@ -26,10 +27,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			Authentication authentication) throws ServletException, IOException {
         
         MemberVO memberVO = (MemberVO) authentication.getPrincipal();
-
-			//가공된 MenuList를 memberVO와 session에 담는다.
-//		memberVO.setMenuList(menuList);
+		//메뉴정보를 세션에 담는다
 		menuService.initMenuList(memberVO, request);
+
 		response.sendRedirect("/main");
 	}
 	

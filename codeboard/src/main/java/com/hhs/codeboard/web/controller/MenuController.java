@@ -1,11 +1,5 @@
 package com.hhs.codeboard.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
@@ -13,21 +7,21 @@ import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.web.service.menu.MenuService;
-
 import com.hhs.codeboard.web.service.menu.MenuVO;
-import com.hhs.codeboard.web.service.menu.TestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/menu")
@@ -47,6 +41,12 @@ public class MenuController extends LoggerController {
         this.menuService = menuService;
     }
 
+    /**
+     * 메뉴 업데이트
+     * @param memberVO
+     * @param request
+     * @return
+     */
     @RequestMapping("/refresh")
     public String menuRefresh(@AuthenticationPrincipal MemberVO memberVO
             , HttpServletRequest request) {
@@ -55,6 +55,13 @@ public class MenuController extends LoggerController {
         return "redirect:/menu/list";
     }
 
+    /**
+     * 메뉴 리스트
+     * @param memberVO
+     * @param request
+     * @param model
+     * @return
+     */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/list")
     public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
@@ -63,17 +70,23 @@ public class MenuController extends LoggerController {
 
         List<MenuVO> menuList = SessionUtil.getSession(request, "menuList");
         List<MenuVO> parentList = new ArrayList<>();
-        Integer maxDepth = SessionUtil.getSession(request, "maxDepth");
-
-        menuList.forEach(menuVO -> {
-            if (menuVO.getDepth() == maxDepth) {
-                parentList.add(menuVO);
+        final Integer preMaxDepth = (Integer) SessionUtil.getSession(request, "maxDepth") - 1;
+        for (MenuVO targetVO : menuList) {
+            if (targetVO.getDepth() == preMaxDepth) {
+                parentList.add(targetVO);
             }
-        });
+        }
         model.addAttribute("parentList", parentList);
         return "menu/list";
     }
 
+    /**
+     * 메뉴 추가
+     * @param memberVO
+     * @param insertMenu
+     * @return
+     * @throws Exception
+     */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/insert")
     public String insert(@AuthenticationPrincipal MemberVO memberVO
@@ -82,11 +95,33 @@ public class MenuController extends LoggerController {
         return "redirect:/menu/refresh";
     }
 
+    /**
+     * 메뉴 수정
+     * @param memberVO
+     * @param updateMenu
+     * @return
+     * @throws Exception
+     */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/update")
     public String update(@AuthenticationPrincipal MemberVO memberVO
             , MenuEntity updateMenu) throws Exception {
         menuService.updateMenu(updateMenu, memberVO);
+        return "redirect:/menu/refresh";
+    }
+
+    /**
+     * 메뉴 삭제
+     * @param memberVO
+     * @param deleteMenu
+     * @return
+     * @throws Exception
+     */
+    @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
+    @RequestMapping("/delete")
+    public String delete(@AuthenticationPrincipal MemberVO memberVO
+            , MenuEntity deleteMenu) throws Exception {
+        menuService.deleteMenu(deleteMenu, memberVO);
         return "redirect:/menu/refresh";
     }
 
@@ -128,29 +163,30 @@ public class MenuController extends LoggerController {
         return ResponseEntity.ok(returnList == null ? new ArrayList<>() : returnList);
     }
 
-    @RequestMapping("/setMenuInfo")
-    public ResponseEntity<String> setMenuInfo(
-            @AuthenticationPrincipal MemberVO memberVO,
-            @RequestBody String depthOne, @RequestBody String depthTwo, @RequestBody String[] delSeqs) throws Exception {
-
-        //TODO :: 무한 뎁스구조로 바꿀시 수정해야함.
-        //수정 및 삭제가 필요.(seq값이 없는건 추가, 있는건 수정. Menu중에서 db에 없는건 삭제)
-        try {
-            //1 뎁스
-            List<MenuEntity> depthOneList = new ObjectMapper().readValue(depthOne, new TypeReference<List<MenuEntity>>() {});
-            //2 뎁스
-            List<MenuEntity> depthTwoList = new ObjectMapper().readValue(depthTwo, new TypeReference<List<MenuEntity>>() {});
-
-            List<List<MenuEntity>> allList = new ArrayList<>();
-            allList.add(depthOneList);
-
-            menuService.txUpdateDepth(allList, delSeqs, memberVO.getSeq());
-
-        } catch (Exception e) {
-            return ResponseEntity.ok("fail");
-        }
-        return ResponseEntity.ok("success");
-    }
+    //@Deprecated :: 2021-07-18 :: 모든 페이지 수정을 json으로 받아 일괄적으로 메뉴 업데이트하는 기능 필요없어짐.
+//    @RequestMapping("/setMenuInfo")
+//    public ResponseEntity<String> setMenuInfo(
+//            @AuthenticationPrincipal MemberVO memberVO,
+//            @RequestBody String depthOne, @RequestBody String depthTwo, @RequestBody String[] delSeqs) throws Exception {
+//
+//        //TODO :: 무한 뎁스구조로 바꿀시 수정해야함.
+//        //수정 및 삭제가 필요.(seq값이 없는건 추가, 있는건 수정. Menu중에서 db에 없는건 삭제)
+//        try {
+//            //1 뎁스
+//            List<MenuEntity> depthOneList = new ObjectMapper().readValue(depthOne, new TypeReference<List<MenuEntity>>() {});
+//            //2 뎁스
+//            List<MenuEntity> depthTwoList = new ObjectMapper().readValue(depthTwo, new TypeReference<List<MenuEntity>>() {});
+//
+//            List<List<MenuEntity>> allList = new ArrayList<>();
+//            allList.add(depthOneList);
+//
+//            menuService.txUpdateDepth(allList, delSeqs, memberVO.getSeq());
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.ok("fail");
+//        }
+//        return ResponseEntity.ok("success");
+//    }
 
 
 }

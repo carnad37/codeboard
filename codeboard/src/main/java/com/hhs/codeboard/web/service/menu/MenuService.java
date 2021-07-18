@@ -5,6 +5,7 @@ import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.jpa.service.MenuDAO;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberVO;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -76,9 +73,7 @@ public class MenuService {
             selectMenu(memberVO.getSeq(), menu.getParentSeq());
         }
 
-        MenuEntity update = StringUtils.hasText(menu.getUuid()) ?
-                menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(menu.getUuid(), memberVO.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."))
-                : menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), memberVO.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));
+        MenuEntity update = getMenu(menu, memberVO);
         update.setTitle(menu.getTitle());
         update.setModUserSeq(memberVO.getSeq());
         update.setMenuOrder(menu.getMenuOrder());
@@ -88,8 +83,22 @@ public class MenuService {
         menuDAO.save(update);
     }
 
+    /**
+     * 메뉴 삭제(하위메뉴 체크)
+     * @param menu
+     * @param memberVO
+     * @throws Exception
+     */
     public void deleteMenu(MenuEntity menu, MemberVO memberVO) throws Exception {
-
+        MenuEntity deleteVO = getMenu(menu, memberVO);
+        if (!MenuTypeEnum.MENU.equals(deleteVO.getMenuType())) {
+            throw new ServiceException("메뉴가 아닙니다.");
+        } else if (!menuDAO.findAllByParentSeqAndDelDateIsNull(deleteVO.getParentSeq()).isEmpty()) {
+            throw new ServiceException("하위 메뉴가 있습니다.");
+        } else {
+            //자식 메뉴가 하나라도 있을경우 삭제불가
+            menuDAO.delete(deleteVO);
+        }
     }
 
     /**
@@ -149,49 +158,9 @@ public class MenuService {
 
         SessionUtil.setSession(request, "menuList", menuList);
         SessionUtil.setSession(request, "menuMap", menuMap);
-        SessionUtil.setSession(request, "maxDepth", getMaxDepth(topMenu, 0));
+        SessionUtil.setSession(request, "maxDepth", getMaxDepth(topMenu, 0, 0));
 
         return menuList;
-    };
-
-    public void txUpdateDepth(List<List<MenuEntity>> targetList, String[] delSeqs, int regUserSeq) throws Exception {
-
-        List<MenuEntity> beforeList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(regUserSeq);
-        //seq로 Map생성
-        Map<Integer, MenuEntity> beforeMap = beforeList.stream()
-                .collect(Collectors.toMap(
-                    MenuEntity::getSeq,
-                    Function.identity()
-                ));
-
-        for(List<MenuEntity> unitList : targetList) {
-            for(MenuEntity target : unitList) {
-                MenuEntity updateEntity = null;
-                if (target.getSeq() > 0) {
-                    //수정된 데이터
-                    updateEntity = beforeMap.get(target.getSeq());
-                    updateEntity.setModDate(LocalDateTime.now());
-                    updateEntity.setModUserSeq(regUserSeq);
-                    updateEntity.setMenuOrder(target.getMenuOrder());
-                    updateEntity.setPublicF(target.getPublicF());
-                    updateEntity.setTitle(target.getTitle());
-                    updateEntity.setParentSeq(target.getParentSeq());
-                } else {
-                    //새로 입력된 데이터
-                    updateEntity = new MenuEntity();
-                    updateEntity.setRegDate(LocalDateTime.now());
-                    updateEntity.setRegUserSeq(regUserSeq);
-                    updateEntity.setMenuOrder(target.getMenuOrder());
-                    updateEntity.setPublicF(target.getPublicF());
-                    updateEntity.setTitle(target.getTitle());
-                    updateEntity.setParentSeq(target.getParentSeq());
-                }
-                menuDAO.save(updateEntity);
-            }
-        }
-
-        //TODO :: 삭제는 차후에 추가
-
     }
 
     /**
@@ -200,71 +169,95 @@ public class MenuService {
      * @param maxDepth
      * @return
      */
-    private int getMaxDepth(MenuVO targetVO, int maxDepth) {
+    private int getMaxDepth(MenuVO targetVO, int selfDepth, int maxDepth) {
+        /**
+         * selfDepth는 실제 해당 메뉴의 depth
+         * maxDepth는 전체 주회돌면서 찾아야하는 maxDepth
+         * maxDepth로 setDepth를 해주게되면 점점 depth가 늘어나는 오류가있어서
+         * selfDepth값을 따로 둠으로서 해결.
+         * 주회 종결시에는 selfDepth를 리턴해서 그동안 전달되온 maxDepth와 크기비교.
+         * 모든 비교가 끝나면 검색점을 형제 메뉴로 옮기면서 maxDepth 전달.
+         */
         //depth 설정
-        targetVO.setDepth(maxDepth);
+        targetVO.setDepth(selfDepth);
 
         if (targetVO.getChildrenMenu() == null) {
             //재귀 종료
-            return maxDepth;
+            return selfDepth;
         } else {
             //재귀 진행
-            maxDepth += 1;
+            selfDepth += 1;
         }
 
         //목록내에서 가장 큰 depth를 리턴
         for (MenuVO childrenVO : targetVO.getChildrenMenu()) {
-            int depth = getMaxDepth(childrenVO, maxDepth);
+            childrenVO.setDepth(selfDepth);
+            int depth = getMaxDepth(childrenVO, selfDepth, maxDepth);
             maxDepth = depth > maxDepth ? depth : maxDepth;
         }
 
         return maxDepth;
     }
 
-//    public Integer getMenuSeq(HttpServletRequest request) throws Exception {
-//        Cookie[] cookies = request.getCookies();
-//        for(int i = 0; i < cookies.length; i++) {
-//            if (MenuEntity.MENU_SEQ_COOKIE_NAME.equals(cookies[i].getName())) return Integer.parseInt(cookies[i].getValue());
-//        }
-//        return null;
-//    }
+    /**
+     * uuid 또는 id로 menuEntity 선택
+     * @param menu
+     * @param member
+     * @return
+     * @throws Exception
+     */
+    private MenuEntity getMenu(MenuEntity menu, MemberVO member) throws Exception {
+        return StringUtils.hasText(menu.getUuid()) ?
+                menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(menu.getUuid(), member.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."))
+                : menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), member.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));
+    }
 
-//    public String getBoardUrl(Integer boardSeq) {
-//        return "/board/" + boardSeq + "/list";
-//    }
-
-//    public void sortMenuList (List<MenuEntity> menuList) {
-//        //메뉴리스트가 있으면 sort. 없으면 종료.
-//        if (menuList.size() > 1) {
-//            menuList.stream().sorted(Comparator.comparing((MenuEntity::getMenuOrder)));
-//            //자식들도 다 sort
-//            for(MenuEntity tMenu : menuList) {
-//                sortMenuList(tMenu.getChildrenMenu());
+    //Deprecated :: 2021-07-18 :: 상위기능이 사용안하게됨
+//    /**
+//     *
+//     * @param targetList
+//     * @param delSeqs
+//     * @param regUserSeq
+//     * @throws Exception
+//     */
+//    public void txUpdateDepth(List<List<MenuEntity>> targetList, String[] delSeqs, int regUserSeq) throws Exception {
+//
+//        List<MenuEntity> beforeList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(regUserSeq);
+//        //seq로 Map생성
+//        Map<Integer, MenuEntity> beforeMap = beforeList.stream()
+//                .collect(Collectors.toMap(
+//                    MenuEntity::getSeq,
+//                    Function.identity()
+//                ));
+//
+//        for(List<MenuEntity> unitList : targetList) {
+//            for(MenuEntity target : unitList) {
+//                MenuEntity updateEntity = null;
+//                if (target.getSeq() > 0) {
+//                    //수정된 데이터
+//                    updateEntity = beforeMap.get(target.getSeq());
+//                    updateEntity.setModDate(LocalDateTime.now());
+//                    updateEntity.setModUserSeq(regUserSeq);
+//                    updateEntity.setMenuOrder(target.getMenuOrder());
+//                    updateEntity.setPublicF(target.getPublicF());
+//                    updateEntity.setTitle(target.getTitle());
+//                    updateEntity.setParentSeq(target.getParentSeq());
+//                } else {
+//                    //새로 입력된 데이터
+//                    updateEntity = new MenuEntity();
+//                    updateEntity.setRegDate(LocalDateTime.now());
+//                    updateEntity.setRegUserSeq(regUserSeq);
+//                    updateEntity.setMenuOrder(target.getMenuOrder());
+//                    updateEntity.setPublicF(target.getPublicF());
+//                    updateEntity.setTitle(target.getTitle());
+//                    updateEntity.setParentSeq(target.getParentSeq());
+//                }
+//                menuDAO.save(updateEntity);
 //            }
 //        }
+//
+//        //TODO :: 삭제는 차후에 추가
+//
 //    }
-
-    // public List<Integer> getSiteAcitveByDepth (List<MenuEntity> menuList, Integer activeSeq) {
-    //     List<Integer> activeList = new ArrayList<Integer>();
-    //     getSiteAcitveByDepthLoop(menuList, activeList, activeSeq);
-    //     return activeList;
-    // }
-
-    // private void getSiteAcitveByDepthLoop (List<MenuEntity> menuList, List<Integer> activeList, Integer activeSeq) {
-    //     for (MenuEntity tMenuEntity : menuList) {
-    //         //현재 선택한 메뉴인지 확인
-    //         if (activeSeq.equals(tMenuEntity.getSeq())) {
-    //             activeList.add(tMenuEntity.getSeq());
-    //             break;
-    //         }
-    //         //재귀 호출
-    //         if (!CollectionUtils.isEmpty(menuList))  getSiteAcitveByDepthLoop(tMenuEntity.getChildrenMenu(), activeList, activeSeq);
-    //         //주회 종료후, activeList가 있으면 더이상 반복할 필요가 없다.
-    //         if (activeList.size() > 0) {
-    //             activeList.add(0, tMenuEntity.getSeq());
-    //             break;
-    //         }
-    //     }
-    // }
 
 }

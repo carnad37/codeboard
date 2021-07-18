@@ -36,6 +36,14 @@ public class MenuVO implements Serializable {
     private MenuEntity menu;
     private Integer depth;
 
+    public String getTitle() {
+        return this.menu.getTitle();
+    }
+
+    public void setTitle(String title) {
+        this.menu.setTitle(title);
+    }
+
     public Integer getSeq() {
         return this.menu.getSeq();
     }
@@ -43,7 +51,6 @@ public class MenuVO implements Serializable {
     public void setSeq(Integer seq) {
         this.menu.setSeq(seq);
     }
-
 
     public MenuVO getParentMenu() {
         return parentMenu;

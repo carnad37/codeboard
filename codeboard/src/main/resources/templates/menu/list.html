@@ -64,6 +64,8 @@
                 // });
                 $(".menu-group").sortable().disableSelection();
                 // $(".menu-group");
+
+
                 $(document).on("click", ".menu-button", function(){
                     var $this = $(this);
                     var $parentRow = $(this).closest(".menu-tab");
@@ -96,13 +98,20 @@
 
                 //minus 버튼 클릭시(삭제기능)
                 $(document).on("click", ".fas.fa-minus-square", function(){
-                    $(this).closest("li").remove();
+                    $("#modal-lg").find(".modal-footer").children(".btn-primary").text("수정");
+                    writeForm.action = "/menu/delete";
+                    $(this).closest("p").siblings().trigger("click");
+                    if (confirm("정말 ["+writeForm.title.value+"]메뉴를 삭제하시겠습니까?")) {
+                        writeForm.submit();
+                    } else {
+                        writeForm.action = "/menu/write";
+                    }
                 });
 
-                //수정버튼 클릭
+                //pen 버튼 클릭시(메뉴수정)
                 $(document).on("click", ".fas.fa-pen-square", function(){
                     $("#modal-lg").find(".modal-footer").children(".btn-primary").text("수정");
-                    $("#modal-lg").find("form")[0].action = "/menu/update";
+                    writeForm.action = "/menu/update";
                     $(this).closest("p").siblings().trigger("click");
                     getMenuData($("#modal-lg"), $(this).closest("li").data("seq"));
                 });
@@ -211,7 +220,7 @@
                             <p th:text="${menu.title}" class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button"></p>
                             <p class="mb-0 col-3">
                                 <i th:if="${not #strings.isEmpty(menu.uuid)}" class="fas fa-pen-square text-info font-size-25 align-middle"></i>
-                                <i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                                <i th:if="${menu.menuType != T(com.hhs.codeboard.enumeration.MenuTypeEnum).MENU.menuType}" class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
                             </p>
                         </li>
                         </th:block>

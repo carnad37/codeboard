@@ -15,5 +15,4 @@ public class MenuUtil {
             return menuType.equals(viewMenuType);
         }
     }
-
 }

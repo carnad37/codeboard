@@ -1,20 +1,15 @@
 package com.hhs.codeboard.jpa.entity.menu;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
-
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
 
-import java.awt.*;
+import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
 
 
 @Getter

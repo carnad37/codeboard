@@ -19,9 +19,7 @@ public class MemberVO extends User{
 		super(memberVO.getEmail(), memberVO.getPassword(), !UserTypeEnum.WAIT.getTypeCode().equals(memberVO.getUserType()),
 			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
 		this.seq = memberVO.getSeq();
-		memberVO.getMenuList().forEach(
-			(MenuEntity entity) -> menuList.add(new MenuEntity())
-		);
+		this.nickName = memberVO.getNickName();
 	}
 
 	public  MemberVO(String username, String password, boolean enabled,
@@ -32,8 +30,7 @@ public class MemberVO extends User{
 	private static final long serialVersionUID = 3262283502601992796L;
 
 	private Integer seq;
-	private List<MenuEntity> menuList = new ArrayList<>();
-	private Map<String, MenuEntity> menuMap = new HashMap<>();
+	private String nickName;
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
@@ -70,14 +67,6 @@ public class MemberVO extends User{
 		return isEnabled();
 	}
 
-	public List<MenuEntity> getMenuList() {
-		return this.menuList;
-	}
-
-	public void setMenuList(List<MenuEntity> menuList) {
-		this.menuList = menuList;
-	}
-
 	public Integer getSeq() {
 		return this.seq;
 	}
@@ -86,4 +75,11 @@ public class MemberVO extends User{
 		this.seq = seq;
 	}
 
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 }
