@@ -220,7 +220,7 @@
                             <p th:text="${menu.title}" class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button"></p>
                             <p class="mb-0 col-3">
                                 <i th:if="${not #strings.isEmpty(menu.uuid)}" class="fas fa-pen-square text-info font-size-25 align-middle"></i>
-                                <i th:if="${menu.menuType != T(com.hhs.codeboard.enumeration.MenuTypeEnum).MENU.menuType}" class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
+                                <i th:if="${menu.menuType eq T(com.hhs.codeboard.enumeration.MenuTypeEnum).MENU.menuType}" class="fas fa-minus-square text-danger font-size-25 align-middle"></i>
                             </p>
                         </li>
                         </th:block>
