@@ -12,7 +12,7 @@ public class WebControllerBindConfig {
     public void initBinder(WebDataBinder dataBinder) {
         dataBinder.registerCustomEditor(
             Integer.class,
-            new CustomIntegerEditor(10,false)
+            new CustomIntegerEditor(0,false)
         );
     }
 

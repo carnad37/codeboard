@@ -98,7 +98,7 @@ public class BoardController extends LoggerController {
     public String managerWrite(@AuthenticationPrincipal MemberVO memberVO,
             Model model, MenuEntity menuEntity
     ) throws Exception {
-        if (menuEntity.getSeq() != null) {
+        if (menuEntity.getSeq() > 0) {
             model.addAttribute("board", menuService.selectMenu(memberVO.getSeq(), menuEntity.getSeq()));
         }
         return "board/mgr/write";
@@ -171,7 +171,7 @@ public class BoardController extends LoggerController {
             @ModelAttribute @PathVariable(name = "uuid") String uuid
             , Model model
             , @ModelAttribute BoardArticleEntity articleEntity) throws Exception {
-        if (articleEntity.getSeq() != null) {
+        if (articleEntity.getSeq() > 0) {
             model.addAttribute("article", articleService.selectArticle(articleEntity, memberVO));
         }
         return "board/article/write";
