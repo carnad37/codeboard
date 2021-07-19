@@ -19,7 +19,6 @@ import com.hhs.codeboard.web.service.member.MemberVO;
 import com.hhs.codeboard.jpa.service.MemberDAO;
 import com.hhs.codeboard.web.service.member.MemberService;
 
-@Service
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired

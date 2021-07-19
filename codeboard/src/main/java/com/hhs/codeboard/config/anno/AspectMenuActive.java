@@ -9,4 +9,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AspectMenuActive {
     MenuTypeEnum menuType() default MenuTypeEnum.MENU;
+    String menuTitle() default "";
 }

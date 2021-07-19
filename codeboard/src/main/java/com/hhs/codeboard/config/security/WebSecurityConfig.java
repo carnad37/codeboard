@@ -1,5 +1,8 @@
 package com.hhs.codeboard.config.security;
 
+import com.hhs.codeboard.web.service.member.MemberService;
+import com.hhs.codeboard.web.service.member.impl.MemberServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,12 +11,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
@@ -30,28 +36,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
         http.authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/open/**").permitAll()
             .antMatchers("/**").authenticated()
-            .antMatchers("/open/**").permitAll();
 
-
-//                .antMatchers("/**").permitAll()
-//        http.csrf().disable();
-
-        http.formLogin()
+            .and()
+            .formLogin()
             .loginPage("/open/login")
             .usernameParameter("email")
             .loginProcessingUrl("/open/actionLogin")
             .failureHandler(loginFailureHandler())
             .successHandler(loginSuccessHandler())
-	        .permitAll();
-	        
-        http.logout()
+	        .permitAll()
+
+            .and()
+            .logout()
         	.logoutRequestMatcher(new AntPathRequestMatcher("/open/logout"))
             .addLogoutHandler(logoutSuccessHandler())
-        	.invalidateHttpSession(true);
-        
-        http.exceptionHandling()
-        	.accessDeniedPage("/denied");
+        	.invalidateHttpSession(true)
+
+            .and()
+            .exceptionHandling()
+        	.accessDeniedPage("/denied")
+
+            .and()
+            .rememberMe().key("dontReadKey")
+            .userDetailsService(memberService());
     }
     
     @Override
@@ -63,6 +72,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
      * 따로 해당 클래스에서 Component나 Service로 등록하지않고
      * 일괄적으로 Bean 등록
      */
+
+    @Bean
+    public MemberService memberService() {
+        return new MemberServiceImpl();
+    }
 
     @Bean
     public LogoutHandler logoutSuccessHandler() {

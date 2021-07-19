@@ -21,25 +21,5 @@ public class SiteInterceptorHandler implements HandlerInterceptor {
         if ("/".equals(request.getContextPath())) {
             response.sendRedirect("/main");
         }
-
-//        SessionUtil.setSession("selectMenu");
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (!(auth instanceof AnonymousAuthenticationToken)) {
-//            MemberVO memberVO = (MemberVO) auth.getPrincipal();
-//            if (memberVO != null) {
-//                List<MenuEntity> menuList =  memberVO.getMenuList();
-//                model.addObject("menuList", menuList);
-//
-//                //쿠키값에서 메뉴 seq를 구해야함.
-//                //실제 구현시는 쿠키로 보내고 jquery로 실행.
-//                //서버오류 안나게. thymeleaf는 서버로직 실행엔 그닥 좋지않음.
-//                // Integer activeSeq = menuService.getMenuSeq(request);
-//                // if (activeSeq != null) {
-//                //     model.addObject("menuSeq", activeSeq);
-//                //     model.addObject("activeList", menuService.getSiteAcitveByDepth(memberVO.getMenuList(), activeSeq));
-//                // }
-//
-//            }
-//        }
     }
 }

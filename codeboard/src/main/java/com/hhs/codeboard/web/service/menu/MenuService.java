@@ -89,17 +89,22 @@ public class MenuService {
      * @param memberVO
      * @throws Exception
      */
-    public void deleteMenu(MenuEntity menu, MemberVO memberVO) throws Exception {
+    public void deleteMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum targetType) throws Exception {
         MenuEntity deleteVO = getMenu(menu, memberVO);
-        if (!MenuTypeEnum.MENU.equals(deleteVO.getMenuType())) {
-            throw new ServiceException("메뉴가 아닙니다.");
-        } else if (!menuDAO.findAllByParentSeqAndDelDateIsNull(deleteVO.getParentSeq()).isEmpty()) {
+        if (!targetType.getMenuType().equals(deleteVO.getMenuType())) {
+            throw new ServiceException("타겟타입이 아닙니다.");
+        } else if (targetType.equals(MenuTypeEnum.MENU) && !menuDAO.findAllByParentSeqAndDelDateIsNull(deleteVO.getSeq()).isEmpty()) {
+            //메뉴타입일 경우에만 하위메뉴 체크
             throw new ServiceException("하위 메뉴가 있습니다.");
         } else {
             //자식 메뉴가 하나라도 있을경우 삭제불가
-            menuDAO.delete(deleteVO);
+            //실제 삭제안하고 delDate만 업데이트
+            deleteVO.setDelDate(LocalDateTime.now());
+            menuDAO.save(deleteVO);
+//            menuDAO.delete(deleteVO);
         }
     }
+
 
     /**
      * 메뉴 초기화

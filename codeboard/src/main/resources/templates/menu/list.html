@@ -100,8 +100,10 @@
                 $(document).on("click", ".fas.fa-minus-square", function(){
                     $("#modal-lg").find(".modal-footer").children(".btn-primary").text("수정");
                     writeForm.action = "/menu/delete";
-                    $(this).closest("p").siblings().trigger("click");
-                    if (confirm("정말 ["+writeForm.title.value+"]메뉴를 삭제하시겠습니까?")) {
+                    const targetMenu = $(this).closest("p").siblings();
+                    targetMenu.trigger("click");
+                    if (confirm("정말 ["+targetMenu.text()+"]메뉴를 삭제하시겠습니까?")) {
+                        $(writeForm).append('<input type="hidden" name="seq" value="'+targetMenu.closest("li").data("seq")+'"/>');
                         writeForm.submit();
                     } else {
                         writeForm.action = "/menu/write";
@@ -133,11 +135,14 @@
                 result.childrenList;
             }
 
-            function addMenuBar($target, menuTitle, seq) {
+            function addMenuBar($target, menuTitle, seq, menuType) {
                 let html = '<li class="row m-0 p-0 ui-sortable-handle" data-seq="'+seq+'">';
                 html += '<p class="mb-0 col-9 rounded border border-white bg-secondary text-white p-2 menu-button">'+menuTitle+'</p>';
                 html += '<p class="mb-0 col-3">';
-                html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
+                html += '<i class="fas fa-pen-square text-info font-size-25 align-middle" style="margin-right: 3px;"></i>'
+                if ([[${T(com.hhs.codeboard.enumeration.MenuTypeEnum).MENU.menuType}]] == menuType) {
+                    html += '<i class="fas fa-minus-square text-danger font-size-25 align-middle"></i>';
+                }
                 html += '</p></li>';
                 $(this).closest(".menu-tab").find(".menu-group").append($(html));
                 $target.append($(html));
@@ -195,7 +200,7 @@
                     let tabNum = $target.data("tab") + 1;
                     const $parent = $("div[data-tab="+tabNum+"]").find(".menu-group");
                     $.each(childrenList, function(index, item){
-                        addMenuBar($parent, item.menu.title, item.menu.seq);
+                        addMenuBar($parent, item.menu.title, item.menu.seq, item.menu.menuType);
                     });
                 }).fail(function(jqXHR, textStatus, errorThrown) {
                     alert("통신실패!");

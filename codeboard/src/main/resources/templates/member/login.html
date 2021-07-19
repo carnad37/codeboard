@@ -100,7 +100,7 @@
             <div class="row mb-3">
               <div class="col-8">
                 <div class="icheck-primary">
-                  <input type="checkbox" id="remember">
+                  <input type="checkbox" id="remember" name="remember-me">
                   <label for="remember">
                     로그인 유지하기
                   </label>
@@ -141,7 +141,7 @@
 
   
   <div th:if="${param.error}" class="modal" id="modal-danger">
-    <div class="modal-dialog">
+    <div class="modal-dialog  modal-dialog-centered" >
       <div class="modal-content">
         <div class="modal-header bg-danger">
           <h4 class="modal-title">로그인 실패</h4>

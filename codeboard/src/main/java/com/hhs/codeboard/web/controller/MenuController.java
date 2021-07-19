@@ -52,7 +52,7 @@ public class MenuController extends LoggerController {
             , HttpServletRequest request) {
         //로그인한 회원정보로 menu정보 리셋.
         SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO, request));
-        return "redirect:/menu/list";
+        return "redirect:/main";
     }
 
     /**
@@ -121,7 +121,7 @@ public class MenuController extends LoggerController {
     @RequestMapping("/delete")
     public String delete(@AuthenticationPrincipal MemberVO memberVO
             , MenuEntity deleteMenu) throws Exception {
-        menuService.deleteMenu(deleteMenu, memberVO);
+        menuService.deleteMenu(deleteMenu, memberVO, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
 

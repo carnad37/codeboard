@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerMapping;
@@ -36,6 +37,12 @@ public class AspectMenuConfig {
             SessionUtil.setSession(request, "viewMenuUUID", pathVariable.get("uuid"));
         } else {
             SessionUtil.setSession(request, "viewMenuUUID", null);
+        }
+
+        //메뉴 타이틀 부여
+        String menuTitle = menuAnno.menuTitle();
+        if (StringUtils.hasText(menuTitle)) {
+            SessionUtil.setSession(request, "menuTitle", menuTitle);
         }
 
         return pjp.proceed(pjp.getArgs());

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
+import com.hhs.codeboard.enumeration.MenuSeqEnum;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
@@ -65,7 +66,7 @@ public class BoardController extends LoggerController {
      * @return
      */
     @RequestMapping("/list")
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 목록")
     public String managerList(@AuthenticationPrincipal MemberVO memberVO,
               @ModelAttribute MenuEntity MenuEntity, Model model) {
         //regUserSeq 랑 delDate로 조건을 건다.(모든 게시물)
@@ -80,7 +81,7 @@ public class BoardController extends LoggerController {
      * @return
      */
     @RequestMapping("/read")
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 관리")
     public String managerRead() {
         return "/board/mgr/read";
     }
@@ -94,7 +95,7 @@ public class BoardController extends LoggerController {
      * @throws Exception
      */
     @RequestMapping("/write")
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 관리")
     public String managerWrite(@AuthenticationPrincipal MemberVO memberVO,
             Model model, MenuEntity menuEntity
     ) throws Exception {
@@ -102,6 +103,15 @@ public class BoardController extends LoggerController {
             model.addAttribute("board", menuService.selectMenu(memberVO.getSeq(), menuEntity.getSeq()));
         }
         return "board/mgr/write";
+    }
+
+    @RequestMapping("/delete")
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 관리")
+    public String managerDelete(@AuthenticationPrincipal MemberVO memberVO,
+               Model model, MenuEntity menuEntity
+    ) throws Exception {
+        menuService.deleteMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
+        return "redirect:/menu/refresh";
     }
 
     /**
@@ -117,6 +127,7 @@ public class BoardController extends LoggerController {
     public String managerInsert(@AuthenticationPrincipal MemberVO memberVO,
             Model model,@ModelAttribute MenuEntity menuEntity
     ) throws Exception {
+        menuEntity.setParentSeq(MenuSeqEnum.ROOT_MENU.getMenuSeq());
         menuService.insertMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
         return "redirect:/board/list";
     }
@@ -147,7 +158,7 @@ public class BoardController extends LoggerController {
      * @throws Exception
      */
     @RequestMapping("/{uuid}/list")
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 관리")
     @Transactional
     public String list(@AuthenticationPrincipal MemberVO memberVO,
            @ModelAttribute @PathVariable(name = "uuid") String uuid, Model model) throws Exception {
@@ -166,7 +177,7 @@ public class BoardController extends LoggerController {
      * @throws Exception
      */
     @RequestMapping("/{uuid}/write")
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 관리")
     public String write(@AuthenticationPrincipal MemberVO memberVO,
             @ModelAttribute @PathVariable(name = "uuid") String uuid
             , Model model
@@ -225,7 +236,7 @@ public class BoardController extends LoggerController {
      * @throws Exception
      */
     @RequestMapping("/{uuid}/read")
-    @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
+    @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 상세")
     public String read(@AuthenticationPrincipal MemberVO memberVO,
            @ModelAttribute @PathVariable(name = "uuid") String uuid,
            Model model,

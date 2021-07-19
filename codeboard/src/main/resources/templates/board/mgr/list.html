@@ -25,6 +25,7 @@
             if (confirm("해당 게시물을 삭제하시겠습니까?")) {
                 listForm.action = "/board/delete";
                 listForm.seq.value = seq;
+                listForm.submit();
             }
         }
 
