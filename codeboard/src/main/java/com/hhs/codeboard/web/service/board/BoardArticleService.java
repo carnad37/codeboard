@@ -27,7 +27,7 @@ public class BoardArticleService {
         this.menuDAO = menuDAO;
     }
 
-    public List<BoardArticleEntity> selectArticleList(MemberVO memberVO, String uuid) throws Exception {
+    public List<BoardArticleEntity> selectArticleList(MemberVO memberVO, String uuid, String searchKeyword) throws Exception {
         MenuEntity menu = menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(uuid, memberVO.getSeq()).orElse(new MenuEntity());
         return menu.getArticleList().stream().collect(Collectors.toList());
     }

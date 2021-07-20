@@ -37,18 +37,38 @@
             listForm.seq.value = seq;
             listForm.submit();
         }
+
+        function fncSearch() {
+            const searchKeyword = $("#searchKeyword").val();
+            if (searchKeyword.length < 1) {
+                alert("검색어를 입력해주세요.");
+                return false;
+            }
+            listForm.action = "/board/" + [[${uuid}]] + "/list";
+            listForm.searchKeyword.value = searchKeyword;
+            listForm.submit();
+        }
     </script>
     </th:block>
     <div layout:fragment="content">
         <form id="listForm" name="listForm" method="post" th:action="@{'/'}" style="display: none;">
             <input name="seq" type="hidden" value="0"/>
+            <input type="hidden" name="searchKeyword" th:value="${searchKeyword}"/>
         </form>
         <!-- /.row -->
         <div class="row">
             <div class="col-12">
                 <div class="card card-info">
-                    <div class="card-header">
-                        <h3 class="card-title">게시물 목록</h3>
+                    <div class="card-header d-flex">
+                        <h3 class="card-title" style="line-height: 2.2;">게시물 목록</h3>
+                        <div class="input-group col-3 ml-auto">
+                            <input class="form-control" type="search" name="searchKeyword" id="searchKeyword" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-sidebar bg-secondary" onclick="fncSearch();">
+                                    <i class="fas fa-fw fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <!-- ./card-header -->
                     <div class="card-body">

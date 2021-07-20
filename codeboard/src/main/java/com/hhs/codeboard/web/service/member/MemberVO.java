@@ -20,6 +20,7 @@ public class MemberVO extends User{
 			memberVO.getDelDate() == null, memberVO.getDelDate() == null, memberVO.getDelDate() == null, authorities);
 		this.seq = memberVO.getSeq();
 		this.nickName = memberVO.getNickName();
+		this.delFlag = memberVO.getDelDate() == null;
 	}
 
 	public  MemberVO(String username, String password, boolean enabled,
@@ -31,6 +32,7 @@ public class MemberVO extends User{
 
 	private Integer seq;
 	private String nickName;
+	private Boolean delFlag;
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
@@ -49,7 +51,7 @@ public class MemberVO extends User{
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return super.isAccountNonExpired();
+		return this.delFlag;
 	}
 
 	@Override
@@ -59,12 +61,12 @@ public class MemberVO extends User{
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return super.isCredentialsNonExpired();
+		return this.delFlag;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return isEnabled();
+		return this.delFlag;
 	}
 
 	public Integer getSeq() {

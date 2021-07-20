@@ -124,8 +124,8 @@ public class BoardController extends LoggerController {
      */
     @RequestMapping("/insert")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
-    public String managerInsert(@AuthenticationPrincipal MemberVO memberVO,
-            Model model,@ModelAttribute MenuEntity menuEntity
+    public String managerInsert(@AuthenticationPrincipal MemberVO memberVO
+            ,@ModelAttribute MenuEntity menuEntity
     ) throws Exception {
         menuEntity.setParentSeq(MenuSeqEnum.ROOT_MENU.getMenuSeq());
         menuService.insertMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
@@ -160,10 +160,13 @@ public class BoardController extends LoggerController {
     @RequestMapping("/{uuid}/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 관리")
     @Transactional
-    public String list(@AuthenticationPrincipal MemberVO memberVO,
-           @ModelAttribute @PathVariable(name = "uuid") String uuid, Model model) throws Exception {
+    public String list(@AuthenticationPrincipal MemberVO memberVO
+           , @ModelAttribute @PathVariable(name = "uuid") String uuid
+           , @ModelAttribute String searchKeyword
+           , Model model) throws Exception {
         //해당 게시판의 Entity
-        model.addAttribute("articleList", articleService.selectArticleList(memberVO, uuid));
+        model.addAttribute("articleList", articleService.selectArticleList(memberVO, uuid, searchKeyword));
+
         return "board/article/list";
     }
 
