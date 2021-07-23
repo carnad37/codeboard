@@ -28,7 +28,7 @@
         });
         $("#regForm").validate({
           rules: {
-            email: {
+            memberId: {
               required: true,
               email: true,
             },
@@ -37,7 +37,7 @@
               minlength: 3,
               nickNameAlgorithm: true,              
             },
-            password: {
+            memberPassword: {
               required: true,
               minlength: 8,
               passwordAlgorithm: true,
@@ -51,7 +51,7 @@
             }
           },
           messages: {
-            email: {
+            memberId: {
               required: "이메일이 입력되지 않았습니다",
               email: "이메일 형식으로 입력해주세요",
             },
@@ -60,7 +60,7 @@
               minlength: "3글자 이상 입력해주세요",
               nickNameAlgorithm: "빈칸은 입력할수 없습니다",              
             },
-            password: {
+            memberPassword: {
               required: "비밀번호가 입력되지 않았습니다",
               minlength: "비밀번호는 8글자",
               passwordAlgorithm: "영문 대소문자,숫자,특수문자(@$!%*#?&)를 섞어주세요"
@@ -102,7 +102,7 @@
 
             <form th:object="${insertVO}" th:action="@{/open/actionRegister}" method="post" id="regForm">              
               <div class="input-group mb-3">                
-                <input type="text" autocomplete="off" autocapitalize="off" autocorrect="off" class="form-control" th:field="*{email}" placeholder="이메일을 입력해주세요">
+                <input type="text" autocomplete="off" autocapitalize="off" autocorrect="off" class="form-control" id="memberId" name="memberId" th:value="*{email}" placeholder="이메일을 입력해주세요">
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -118,7 +118,7 @@
                 </div>
               </div>
               <div class="input-group mb-3">
-                <input type="password" autocomplete="off" autocapitalize="off" autocorrect="off" id="password" name="password" class="form-control" placeholder="비밀번호를 입력해주세요">
+                <input type="password" autocomplete="off" autocapitalize="off" autocorrect="off" id="memberPassword" name="memberPassword" class="form-control" placeholder="비밀번호를 입력해주세요">
                 <div class="input-group-append">
                   <div class="input-group-text">
                     <span class="fas fa-lock"></span>
