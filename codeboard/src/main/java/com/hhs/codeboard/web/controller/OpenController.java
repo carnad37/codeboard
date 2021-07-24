@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,9 +45,13 @@ public class OpenController extends LoggerController {
 	@RequestMapping("/actionRegister")
 	public String actionRegister(@AuthenticationPrincipal MemberVO loginVO,
 				@ModelAttribute MemberEntity insertVO,
+				@RequestParam(value = "memberId") String email,
+				@RequestParam(value = "memberPassword") String password,
 				Model model) throws Exception {
         if (loginVO != null) return "/main";
         try {
+        	insertVO.setEmail(email);
+        	insertVO.setPassword(password);
             memberService.insertUser(insertVO);
         } catch (Exception e) {
             if (e instanceof SQLIntegrityConstraintViolationException) {

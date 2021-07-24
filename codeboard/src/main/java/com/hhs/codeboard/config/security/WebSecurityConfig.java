@@ -34,6 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        //공통 사용
+        AuthenticationSuccessHandler successHandler = loginSuccessHandler();
+
         http.authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/open/**").permitAll()
@@ -46,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             .passwordParameter("memberPassword")
             .loginProcessingUrl("/open/actionLogin")
             .failureHandler(loginFailureHandler())
-            .successHandler(loginSuccessHandler())
+            .successHandler(successHandler)
 	        .permitAll()
 
             .and()
@@ -61,7 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
             .and()
             .rememberMe().key("dontReadKey")
-            .userDetailsService(memberService());
+            .userDetailsService(memberService())
+            .authenticationSuccessHandler(successHandler);
     }
     
     @Override
