@@ -15,11 +15,24 @@ import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
 @Repository
 public interface ArticleDAO extends JpaRepository<BoardArticleEntity, Long> {
 
-    List<BoardArticleEntity> findAllByRegUserSeqAndDelDateIsNull(Integer regUserSeq);
+    /*
+        TODO :: 차후 jpql로 대체함
+     */
 
+    List<BoardArticleEntity> findAllByRegUserSeqAndDelDateIsNull(Integer regUserSeq);
     Optional<BoardArticleEntity> findBySeqAndRegUserSeqAndDelDateIsNull(Integer seq, Integer regUserSeq);
 
+    //카운트 함수
+    Integer countAllByBoardSeqAndDelDateIsNull(Integer boardSeq);
+    Integer countAllByBoardSeqAndTitleContainsAndDelDateIsNull(Integer boardSeq, String title);
+    Integer countAllByBoardSeqAndContentContainsAndDelDateIsNull(Integer boardSeq, String content);
+    Integer countAllByTitleContainsOrContentContainsAndBoardSeqAndDelDateIsNull(String title, String content, Integer BoardSeq);
+
 //    @Query(value = "select b FROM BoardArticleEntity b WHERE ")
-//    Page<BoardArticleEntity> selectArticleList(@Param("searchVO") BoardArticleEntity searchVO, Pageable pageable);
+    //리스트 함수
+    List<BoardArticleEntity> findAllByBoardSeqAndDelDateIsNull(Integer boardSeq, Pageable pageable);
+    List<BoardArticleEntity> findAllByBoardSeqAndTitleContainsAndDelDateIsNull(Integer boardSeq, String title, Pageable pageable);
+    List<BoardArticleEntity> findAllByBoardSeqAndContentContainsAndDelDateIsNull(Integer boardSeq, String content, Pageable pageable);
+    List<BoardArticleEntity> findAllByTitleContainsOrContentContainsAndBoardSeqAndDelDateIsNull(String title, String content, Integer BoardSeq,Pageable pageable);
 
 }

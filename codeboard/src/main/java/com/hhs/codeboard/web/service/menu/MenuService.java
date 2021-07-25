@@ -1,5 +1,6 @@
 package com.hhs.codeboard.web.service.menu;
 
+import com.hhs.codeboard.enumeration.MenuSeqEnum;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
 import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.jpa.service.MenuDAO;
@@ -53,6 +54,8 @@ public class MenuService {
         if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
             selectMenu(memberVO.getSeq(), menu.getParentSeq());
+        } else {
+            menu.setParentSeq(MenuSeqEnum.ROOT_MENU.getMenuSeq());
         }
 
         MenuEntity insert = new MenuEntity();
@@ -67,8 +70,8 @@ public class MenuService {
         menuDAO.save(insert);
     }
 
-    public void updateMenu(MenuEntity menu, MemberVO memberVO) throws Exception {
-        if (menu.getParentSeq() > 0) {
+    public void updateMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum menuType) throws Exception {
+        if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
             selectMenu(memberVO.getSeq(), menu.getParentSeq());
         }

@@ -29,6 +29,9 @@ public class BoardFunctionTest {
         String uuid = "uuid";
         Integer regUserSeq = 1;
 
+        //페이지 처리및 검색어, 검색조건의 경우 분리조건처리
+
+
         Optional<MenuEntity> menu = menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(uuid, regUserSeq);
         MenuEntity result = menu.get();
 
@@ -43,11 +46,7 @@ public class BoardFunctionTest {
 
     }
 
-    @Test
-    void getBoardMenuTest() {
 
-
-    }
 
 
 }

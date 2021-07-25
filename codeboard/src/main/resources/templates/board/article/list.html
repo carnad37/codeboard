@@ -38,14 +38,21 @@
             listForm.submit();
         }
 
+        function fncList(pageIndex) {
+            listForm.action = "";
+            listForm.pageIndex.value = pageIndex;
+            listForm.submit();
+        }
+
         function fncSearch() {
             const searchKeyword = $("#searchKeyword").val();
             if (searchKeyword.length < 1) {
                 alert("검색어를 입력해주세요.");
                 return false;
             }
-            listForm.action = "/board/" + [[${uuid}]] + "/list";
+            listForm.action = "";
             listForm.searchKeyword.value = searchKeyword;
+            listForm.pageIndex.value = 1;
             listForm.submit();
         }
     </script>
@@ -53,23 +60,44 @@
     <div layout:fragment="content">
         <form id="listForm" name="listForm" method="post" th:action="@{'/'}" style="display: none;">
             <input name="seq" type="hidden" value="0"/>
-            <input type="hidden" name="searchKeyword" th:value="${searchKeyword}"/>
+            <input name="pageIndex" type="hidden" th:value="${searchVO.pageIndex}"/>
+            <input type="hidden" name="searchKeyword" th:value="${searchVO.searchKeyword}"/>
+            <input type="hidden" name="searchCondition" th:value="${searchVO.searchCondition}"/>
         </form>
         <!-- /.row -->
         <div class="row">
             <div class="col-12">
                 <div class="card card-info">
-                    <div class="card-header d-flex">
-                        <h3 class="card-title" style="line-height: 2.2;">게시물 목록</h3>
-                        <div class="input-group col-3 ml-auto">
-                            <input class="form-control" type="search" name="searchKeyword" id="searchKeyword" placeholder="Search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-sidebar bg-secondary" onclick="fncSearch();">
-                                    <i class="fas fa-fw fa-times"></i>
-                                </button>
+                    <div class="card-header d-flex flex-wrap">
+                        <h3 class="card-title mb-2 mb-md-0 mr-auto col-12 col-md-2" style="line-height: 2.7;">
+                            게시물 목록
+                        </h3>
+                        <div class="form-group mb-md-0 col-12 col-md-2">
+                            <select name="searchCondition" id="searchCondition" class="custom-select h-100" th:field="${searchVO.searchCondition}">
+                                <option value="">전체</option>
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-md-0 col-12 col-md-5 col-lg-4">
+                            <div class="input-group">
+                                <input type="search" id="searchKeyword" name="searchKeyword" class="form-control form-control-lg" placeholder="검색어를 입력해주세요" th:value="${searchVO.searchKeyword}">
+                                <div class="input-group-append">
+                                    <button type="button" onclick="fncSearch();" class="btn btn-lg btn-default">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
+<!--                        <div class="input-group col-3 ml-auto">-->
+<!--                            <input class="form-control" type="search" name="searchKeyword" id="searchKeyword" placeholder="Search" aria-label="Search">-->
+<!--                            <div class="input-group-append">-->
+<!--                                <button class="btn btn-sidebar bg-secondary" onclick="fncSearch();">-->
+<!--                                    <i class="fas fa-fw fa-times"></i>-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     <!-- ./card-header -->
                     <div class="card-body">
                         <table class="table table-hover">
@@ -88,7 +116,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <th:block th:each="article, iter : ${articleList}">
+                            <th:block th:if="${not #lists.isEmpty(articleList)}" th:each="article, iter : ${articleList}">
                                 <tr data-widget="expandable-table" aria-expanded="false">
                                     <td class="text-center align-middle" th:text="${iter.index + 1}"></td>
                                     <td class="align-middle" th:text="${article.title}"></td>
@@ -104,11 +132,32 @@
                                     </td>
                                 </tr>
                             </th:block>
+                            <th:tr th:unless="${not #lists.isEmpty(articleList)}">
+                                <td class="text-center" colspan="4">
+                                    등록된 게시글이 없습니다
+                                </td>
+                            </th:tr>
                             </tbody>
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
+
+                    </div>
+                    <div class="card-footer position-relative">
+                        <ul class="pagination transl translate-middle-xy">
+                            <li class="paginate_button page-item previous disabled" id="example2_previous">
+                                <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                            </li>
+                            <th:block th:each="num, numStatus : ${#numbers.sequence(pagination.getStartListIndex(), pagination.getEndListIndex())}">
+                                <li class="paginate_button page-item" th:classappend="${num == searchVO.pageIndex} ? 'active'">
+                                    <a th:if="${num == searchVO.pageIndex}" href="#" onclick="return false;" class="page-link" th:text="${num}"></a>
+                                    <a th:unless="${num == searchVO.pageIndex}" href="#" th:onclick="fncList([[${num}]]);" class="page-link" th:text="${num}"></a>
+                                </li>
+                            </th:block>
+                            <li class="paginate_button page-item next" id="example2_next">
+                                <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                            </li>
+                        </ul>
                         <button type="button" onclick="fncWrite();" class="btn btn-primary float-right">등록</button>
                     </div>
                 </div>

@@ -15,39 +15,41 @@
         <script th:inline="javascript">
             $(function() {
                 //init
-                $('#inputContent').summernote();
-                //init validator
-                $("#writeForm").validate({
-                    rules: {
-                        title: {
-                            required: true
-                        },
-                        content: {
-                            required: true
-                        }
-                    },
-                    messages: {
-                        title: {
-                            required: "제목을 입력해주세요"
-                        },
-                        content: {
-                            required: "내용을 입력해주세요"
-                        }
-                    },
-                    errorElement: 'span',
-                    errorPlacement: function (error, element) {
-                        error.addClass('invalid-feedback');
-                        element.closest('.input-group').append(error);
-                    },
-                    highlight: function (element, errorClass, validClass) {
-                        $(element).removeClass('is-valid');
-                        $(element).addClass('is-invalid');
-                    },
-                    unhighlight: function (element, errorClass, validClass) {
-                        $(element).removeClass('is-invalid');
-                        $(element).addClass('is-valid');
-                    },
+                $('#inputContent').summernote({
+                    height: 300
                 });
+                //init validator
+                // $("#writeForm").validate({
+                //     rules: {
+                //         title: {
+                //             required: true
+                //         },
+                //         content: {
+                //             required: true
+                //         }
+                //     },
+                //     messages: {
+                //         title: {
+                //             required: "제목을 입력해주세요"
+                //         },
+                //         content: {
+                //             required: "내용을 입력해주세요"
+                //         }
+                //     },
+                //     errorElement: 'span',
+                //     errorPlacement: function (error, element) {
+                //         error.addClass('invalid-feedback');
+                //         element.closest('.input-group').append(error);
+                //     },
+                //     highlight: function (element, errorClass, validClass) {
+                //         $(element).removeClass('is-valid');
+                //         $(element).addClass('is-invalid');
+                //     },
+                //     unhighlight: function (element, errorClass, validClass) {
+                //         $(element).removeClass('is-invalid');
+                //         $(element).addClass('is-valid');
+                //     },
+                // });
             });
 
             function fncWrite() {
@@ -76,8 +78,9 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/' + ${uuid} + '/list'">
-                        <input name="page" th:value="${#strings.isEmpty(page) ? 0 : page}"/>
-                        <input name="searchKeyword" th:value="${#strings.isEmpty(searchKeyword) ? 0 : searchKeyword}"/>
+                        <input name="pageIndex" th:value="${searchVO.pageIndex}"/>
+                        <input name="searchKeyword" th:value="${searchVO.searchKeyword}"/>
+                        <input name="searchCondition" th:value="${searchVO.searchCondition}"/>
                     </form>
 
                     <form id="writeForm" name="writeForm" method="post" class="form-horizontal" th:action="'/'">
@@ -98,7 +101,7 @@
                             <div class="form-group row">
                                 <label for="inputContent" class="col-sm-2 col-form-label">내용</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="inputContent" name="content" th:text="${article?.content}"></textarea>
+                                    <textarea class="form-control" style="height: 300px;" id="inputContent" name="content" th:text="${article?.content}"></textarea>
                                 </div>
                             </div>
                             <div class="form-group row">

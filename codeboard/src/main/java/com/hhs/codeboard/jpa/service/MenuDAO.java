@@ -12,6 +12,8 @@ public interface MenuDAO extends JpaRepository<MenuEntity, Long> {
 
     Optional<MenuEntity> findBySeqAndRegUserSeqAndDelDateIsNull(Integer seq, Integer regUserSeq);
 
+    Optional<MenuEntity> findByUuidAndRegUserSeqAndMenuTypeAndDelDateIsNull(String uuid, Integer regUserSeq, String menuType);
+
     List<MenuEntity> findAllByRegUserSeqAndDelDateIsNull(Integer regUserSeq, Sort sort);
 
     List<MenuEntity> findAllByRegUserSeqAndDelDateIsNull(Integer regUserSeq);

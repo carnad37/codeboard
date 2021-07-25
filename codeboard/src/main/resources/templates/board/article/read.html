@@ -25,8 +25,9 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/' + ${uuid} + '/list'">
-                        <input name="page" th:value="${#strings.isEmpty(page) ? 0 : page}"/>
-                        <input name="searchKeyword" th:value="${#strings.isEmpty(searchKeyword) ? 0 : searchKeyword}"/>
+                        <input name="pageIndex" th:value="${searchVO.pageIndex}"/>
+                        <input name="searchKeyword" th:value="${searchVO.searchKeyword}"/>
+                        <input name="searchCondition" th:value="${searchVO.searchCondition}"/>
                     </form>
 
                     <div class="card-body">

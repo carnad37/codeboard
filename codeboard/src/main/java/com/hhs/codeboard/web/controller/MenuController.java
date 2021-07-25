@@ -106,7 +106,7 @@ public class MenuController extends LoggerController {
     @RequestMapping("/update")
     public String update(@AuthenticationPrincipal MemberVO memberVO
             , MenuEntity updateMenu) throws Exception {
-        menuService.updateMenu(updateMenu, memberVO);
+        menuService.updateMenu(updateMenu, memberVO, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
 
