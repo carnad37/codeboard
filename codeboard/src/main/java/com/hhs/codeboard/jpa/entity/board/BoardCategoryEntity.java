@@ -27,13 +27,15 @@ public class BoardCategoryEntity extends DefaultEntity {
     @Column
     private String useF;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="menuSeq")
-    private MenuEntity menu;
+    @Column
+    private String boardSeq;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="categorySeq")
-    private Collection<BoardCateArticleEntity> categorys;
-   
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="menuSeq")
+//    private MenuEntity menu;
+//
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name="categorySeq")
+//    private Collection<BoardCateArticleEntity> categorys;
     
 }

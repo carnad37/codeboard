@@ -36,7 +36,8 @@ public class BoardPagination {
         this.startListIndex = listPer * this.perListPage + 1;
         this.endListIndex = this.startListIndex + this.perListPage > this.totalPage ?
                 this.totalPage : this.startListIndex + this.perListPage;
-
+        this.isStart = this.pageIndex < 2;
+        this.isEnd = this.totalPage - pageIndex == 0;
     }
 
     private Integer totalCount;
@@ -56,6 +57,10 @@ public class BoardPagination {
     private Integer startListIndex;
 
     private Integer endListIndex;
+
+    private Boolean isEnd;
+
+    private Boolean isStart;
 
     public Pageable getPageable() {
         return PageRequest.of(this.pageIndex - 1, this.perPage);

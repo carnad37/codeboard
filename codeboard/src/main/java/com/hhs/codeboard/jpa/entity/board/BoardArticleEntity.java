@@ -8,6 +8,7 @@ import com.hhs.codeboard.jpa.entity.common.DefaultEntity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
@@ -33,8 +34,12 @@ public class BoardArticleEntity extends DefaultEntity{
     @Column
     private Integer boardSeq;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="articleSeq")
-    private Collection<BoardCateArticleEntity> categorys;
+    @Column
+    @Nullable
+    private Integer categorySeq;
+
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name="articleSeq")
+//    private Collection<BoardCateArticleEntity> categorys;
 
 }

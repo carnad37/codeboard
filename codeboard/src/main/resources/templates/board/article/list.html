@@ -11,7 +11,7 @@
     <script th:inline="javascript">
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
 
         function fncEdit(seq) {
             listForm.action = "/board/" + [[${uuid}]] + "/write";
@@ -42,6 +42,24 @@
             listForm.action = "";
             listForm.pageIndex.value = pageIndex;
             listForm.submit();
+        }
+
+        function fncPrev(obj) {
+            const $parent = $(obj).parent();
+            if(!$parent.hasClass("disabled")) {
+                listForm.pageIndex.value = parseInt(listForm.pageIndex.value) - 1;
+                listForm.action = "";
+                listForm.submit();
+            }
+        }
+
+        function fncNext(obj) {
+            const $parent = $(obj).parent();
+            if(!$parent.hasClass("disabled")) {
+                listForm.pageIndex.value = parseInt(listForm.pageIndex.value) + 1;
+                listForm.action = "";
+                listForm.submit();
+            }
         }
 
         function fncSearch() {
@@ -145,8 +163,8 @@
                     </div>
                     <div class="card-footer position-relative">
                         <ul class="pagination transl translate-middle-xy">
-                            <li class="paginate_button page-item previous disabled" id="example2_previous">
-                                <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                            <li class="paginate_button page-item previous" th:classappend="${pagination.isStart} ? 'disabled'">
+                                <a href="#" class="page-link" onclick="fncPrev(this);">이전</a>
                             </li>
                             <th:block th:each="num, numStatus : ${#numbers.sequence(pagination.getStartListIndex(), pagination.getEndListIndex())}">
                                 <li class="paginate_button page-item" th:classappend="${num == searchVO.pageIndex} ? 'active'">
@@ -154,8 +172,8 @@
                                     <a th:unless="${num == searchVO.pageIndex}" href="#" th:onclick="fncList([[${num}]]);" class="page-link" th:text="${num}"></a>
                                 </li>
                             </th:block>
-                            <li class="paginate_button page-item next" id="example2_next">
-                                <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                            <li class="paginate_button page-item next" th:classappend="${pagination.isEnd} ? 'disabled'">
+                                <a href="#" class="page-link" onclick="fncNext(this);">다음</a>
                             </li>
                         </ul>
                         <button type="button" onclick="fncWrite();" class="btn btn-primary float-right">등록</button>
