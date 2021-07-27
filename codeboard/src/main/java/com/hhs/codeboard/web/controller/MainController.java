@@ -11,7 +11,7 @@ public class MainController extends LoggerController {
 
 	@RequestMapping("")
 	public String main() {
-
+		//TODO :: 메인화면 제작
 		return "main";
 	}
 	

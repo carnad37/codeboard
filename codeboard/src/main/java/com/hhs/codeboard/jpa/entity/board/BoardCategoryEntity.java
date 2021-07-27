@@ -28,7 +28,7 @@ public class BoardCategoryEntity extends DefaultEntity {
     private String useF;
 
     @Column
-    private String boardSeq;
+    private Integer boardSeq;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="menuSeq")
