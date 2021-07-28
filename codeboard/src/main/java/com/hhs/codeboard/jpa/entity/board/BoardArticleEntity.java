@@ -14,7 +14,7 @@ import org.springframework.lang.Nullable;
 @Setter
 @Entity
 @Table(name="code_board_article")
-@SequenceGenerator(name = "seqGenerator", sequenceName = "seqBoardArticle")
+//@SequenceGenerator(name = "seqGenerator", sequenceName = "seqBoardArticle")
 public class BoardArticleEntity extends DefaultEntity{
 
     private static final long serialVersionUID = 536546113468443744L;

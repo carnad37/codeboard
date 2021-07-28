@@ -36,7 +36,7 @@ public class CategoryService {
         insertVO.setRegDate(LocalDateTime.now());
         insertVO.setRegUserSeq(memberVO.getSeq());
 
-        return categoryDAO.save(insertVO);
+        return 0;
     }
 
 }
