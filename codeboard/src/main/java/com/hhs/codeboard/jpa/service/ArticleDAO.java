@@ -35,4 +35,7 @@ public interface ArticleDAO extends JpaRepository<BoardArticleEntity, Long> {
     List<BoardArticleEntity> findAllByBoardSeqAndContentContainsAndDelDateIsNull(Integer boardSeq, String content, Pageable pageable);
     List<BoardArticleEntity> findAllByTitleContainsOrContentContainsAndBoardSeqAndDelDateIsNull(String title, String content, Integer BoardSeq,Pageable pageable);
 
+    //카테고리 값으로 검색
+    List<BoardArticleEntity> findAllByCategorySeq(Integer categorySeq);
+
 }

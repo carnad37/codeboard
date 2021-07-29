@@ -10,4 +10,6 @@ public interface CategoryDAO extends JpaRepository<BoardCategoryEntity, Long> {
 
     List<BoardCategoryEntity> findAllByBoardSeq(int boardSeq);
 
+    Optional<BoardCategoryEntity> findBySeqAndDelDateIsNotNull(int seq);
+
 }
