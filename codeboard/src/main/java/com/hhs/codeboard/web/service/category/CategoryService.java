@@ -1,5 +1,6 @@
 package com.hhs.codeboard.web.service.category;
 
+import com.hhs.codeboard.jpa.entity.board.dto.BoardCategoryDto;
 import com.hhs.codeboard.jpa.entity.board.entity.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.board.entity.BoardCategoryEntity;
 import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
@@ -24,7 +25,7 @@ public class CategoryService {
     private final MenuDAO menuDAO;
     private final ArticleDAO articleDAO;
 
-    public int insertCategory(BoardCategoryEntity cateVO, MemberDto memberDto) {
+    public int insertCategory(BoardCategoryDto cateVO, MemberDto memberDto) {
         /*
             먼저 해당 게시판에대해 유저의 권한을 확인한다.
          */
@@ -41,7 +42,7 @@ public class CategoryService {
         return 1;
     }
 
-    public int deleteCategory(BoardCategoryEntity cateVO, MemberDto memberDto) {
+    public int deleteCategory(BoardCategoryDto cateVO, MemberDto memberDto) {
         /*
             카테고리의 삭제. 해당 카테고리를 삭제하며, delDate를 업데이트한다.
             해당 카테고리 번호를 가진 boardArticle역시 모두 null로 초기화한다.
