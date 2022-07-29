@@ -2,10 +2,10 @@ package com.hhs.codeboard.web.service.menu;
 
 import com.hhs.codeboard.enumeration.MenuSeqEnum;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.hhs.codeboard.jpa.service.MenuDAO;
+import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
+import com.hhs.codeboard.jpa.repository.MenuDAO;
 import com.hhs.codeboard.util.common.SessionUtil;
-import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.web.service.member.MemberDto;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -50,10 +50,10 @@ public class MenuService {
         return menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(uuid, regUserSeq).orElseThrow(()->new Exception("잘못된 접근입니다."));
     }
 
-    public void insertMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum menuType) throws Exception {
+    public void insertMenu(MenuEntity menu, MemberDto memberDto, MenuTypeEnum menuType) throws Exception {
         if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
-            selectMenu(memberVO.getSeq(), menu.getParentSeq());
+            selectMenu(memberDto.getSeq(), menu.getParentSeq());
         } else {
             menu.setParentSeq(MenuSeqEnum.ROOT_MENU.getMenuSeq());
         }
@@ -64,21 +64,21 @@ public class MenuService {
         insert.setPublicF(menu.getPublicF());
         insert.setMenuOrder(menu.getMenuOrder());
         insert.setParentSeq(menu.getParentSeq());
-        insert.setRegUserSeq(memberVO.getSeq());
+        insert.setRegUserSeq(memberDto.getSeq());
         insert.setRegDate(LocalDateTime.now());
         insert.setUuid(UUID.randomUUID().toString().replaceAll("-", ""));
         menuDAO.save(insert);
     }
 
-    public void updateMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum menuType) throws Exception {
+    public void updateMenu(MenuEntity menu, MemberDto memberDto, MenuTypeEnum menuType) throws Exception {
         if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
-            selectMenu(memberVO.getSeq(), menu.getParentSeq());
+            selectMenu(memberDto.getSeq(), menu.getParentSeq());
         }
 
-        MenuEntity update = getMenu(menu, memberVO);
+        MenuEntity update = getMenu(menu, memberDto);
         update.setTitle(menu.getTitle());
-        update.setModUserSeq(memberVO.getSeq());
+        update.setModUserSeq(memberDto.getSeq());
         update.setMenuOrder(menu.getMenuOrder());
         update.setParentSeq(menu.getParentSeq());
         update.setPublicF(menu.getPublicF());
@@ -89,11 +89,11 @@ public class MenuService {
     /**
      * 메뉴 삭제(하위메뉴 체크)
      * @param menu
-     * @param memberVO
+     * @param memberDto
      * @throws Exception
      */
-    public void deleteMenu(MenuEntity menu, MemberVO memberVO, MenuTypeEnum targetType) throws Exception {
-        MenuEntity deleteVO = getMenu(menu, memberVO);
+    public void deleteMenu(MenuEntity menu, MemberDto memberDto, MenuTypeEnum targetType) throws Exception {
+        MenuEntity deleteVO = getMenu(menu, memberDto);
         if (!targetType.getMenuType().equals(deleteVO.getMenuType())) {
             throw new ServiceException("타겟타입이 아닙니다.");
         } else if (targetType.equals(MenuTypeEnum.MENU) && !menuDAO.findAllByParentSeqAndDelDateIsNull(deleteVO.getSeq()).isEmpty()) {
@@ -111,13 +111,13 @@ public class MenuService {
 
     /**
      * 메뉴 초기화
-     * @param memberVO
+     * @param memberDto
      * @param request
      * @return
      */
-    public List<MenuVO> initMenuList(MemberVO memberVO, HttpServletRequest request) {
+    public List<MenuVO> initMenuList(MemberDto memberDto, HttpServletRequest request) {
 
-        List<MenuEntity> dbMenuList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(memberVO.getSeq(), Sort.by(Sort.Direction.ASC, "menuOrder"));
+        List<MenuEntity> dbMenuList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(memberDto.getSeq(), Sort.by(Sort.Direction.ASC, "menuOrder"));
 
         List<MenuVO> menuList = new ArrayList<>();
         List<MenuVO> setInnerList = new ArrayList<>();
@@ -214,7 +214,7 @@ public class MenuService {
      * @return
      * @throws Exception
      */
-    private MenuEntity getMenu(MenuEntity menu, MemberVO member) throws Exception {
+    private MenuEntity getMenu(MenuEntity menu, MemberDto member) throws Exception {
         return StringUtils.hasText(menu.getUuid()) ?
                 menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(menu.getUuid(), member.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."))
                 : menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), member.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));

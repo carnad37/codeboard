@@ -1,30 +1,24 @@
 package com.hhs.codeboard.web.controller;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.enumeration.MenuSeqEnum;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
-import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.hhs.codeboard.jpa.service.MenuDAO;
+import com.hhs.codeboard.jpa.entity.board.dto.BoardArticleDto;
+import com.hhs.codeboard.jpa.entity.board.entity.BoardArticleEntity;
+import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.util.pagination.BoardPagination;
 import com.hhs.codeboard.web.service.board.BoardArticleService;
-import com.hhs.codeboard.web.service.common.SearchVO;
-import com.hhs.codeboard.web.service.member.MemberVO;
-import com.hhs.codeboard.jpa.service.ArticleDAO;
+import com.hhs.codeboard.web.service.common.SearchDto;
+import com.hhs.codeboard.web.service.member.MemberDto;
 
 import com.hhs.codeboard.web.service.menu.MenuService;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,20 +57,20 @@ public class BoardController extends LoggerController {
 
     /**
      * 전체 게시판 목록
-     * @param memberVO
+     * @param memberDto
      * @param MenuEntity
      * @param model
      * @return
      */
     @RequestMapping("/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 목록")
-    public String managerList(@AuthenticationPrincipal MemberVO memberVO
-              , @ModelAttribute SearchVO searchVO
+    public String managerList(@AuthenticationPrincipal MemberDto memberDto
+              , @ModelAttribute SearchDto searchVO
               , @ModelAttribute MenuEntity MenuEntity, Model model) {
         //regUserSeq 랑 delDate로 조건을 건다.(모든 게시물)
 //        List<BoardArticleEntity> articleList = articleDAO.findAllByRegUserSeqAndUuidAndDelDateIsNull(memberVO.getSeq(), MenuEntity.getSeq());
 //        model.addAttribute("articleList", articleList);
-        model.addAttribute("boardList", menuService.selectMenuList(memberVO.getSeq(), MenuTypeEnum.BOARD));
+        model.addAttribute("boardList", menuService.selectMenuList(memberDto.getSeq(), MenuTypeEnum.BOARD));
         return "board/mgr/list";
     }
 
@@ -92,7 +86,7 @@ public class BoardController extends LoggerController {
 
     /**
      * 게시판 입력 페이지
-     * @param memberVO
+     * @param memberDto
      * @param model
      * @param menuEntity
      * @return
@@ -100,29 +94,29 @@ public class BoardController extends LoggerController {
      */
     @RequestMapping("/write")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 관리")
-    public String managerWrite(@AuthenticationPrincipal MemberVO memberVO
+    public String managerWrite(@AuthenticationPrincipal MemberDto memberDto
             , Model model, MenuEntity menuEntity
     ) throws Exception {
         if (menuEntity.getSeq() > 0) {
-            model.addAttribute("board", menuService.selectMenu(memberVO.getSeq(), menuEntity.getSeq()));
+            model.addAttribute("board", menuService.selectMenu(memberDto.getSeq(), menuEntity.getSeq()));
         }
         return "board/mgr/write";
     }
 
     @RequestMapping("/delete")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG, menuTitle = "게시판 관리")
-    public String managerDelete(@AuthenticationPrincipal MemberVO memberVO
+    public String managerDelete(@AuthenticationPrincipal MemberDto memberDto
             , HttpServletRequest request
             , MenuEntity menuEntity
     ) throws Exception {
-        menuService.deleteMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
-        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO, request));
+        menuService.deleteMenu(menuEntity, memberDto, MenuTypeEnum.BOARD);
+        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberDto, request));
         return "redirect:/board/list";
     }
 
     /**
      * 게시판 입력
-     * @param memberVO
+     * @param memberDto
      * @param menuEntity
      * @param request
      * @return
@@ -130,19 +124,19 @@ public class BoardController extends LoggerController {
      */
     @RequestMapping("/insert")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
-    public String managerInsert(@AuthenticationPrincipal MemberVO memberVO
+    public String managerInsert(@AuthenticationPrincipal MemberDto memberDto
             , @ModelAttribute MenuEntity menuEntity
             , HttpServletRequest request
     ) throws Exception {
         menuEntity.setParentSeq(MenuSeqEnum.ROOT_MENU.getMenuSeq());
-        menuService.insertMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
-        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO, request));
+        menuService.insertMenu(menuEntity, memberDto, MenuTypeEnum.BOARD);
+        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberDto, request));
         return "redirect:/board/list";
     }
 
     /**
      * 게시판 수정
-     * @param memberVO
+     * @param memberDto
      * @param searchVO
      * @param request
      * @param menuEntity
@@ -151,19 +145,19 @@ public class BoardController extends LoggerController {
      */
     @RequestMapping("/update")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD_CONFIG)
-    public String managerUpdate(@AuthenticationPrincipal MemberVO memberVO
-            , @ModelAttribute SearchVO searchVO
+    public String managerUpdate(@AuthenticationPrincipal MemberDto memberDto
+            , @ModelAttribute SearchDto searchVO
             , HttpServletRequest request
             , MenuEntity menuEntity
     ) throws Exception {
-        menuService.updateMenu(menuEntity, memberVO, MenuTypeEnum.BOARD);
-        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO, request));
+        menuService.updateMenu(menuEntity, memberDto, MenuTypeEnum.BOARD);
+        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberDto, request));
         return "redirect:/board/list";
     }
 
     /**
      * 게시물 리스트
-     * @param memberVO
+     * @param memberDto
      * @param uuid
      * @param model
      * @return
@@ -172,20 +166,20 @@ public class BoardController extends LoggerController {
     @RequestMapping("/{uuid}/list")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 관리")
     @Transactional
-    public String list(@AuthenticationPrincipal MemberVO memberVO
+    public String list(@AuthenticationPrincipal MemberDto memberDto
            , @ModelAttribute @PathVariable(name = "uuid") String uuid
-           , @ModelAttribute SearchVO searchVO
+           , @ModelAttribute SearchDto searchVO
            , Model model) throws Exception {
         //해당 게시판의 Entity
         BoardPagination pagination = new BoardPagination(10, 10, searchVO.getPageIndex());
-        model.addAttribute("articleList", articleService.selectArticleList(memberVO, uuid, searchVO, pagination));
+        model.addAttribute("articleList", articleService.selectArticleList(memberDto, uuid, searchVO, pagination));
         model.addAttribute("pagination", pagination);
         return "board/article/list";
     }
 
     /**
      * 게시물 입력 페이지
-     * @param memberVO
+     * @param memberDto
      * @param uuid
      * @param model
      * @param articleEntity
@@ -194,20 +188,20 @@ public class BoardController extends LoggerController {
      */
     @RequestMapping("/{uuid}/write")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 관리")
-    public String write(@AuthenticationPrincipal MemberVO memberVO,
+    public String write(@AuthenticationPrincipal MemberDto memberDto,
             @ModelAttribute @PathVariable(name = "uuid") String uuid
-            , @ModelAttribute SearchVO searchVO
+            , @ModelAttribute SearchDto searchVO
             , Model model
-            , @ModelAttribute BoardArticleEntity articleEntity) throws Exception {
-        if (articleEntity.getSeq() > 0) {
-            model.addAttribute("article", articleService.selectArticle(articleEntity, memberVO));
+            , @ModelAttribute BoardArticleDto articleDto) throws Exception {
+        if (articleDto.getSeq() > 0) {
+            model.addAttribute("article", articleService.selectArticle(articleDto, memberDto));
         }
         return "board/article/write";
     }
 
     /**
      * 게시물 입력
-     * @param memberVO
+     * @param memberDto
      * @param uuid
      * @param articleEntity
      * @return
@@ -215,51 +209,51 @@ public class BoardController extends LoggerController {
      */
     @RequestMapping("/{uuid}/insert")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
-    public String insert(@AuthenticationPrincipal MemberVO memberVO,
+    public String insert(@AuthenticationPrincipal MemberDto memberDto,
             @PathVariable(name = "uuid") String uuid
-            , BoardArticleEntity articleEntity) throws Exception {
-        articleService.insertArticle(articleEntity, memberVO, uuid);
+            , BoardArticleDto articleDto) throws Exception {
+        articleService.insertArticle(articleDto, memberDto, uuid);
 
         return "redirect:/board/" + uuid + "/list";
     }
 
     /**
      * 게시물 수정
-     * @param memberVO
+     * @param memberDto
      * @param uuid
-     * @param articleEntity
+     * @param articleDto
      * @return
      * @throws Exception
      */
     @RequestMapping("/{uuid}/update")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD)
-    public String update(@AuthenticationPrincipal MemberVO memberVO,
+    public String update(@AuthenticationPrincipal MemberDto memberDto,
              @PathVariable(name = "uuid") String uuid
-            , BoardArticleEntity articleEntity) throws Exception {
+            , BoardArticleDto articleDto) throws Exception {
 
-        articleService.updateArticle(articleEntity, memberVO);
+        articleService.updateArticle(articleDto, memberDto);
 
         return "redirect:/board/" + uuid + "/list";
     }
 
     /**
      * 게시물 읽기
-     * @param memberVO
+     * @param memberDto
      * @param uuid
      * @param model
-     * @param articleEntity
+     * @param articleDto
      * @return
      * @throws Exception
      */
     @RequestMapping("/{uuid}/read")
     @AspectMenuActive(menuType = MenuTypeEnum.BOARD, menuTitle = "게시물 상세")
-    public String read(@AuthenticationPrincipal MemberVO memberVO
+    public String read(@AuthenticationPrincipal MemberDto memberDto
            , @ModelAttribute @PathVariable(name = "uuid") String uuid
-           , @ModelAttribute SearchVO searchVO
+           , @ModelAttribute SearchDto searchVO
            , Model model
-           , BoardArticleEntity articleEntity) throws Exception {
+           , BoardArticleDto articleDto) throws Exception {
 
-        model.addAttribute("article", articleService.selectArticle(articleEntity, memberVO));
+        model.addAttribute("article", articleService.selectArticle(articleDto, memberDto));
 
         return "board/article/read";
     }

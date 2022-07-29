@@ -1,10 +1,8 @@
 package com.hhs.codeboard.web.controller;
 
 
-import com.hhs.codeboard.jpa.entity.board.BoardCategoryEntity;
-import com.hhs.codeboard.jpa.service.CategoryDAO;
-import com.hhs.codeboard.web.service.member.MemberVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hhs.codeboard.jpa.entity.board.entity.BoardCategoryEntity;
+import com.hhs.codeboard.web.service.member.MemberDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,7 @@ public class CategoryController {
 
     @RequestMapping("/getCategory")
     public ResponseEntity<List<BoardCategoryEntity>> getCategory(
-            @AuthenticationPrincipal MemberVO memberVO
+            @AuthenticationPrincipal MemberDto memberDto
             , @RequestParam Integer boardSeq
         ) {
 

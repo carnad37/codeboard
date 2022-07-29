@@ -1,6 +1,5 @@
 package com.hhs.codeboard.enumeration;
 
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
 import com.hhs.codeboard.web.service.menu.MenuVO;
 
 import java.util.function.Function;

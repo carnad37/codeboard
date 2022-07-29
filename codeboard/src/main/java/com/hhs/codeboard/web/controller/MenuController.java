@@ -3,15 +3,14 @@ package com.hhs.codeboard.web.controller;
 import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
+import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
-import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.web.service.member.MemberDto;
 import com.hhs.codeboard.web.service.menu.MenuService;
 import com.hhs.codeboard.web.service.menu.MenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,28 +42,28 @@ public class MenuController extends LoggerController {
 
     /**
      * 메뉴 업데이트
-     * @param memberVO
+     * @param memberDto
      * @param request
      * @return
      */
     @RequestMapping("/refresh")
-    public String menuRefresh(@AuthenticationPrincipal MemberVO memberVO
+    public String menuRefresh(@AuthenticationPrincipal MemberDto memberDto
             , HttpServletRequest request) {
         //로그인한 회원정보로 menu정보 리셋.
-        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberVO, request));
+        SessionUtil.setSession(request, "menuList", menuService.initMenuList(memberDto, request));
         return "redirect:/main";
     }
 
     /**
      * 메뉴 리스트
-     * @param memberVO
+     * @param memberDto
      * @param request
      * @param model
      * @return
      */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/list")
-    public String menuConfig(@AuthenticationPrincipal MemberVO memberVO
+    public String menuConfig(@AuthenticationPrincipal MemberDto memberDto
             , HttpServletRequest request
             , Model model) {
 
@@ -82,52 +81,52 @@ public class MenuController extends LoggerController {
 
     /**
      * 메뉴 추가
-     * @param memberVO
+     * @param memberDto
      * @param insertMenu
      * @return
      * @throws Exception
      */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/insert")
-    public String insert(@AuthenticationPrincipal MemberVO memberVO
+    public String insert(@AuthenticationPrincipal MemberDto memberDto
             , MenuEntity insertMenu) throws Exception {
-        menuService.insertMenu(insertMenu, memberVO, MenuTypeEnum.MENU);
+        menuService.insertMenu(insertMenu, memberDto, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
 
     /**
      * 메뉴 수정
-     * @param memberVO
+     * @param memberDto
      * @param updateMenu
      * @return
      * @throws Exception
      */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/update")
-    public String update(@AuthenticationPrincipal MemberVO memberVO
+    public String update(@AuthenticationPrincipal MemberDto memberDto
             , MenuEntity updateMenu) throws Exception {
-        menuService.updateMenu(updateMenu, memberVO, MenuTypeEnum.MENU);
+        menuService.updateMenu(updateMenu, memberDto, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
 
     /**
      * 메뉴 삭제
-     * @param memberVO
+     * @param memberDto
      * @param deleteMenu
      * @return
      * @throws Exception
      */
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/delete")
-    public String delete(@AuthenticationPrincipal MemberVO memberVO
+    public String delete(@AuthenticationPrincipal MemberDto memberDto
             , MenuEntity deleteMenu) throws Exception {
-        menuService.deleteMenu(deleteMenu, memberVO, MenuTypeEnum.MENU);
+        menuService.deleteMenu(deleteMenu, memberDto, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
 
     /**
      * menuVO정보 호출
-     * @param memberVO
+     * @param memberDto
      * @param menu
      * @param request
      * @return
@@ -136,7 +135,7 @@ public class MenuController extends LoggerController {
     @ResponseBody
     @RequestMapping("/getMenuInfo")
     public ResponseEntity<MenuVO> getMenuInfo(
-            @AuthenticationPrincipal MemberVO memberVO,
+            @AuthenticationPrincipal MemberDto memberDto,
             @ModelAttribute MenuEntity menu,
             HttpServletRequest request) throws Exception {
         Map<Integer, MenuVO> menuMap = SessionUtil.getSession(request, "menuMap");
@@ -146,7 +145,7 @@ public class MenuController extends LoggerController {
     /**
      * 자식 메뉴 호출
      * (관리자에서는 menuMap에서 꺼내씀)
-     * @param memberVO
+     * @param memberDto
      * @param menu
      * @param request
      * @return
@@ -155,7 +154,7 @@ public class MenuController extends LoggerController {
     @ResponseBody
     @RequestMapping("/getChildrenList")
     public ResponseEntity<List<MenuVO>> getChildrenList(
-            @AuthenticationPrincipal MemberVO memberVO,
+            @AuthenticationPrincipal MemberDto memberDto,
             @ModelAttribute MenuEntity menu,
             HttpServletRequest request) throws Exception {
         Map<Integer, MenuVO> menuMap = SessionUtil.getSession(request, "menuMap");

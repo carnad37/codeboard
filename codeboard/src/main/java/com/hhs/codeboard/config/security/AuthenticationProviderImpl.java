@@ -1,7 +1,7 @@
 package com.hhs.codeboard.config.security;
 
 
-import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.web.service.member.MemberDto;
 import com.hhs.codeboard.web.service.member.MemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthenticationProviderImpl implements AuthenticationProvider {
@@ -26,7 +25,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         String userEmail = (String) authentication.getPrincipal();
         String userPasswd = (String) authentication.getCredentials();
 
-        MemberVO userVO = (MemberVO) memberService.loadUserByUsername(userEmail);
+        MemberDto userVO = (MemberDto) memberService.loadUserByUsername(userEmail);
 
         if (!passwordEncoder.matches(userPasswd, userVO.getPassword())) {
             // throw new BadCredentialsException("잘못된 로그인 정보입니다.");

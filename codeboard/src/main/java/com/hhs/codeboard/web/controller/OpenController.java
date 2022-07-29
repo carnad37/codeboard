@@ -3,9 +3,8 @@ package com.hhs.codeboard.web.controller;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.hhs.codeboard.config.common.LoggerController;
-import com.hhs.codeboard.jpa.entity.member.MemberEntity;
-import com.hhs.codeboard.util.common.SessionUtil;
-import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.jpa.entity.member.entity.MemberEntity;
+import com.hhs.codeboard.web.service.member.MemberDto;
 import com.hhs.codeboard.web.service.member.MemberService;
 
 
@@ -27,14 +26,14 @@ public class OpenController extends LoggerController {
 	MemberService memberService;
 
     @RequestMapping("/login")
-	public String login(@AuthenticationPrincipal MemberVO loginVO,
+	public String login(@AuthenticationPrincipal MemberDto loginVO,
 				Model model, HttpServletRequest request) {
 		if (loginVO != null) return "redirect:/main";
 		return "member/login";
 	}
 
 	@RequestMapping("/register")
-	public String register(@AuthenticationPrincipal MemberVO loginVO,
+	public String register(@AuthenticationPrincipal MemberDto loginVO,
 				@ModelAttribute MemberEntity insertVO,
 				Model model) {
 		if (loginVO != null) return "/main";
@@ -43,7 +42,7 @@ public class OpenController extends LoggerController {
 	}
 
 	@RequestMapping("/actionRegister")
-	public String actionRegister(@AuthenticationPrincipal MemberVO loginVO,
+	public String actionRegister(@AuthenticationPrincipal MemberDto loginVO,
 				@ModelAttribute MemberEntity insertVO,
 				@RequestParam(value = "memberId") String email,
 				@RequestParam(value = "memberPassword") String password,

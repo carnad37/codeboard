@@ -1,11 +1,7 @@
 package com.hhs.codeboard.web.service.menu;
 
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.sun.istack.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.List;
 

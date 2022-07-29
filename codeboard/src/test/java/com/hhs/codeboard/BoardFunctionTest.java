@@ -1,8 +1,8 @@
 package com.hhs.codeboard;
 
-import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.hhs.codeboard.jpa.service.MenuDAO;
+import com.hhs.codeboard.jpa.entity.board.entity.BoardArticleEntity;
+import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
+import com.hhs.codeboard.jpa.repository.MenuDAO;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

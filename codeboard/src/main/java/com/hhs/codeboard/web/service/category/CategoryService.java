@@ -1,21 +1,22 @@
 package com.hhs.codeboard.web.service.category;
 
-import com.hhs.codeboard.jpa.entity.board.BoardArticleEntity;
-import com.hhs.codeboard.jpa.entity.board.BoardCategoryEntity;
-import com.hhs.codeboard.jpa.entity.menu.MenuEntity;
-import com.hhs.codeboard.jpa.service.ArticleDAO;
-import com.hhs.codeboard.jpa.service.CategoryDAO;
-import com.hhs.codeboard.jpa.service.MemberDAO;
-import com.hhs.codeboard.jpa.service.MenuDAO;
-import com.hhs.codeboard.web.service.member.MemberVO;
+import com.hhs.codeboard.jpa.entity.board.entity.BoardArticleEntity;
+import com.hhs.codeboard.jpa.entity.board.entity.BoardCategoryEntity;
+import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
+import com.hhs.codeboard.jpa.repository.ArticleDAO;
+import com.hhs.codeboard.jpa.repository.CategoryDAO;
+import com.hhs.codeboard.jpa.repository.MemberDAO;
+import com.hhs.codeboard.jpa.repository.MenuDAO;
+import com.hhs.codeboard.web.service.member.MemberDto;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
     private final CategoryDAO categoryDAO;
@@ -23,37 +24,29 @@ public class CategoryService {
     private final MenuDAO menuDAO;
     private final ArticleDAO articleDAO;
 
-    @Autowired
-    public CategoryService(CategoryDAO categoryDAO, MemberDAO memberDAO, MenuDAO menuDAO, ArticleDAO articleDAO) {
-        this.categoryDAO = categoryDAO;
-        this.memberDAO = memberDAO;
-        this.articleDAO = articleDAO;
-        this.menuDAO = menuDAO;
-    }
-
-    public int insertCategory(BoardCategoryEntity cateVO, MemberVO memberVO) {
+    public int insertCategory(BoardCategoryEntity cateVO, MemberDto memberDto) {
         /*
             먼저 해당 게시판에대해 유저의 권한을 확인한다.
          */
-        MenuEntity targetBoard = menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(cateVO.getBoardSeq(), memberVO.getSeq())
+        MenuEntity targetBoard = menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(cateVO.getBoardSeq(), memberDto.getSeq())
                 .orElseThrow(()-> new ServiceException("잘못된 접근입니다."));
 
         BoardCategoryEntity insertVO = new BoardCategoryEntity();
         insertVO.setBoardSeq(targetBoard.getSeq());
         insertVO.setTitle(cateVO.getTitle());
         insertVO.setRegDate(LocalDateTime.now());
-        insertVO.setRegUserSeq(memberVO.getSeq());
+        insertVO.setRegUserSeq(memberDto.getSeq());
 
         categoryDAO.save(insertVO);
         return 1;
     }
 
-    public int deleteCategory(BoardCategoryEntity cateVO, MemberVO memberVO) {
+    public int deleteCategory(BoardCategoryEntity cateVO, MemberDto memberDto) {
         /*
             카테고리의 삭제. 해당 카테고리를 삭제하며, delDate를 업데이트한다.
             해당 카테고리 번호를 가진 boardArticle역시 모두 null로 초기화한다.
          */
-        MenuEntity targetBoard = menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(cateVO.getBoardSeq(), memberVO.getSeq())
+        MenuEntity targetBoard = menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(cateVO.getBoardSeq(), memberDto.getSeq())
                 .orElseThrow(()-> new ServiceException("잘못된 접근입니다."));
 
         Integer delCateSeq = cateVO.getSeq();

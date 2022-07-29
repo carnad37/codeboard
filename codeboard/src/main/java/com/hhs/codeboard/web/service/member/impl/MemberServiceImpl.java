@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.hhs.codeboard.enumeration.UserTypeEnum;
-import com.hhs.codeboard.jpa.entity.member.MemberEntity;
-import com.hhs.codeboard.web.service.member.MemberVO;
-import com.hhs.codeboard.jpa.service.MemberDAO;
+import com.hhs.codeboard.jpa.entity.member.entity.MemberEntity;
+import com.hhs.codeboard.web.service.member.MemberDto;
+import com.hhs.codeboard.jpa.repository.MemberDAO;
 import com.hhs.codeboard.web.service.member.MemberService;
 
 public class MemberServiceImpl implements MemberService {
@@ -43,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
 			throw new UsernameNotFoundException("가입승인 대기중입니다");
 		}
 		
-		return new MemberVO(memberVO, authorities);
+		return new MemberDto(memberVO, authorities);
 	}
 
 	@Override
