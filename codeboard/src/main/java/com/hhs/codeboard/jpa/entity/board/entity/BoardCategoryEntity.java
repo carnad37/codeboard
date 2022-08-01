@@ -2,6 +2,7 @@ package com.hhs.codeboard.jpa.entity.board.entity;
 
 import javax.persistence.*;
 
+import com.hhs.codeboard.config.common.CommonStaticProperty;
 import com.hhs.codeboard.jpa.entity.common.entity.DefaultEntity;
 
 import lombok.Getter;
@@ -11,13 +12,13 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="code_category")
-@TableGenerator(name = "tableGenerator", table = "_sequence_table")
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = "_sequence_table")
 public class BoardCategoryEntity extends DefaultEntity {
 
     private static final long serialVersionUID = -6177068167629590168L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGenerator")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR)
     private Integer seq;
 
     @Column

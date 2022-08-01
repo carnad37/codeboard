@@ -2,7 +2,7 @@ package com.hhs.codeboard.jpa.entity.board.entity;
 
 import javax.persistence.*;
 
-import com.hhs.codeboard.config.common.StaticProperty;
+import com.hhs.codeboard.config.common.CommonStaticProperty;
 import com.hhs.codeboard.jpa.entity.common.entity.DefaultEntity;
 
 import lombok.Data;
@@ -11,7 +11,7 @@ import org.springframework.lang.Nullable;
 @Data
 @Entity
 @Table(name="code_board_article")
-@TableGenerator(name = "tableGenerator", table = StaticProperty.SEQUENCE_TABLE_NAME)
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = CommonStaticProperty.SEQUENCE_TABLE_NAME)
 public class BoardArticleEntity extends DefaultEntity{
 
     private static final long serialVersionUID = 536546113468443744L;

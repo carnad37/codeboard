@@ -3,6 +3,7 @@ package com.hhs.codeboard.jpa.entity.common.entity;
 import javax.persistence.*;
 
 
+import com.hhs.codeboard.config.common.CommonStaticProperty;
 import lombok.Data;
 
 @Data
@@ -13,7 +14,7 @@ public abstract class DefaultEntity extends DefaultDateEntity {
 
 	@Id
 	@Column(length = 15)
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGenerator")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR)
 	private Integer seq;
 
 	@Column

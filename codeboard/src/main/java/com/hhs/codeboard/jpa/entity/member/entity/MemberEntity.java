@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.*;
 
+import com.hhs.codeboard.config.common.CommonStaticProperty;
 import com.hhs.codeboard.jpa.entity.common.entity.DefaultDateEntity;
 import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 import lombok.Data;
@@ -13,13 +14,13 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "code_member")
-@TableGenerator(name = "tableGenerator", table = "_sequence_table")
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = "_sequence_table")
 public class MemberEntity extends DefaultDateEntity {
 
 	private static final long serialVersionUID = -3781361636538961523L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator = "tableGenerator")
+	@GeneratedValue(strategy=GenerationType.TABLE, generator = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR)
 	private Integer seq;
 	
 	@Column

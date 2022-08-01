@@ -1,6 +1,7 @@
 package com.hhs.codeboard.jpa.entity.menu.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hhs.codeboard.config.common.CommonStaticProperty;
 import com.hhs.codeboard.jpa.entity.board.entity.BoardArticleEntity;
 import com.hhs.codeboard.jpa.entity.common.entity.DefaultEntity;
 import com.sun.istack.NotNull;
@@ -16,7 +17,7 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "code_menu")
-@TableGenerator(name = "tableGenerator", table = "_sequence_table")
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = "_sequence_table")
 public class MenuEntity extends DefaultEntity {
 
     public MenuEntity() {
