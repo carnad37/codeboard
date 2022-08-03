@@ -2,6 +2,7 @@ package com.hhs.codeboard.web.service.menu;
 
 import com.hhs.codeboard.enumeration.MenuSeqEnum;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
+import com.hhs.codeboard.jpa.entity.menu.dto.MenuDto;
 import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 import com.hhs.codeboard.jpa.repository.MenuDAO;
 import com.hhs.codeboard.util.common.SessionUtil;
@@ -50,7 +51,7 @@ public class MenuService {
         return menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(uuid, regUserSeq).orElseThrow(()->new Exception("잘못된 접근입니다."));
     }
 
-    public void insertMenu(MenuEntity menu, MemberDto memberDto, MenuTypeEnum menuType) throws Exception {
+    public void insertMenu(MenuDto menu, MemberDto memberDto, MenuTypeEnum menuType) throws Exception {
         if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
             selectMenu(memberDto.getSeq(), menu.getParentSeq());
@@ -70,7 +71,7 @@ public class MenuService {
         menuDAO.save(insert);
     }
 
-    public void updateMenu(MenuEntity menu, MemberDto memberDto, MenuTypeEnum menuType) throws Exception {
+    public void updateMenu(MenuDto menu, MemberDto memberDto, MenuTypeEnum menuType) throws Exception {
         if (!MenuTypeEnum.BOARD.equals(menuType) && menu.getParentSeq() > 0) {
             //parentSeq 체크, 없으면 exception
             selectMenu(memberDto.getSeq(), menu.getParentSeq());
@@ -92,7 +93,7 @@ public class MenuService {
      * @param memberDto
      * @throws Exception
      */
-    public void deleteMenu(MenuEntity menu, MemberDto memberDto, MenuTypeEnum targetType) throws Exception {
+    public void deleteMenu(MenuDto menu, MemberDto memberDto, MenuTypeEnum targetType) throws Exception {
         MenuEntity deleteVO = getMenu(menu, memberDto);
         if (!targetType.getMenuType().equals(deleteVO.getMenuType())) {
             throw new ServiceException("타겟타입이 아닙니다.");
@@ -214,7 +215,7 @@ public class MenuService {
      * @return
      * @throws Exception
      */
-    private MenuEntity getMenu(MenuEntity menu, MemberDto member) throws Exception {
+    private MenuEntity getMenu(MenuDto menu, MemberDto member) throws Exception {
         return StringUtils.hasText(menu.getUuid()) ?
                 menuDAO.findByUuidAndRegUserSeqAndDelDateIsNull(menu.getUuid(), member.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."))
                 : menuDAO.findBySeqAndRegUserSeqAndDelDateIsNull(menu.getSeq(), member.getSeq()).orElseThrow(()->new Exception("잘못된 접근입니다."));

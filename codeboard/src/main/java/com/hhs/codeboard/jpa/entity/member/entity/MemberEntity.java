@@ -14,7 +14,7 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "code_member")
-@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = "_sequence_table")
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = CommonStaticProperty.SEQUENCE_TABLE_NAME)
 public class MemberEntity extends DefaultDateEntity {
 
 	private static final long serialVersionUID = -3781361636538961523L;

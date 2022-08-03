@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="code_category")
-@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = "_sequence_table")
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = CommonStaticProperty.SEQUENCE_TABLE_NAME)
 public class BoardCategoryEntity extends DefaultEntity {
 
     private static final long serialVersionUID = -6177068167629590168L;

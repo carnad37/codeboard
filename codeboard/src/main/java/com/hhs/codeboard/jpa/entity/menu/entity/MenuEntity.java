@@ -17,7 +17,7 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "code_menu")
-@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = "_sequence_table")
+@TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = CommonStaticProperty.SEQUENCE_TABLE_NAME)
 public class MenuEntity extends DefaultEntity {
 
     public MenuEntity() {

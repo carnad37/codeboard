@@ -3,6 +3,7 @@ package com.hhs.codeboard.web.controller;
 import com.hhs.codeboard.config.anno.AspectMenuActive;
 import com.hhs.codeboard.config.common.LoggerController;
 import com.hhs.codeboard.enumeration.MenuTypeEnum;
+import com.hhs.codeboard.jpa.entity.menu.dto.MenuDto;
 import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberDto;
@@ -89,7 +90,7 @@ public class MenuController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/insert")
     public String insert(@AuthenticationPrincipal MemberDto memberDto
-            , MenuEntity insertMenu) throws Exception {
+            , MenuDto insertMenu) throws Exception {
         menuService.insertMenu(insertMenu, memberDto, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
@@ -104,7 +105,7 @@ public class MenuController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/update")
     public String update(@AuthenticationPrincipal MemberDto memberDto
-            , MenuEntity updateMenu) throws Exception {
+            , MenuDto updateMenu) throws Exception {
         menuService.updateMenu(updateMenu, memberDto, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
@@ -119,7 +120,7 @@ public class MenuController extends LoggerController {
     @AspectMenuActive(menuType = MenuTypeEnum.MENU_CONFIG)
     @RequestMapping("/delete")
     public String delete(@AuthenticationPrincipal MemberDto memberDto
-            , MenuEntity deleteMenu) throws Exception {
+            , MenuDto deleteMenu) throws Exception {
         menuService.deleteMenu(deleteMenu, memberDto, MenuTypeEnum.MENU);
         return "redirect:/menu/refresh";
     }
@@ -136,7 +137,7 @@ public class MenuController extends LoggerController {
     @RequestMapping("/getMenuInfo")
     public ResponseEntity<MenuVO> getMenuInfo(
             @AuthenticationPrincipal MemberDto memberDto,
-            @ModelAttribute MenuEntity menu,
+            MenuEntity menu,
             HttpServletRequest request) throws Exception {
         Map<Integer, MenuVO> menuMap = SessionUtil.getSession(request, "menuMap");
         return ResponseEntity.ok(menuMap.get(menu.getSeq()));
