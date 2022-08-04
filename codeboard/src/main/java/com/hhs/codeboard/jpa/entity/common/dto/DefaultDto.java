@@ -6,7 +6,7 @@ import javax.persistence.Column;
 
 
 @Data
-public class DefaultDto {
+public class DefaultDto extends DefaultDateDto{
 
     private Integer seq;
 

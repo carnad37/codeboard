@@ -1,5 +1,6 @@
 package com.hhs.codeboard.jpa.entity.board.dto;
 
+import com.hhs.codeboard.jpa.entity.common.dto.DefaultDateDto;
 import com.hhs.codeboard.jpa.entity.common.dto.DefaultDto;
 import lombok.Data;
 
