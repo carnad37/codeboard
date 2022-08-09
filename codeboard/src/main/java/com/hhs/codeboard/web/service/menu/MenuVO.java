@@ -1,6 +1,6 @@
 package com.hhs.codeboard.web.service.menu;
 
-import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
+import com.hhs.codeboard.jpa.entity.menu.dto.MenuDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,14 +22,14 @@ public class MenuVO implements Serializable {
         this.childrenMenu = childrenMenu;
     }
 
-    public MenuVO(MenuEntity menu) {
+    public MenuVO(MenuDto menu) {
         super();
         this.menu = menu;
     }
 
     private MenuVO parentMenu;
     private List<MenuVO> childrenMenu;
-    private MenuEntity menu;
+    private MenuDto menu;
     private Integer depth;
 
     public String getTitle() {
@@ -56,11 +56,11 @@ public class MenuVO implements Serializable {
         this.parentMenu = parentMenu;
     }
 
-    public MenuEntity getMenu() {
+    public MenuDto getMenu() {
         return menu;
     }
 
-    public void setMenu(MenuEntity menu) {
+    public void setMenu(MenuDto menu) {
         this.menu = menu;
     }
 

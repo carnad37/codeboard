@@ -7,7 +7,9 @@ import com.hhs.codeboard.jpa.entity.menu.entity.MenuEntity;
 import com.hhs.codeboard.jpa.repository.MenuDAO;
 import com.hhs.codeboard.util.common.SessionUtil;
 import com.hhs.codeboard.web.service.member.MemberDto;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,21 +22,19 @@ import java.util.*;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class MenuService {
 
     private final MenuDAO menuDAO;
 
-    @Autowired
-    public MenuService(MenuDAO menuDAO) {
-        this.menuDAO = menuDAO;
-    }
+    private final ModelMapper modelMapper;
 
     public List<MenuEntity> selectAllBoardMenu(int regUserSeq) {
         List<MenuEntity> resultList = new ArrayList<>();
         List<MenuEntity> menuList = menuDAO.findAllByRegUserSeqAndDelDateIsNull(regUserSeq, Sort.by(Sort.Direction.DESC, "menuOrder"));
-        menuList.forEach(
-                MenuEntity -> resultList.add(new MenuEntity())
-        );
+//        menuList.forEach(
+//                MenuEntity -> resultList.add(new MenuEntity())
+//        );
         return resultList;
     }
 
@@ -123,15 +123,32 @@ public class MenuService {
         List<MenuVO> menuList = new ArrayList<>();
         List<MenuVO> setInnerList = new ArrayList<>();
 
+        //기본메뉴
+        MenuVO constMenuVO = new MenuVO();
+
         //공통 설정
-        MenuVO setMenu = new MenuVO(new MenuEntity(0, "공통메뉴", MenuTypeEnum.STATIC_MENU.getMenuType()));
+        MenuDto setMenu = new MenuDto();
+        setMenu.setSeq(0);
+        setMenu.setTitle("공통메뉴");
+        setMenu.setMenuType(MenuTypeEnum.STATIC_MENU.getMenuType());
+        constMenuVO.setMenu(setMenu);
+
         //공통게시판 내용추가
-        setInnerList.add(new MenuVO(new MenuEntity(0,  "게시판 목록", MenuTypeEnum.BOARD_CONFIG.getMenuType())));
-        setInnerList.add(new MenuVO(new MenuEntity(0, "메뉴 목록", MenuTypeEnum.MENU_CONFIG.getMenuType())));
+        setMenu = new MenuDto();
+        setMenu.setSeq(0);
+        setMenu.setTitle("게시판 목록");
+        setMenu.setMenuType(MenuTypeEnum.BOARD_CONFIG.getMenuType());
+        setInnerList.add(new MenuVO(setMenu));
+
+        setMenu = new MenuDto();
+        setMenu.setSeq(0);
+        setMenu.setTitle("메뉴 목록");
+        setMenu.setMenuType(MenuTypeEnum.MENU_CONFIG.getMenuType());
+        setInnerList.add(new MenuVO(setMenu));
 //        setInnerList.add(new MenuVO(new MenuEntity(0, "카테고리 설정", MenuTypeEnum.CATEGORY_CONFIG.getMenuType())));
 
-        setMenu.setChildrenMenu(setInnerList);
-        menuList.add(setMenu);
+        constMenuVO.setChildrenMenu(setInnerList);
+        menuList.add(constMenuVO);
 
         //메뉴 맵 UUID::VO
         Map<Integer, MenuVO> menuMap = new HashMap<>();
@@ -141,7 +158,8 @@ public class MenuService {
         //게시판 같은경우 기본적으론 게시판 공통 메뉴 하위에 들어간다.
         //게시판 공통 메뉴 같은 경우 하위에 게시판이 있어야지만 활성화된다.
         for (MenuEntity dbMenu : dbMenuList) {
-            MenuVO menuVO = new MenuVO(dbMenu);
+            MenuDto menuDto = modelMapper.map(dbMenu, MenuDto.class);
+            MenuVO menuVO = new MenuVO(menuDto);
             if (menuMap.containsKey(menuVO.getSeq())) {
                 MenuVO targetVO = menuMap.get(menuVO.getSeq());
                 menuVO.setChildrenMenu(targetVO.getChildrenMenu());

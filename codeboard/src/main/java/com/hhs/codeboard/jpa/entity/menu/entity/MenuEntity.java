@@ -14,22 +14,12 @@ import javax.persistence.*;
 import java.util.Collection;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "code_menu")
 @TableGenerator(name = CommonStaticProperty.SEQUENCE_TABLE_GENERATOR, table = CommonStaticProperty.SEQUENCE_TABLE_NAME)
 public class MenuEntity extends DefaultEntity {
-
-    public MenuEntity() {
-        super();
-    }
-
-    public MenuEntity(Integer seq, String title, String menuType) {
-        super();
-        this.setSeq(seq);
-        this.setTitle(title);
-        this.setMenuType(menuType);
-    }
 
     private static final long serialVersionUID = 6217465463857529869L;
 
