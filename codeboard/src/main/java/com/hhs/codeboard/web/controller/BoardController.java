@@ -21,11 +21,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/board")
-@Controller
+@RestController
 public class BoardController extends LoggerController {
 
     private final BoardArticleService articleService;
