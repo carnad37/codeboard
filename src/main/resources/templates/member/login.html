@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/no-design-temp}">
+  <!-- 고유 css -->
+  <th:block layout:fragment="css">
+    <style>
+      #remember~label {
+        font-size: 13px;
+      }
+
+    </style>
+  </th:block>
+  <!-- 고유 script -->
+  <th:block layout:fragment="script">
+  <script src="/plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="/plugins/jquery-validation/additional-methods.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      $("#remember").click(function(){
+        if ($(this).is(":checked")) {
+          alert("로그인 유지 기능은 개인컴퓨터에서만 사용해주시기 바랍니다\n쿠키삭제시 로그인이 해제되니 주의해주세요\n로그인은 15일 동안 유지됩니다");
+        }
+      });
+      $.validator.addMethod("passwordAlgorithm", function(value) {
+        return /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*#?&])[a-zA-Z\d@$!%*#?&]{8,20}$/.test(value);
+      });
+
+      $("#loginForm").validate({
+        rules: {
+          memberId: {
+            required: true,
+            email: true,
+          },
+          memberPassword: {
+            required: true,
+            minlength: 8,
+            passwordAlgorithm: true,
+          }
+        },
+        messages: {
+          memberId: {
+            required: "이메일이 입력되지 않았습니다",
+            email: "이메일 형식으로 입력해주세요",
+          },
+          memberPassword: {
+            required: "비밀번호가 입력되지 않았습니다",
+            minlength: "비밀번호는 8글자",
+            passwordAlgorithm: "영문 대소문자,숫자,특수문자(@$!%*#?&)를 섞어주세요"
+          }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.input-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-valid');
+          $(element).addClass('is-invalid');          
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+          $(element).addClass('is-valid');
+        },
+      });
+    });
+  </script>
+  <script th:if="${param.error}">$(function(){$("#modal-danger").modal("show");});</script>
+  </th:block>
+
+  <div layout:fragment="content">
+  <div class="login-page">
+    <div class="login-box ">
+      <!-- /.login-logo -->
+      <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+          <a href="/open/login" onclick="return false;" class="h1"><b>Code</b>Bank</a>
+        </div>
+        <div class="card-body">
+          <p class="login-box-msg">로그인정보를 입력해주세요</p>
+
+          <form th:action="@{/open/actionLogin}" method="post" id="loginForm">
+            <div class="input-group mb-3">
+              <input type="text" name="memberId" id="memberId" class="form-control" placeholder="이메일을 입력해주세요" autocomplete="off" autocapitalize="off" autocorrect="off" >
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-envelope"></span>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" name="memberPassword" id="memberPassword" class="form-control" placeholder="비밀번호를 입력해주세요" autocomplete="current-password">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-8">
+                <div class="icheck-primary">
+                  <input type="checkbox" id="remember" name="remember-me">
+                  <label for="remember">
+                    로그인 유지하기
+                  </label>
+                </div>
+              </div>
+              <!-- /.col -->
+              <div class="col-4">
+                <button type="submit" class="btn btn-primary btn-block">로그인</button>
+              </div>
+              <!-- /.col -->
+            </div>
+          </form>
+          <!--
+          <div class="social-auth-links text-center mt-2 mb-3">
+            <a href="#" class="btn btn-block btn-primary">
+              <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+            </a>
+            <a href="#" class="btn btn-block btn-danger">1
+              <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+            </a>
+          </div>
+          -->
+          <!-- /.social-auth-links -->
+          
+          <p class="col-12 mb-3 px-0">
+            <a href="forgot-password.html" class="btn btn-block btn-secondary">비밀번호 찾기</a>
+          </p>
+          <p class="col-12 px-0">
+            <a th:href="@{/open/register}" class="btn btn-block btn-primary">가입하기</a>
+          </p>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.login-box -->
+  </div>
+
+  
+  <div th:if="${param.error}" class="modal" id="modal-danger">
+    <div class="modal-dialog  modal-dialog-centered" >
+      <div class="modal-content">
+        <div class="modal-header bg-danger">
+          <h4 class="modal-title">로그인 실패</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p th:text="${param.error}"></p>
+        </div>
+        <div class="modal-footer justify-content-end">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">닫기</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->    
+  </div>
+  <!-- /.modal -->
+
+  </div>
+</html>

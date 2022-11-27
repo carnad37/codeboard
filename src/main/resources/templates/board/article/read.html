@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/design-temp}">
+    <!-- 고유 css -->
+    <th:block layout:fragment="css">
+    </th:block>
+    <!-- 고유 script -->
+    <th:block layout:fragment="script">
+    <script>
+        function fncList() {
+            listForm.submit();
+        }
+    </script>
+    </th:block>
+    <div layout:fragment="content">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">게시물 읽기</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form id="listForm" name="listForm" method="post" style="display: none;" th:action="'/board/' + ${uuid} + '/list'">
+                        <input name="pageIndex" th:value="${searchVO.pageIndex}"/>
+                        <input name="searchKeyword" th:value="${searchVO.searchKeyword}"/>
+                        <input name="searchCondition" th:value="${searchVO.searchCondition}"/>
+                    </form>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <h4 class="col-sm-12 mb-0" th:text="${article?.title}">
+                            </h4>
+                        </div>
+                        <hr>
+                        <div class="row" >
+                            <div class="col-sm-12 font-italic" th:text="${article?.summary}">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12" th:utext="${article?.content}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="button" onclick="fncList();" class="btn btn-default float-right">목록</button>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</html>
