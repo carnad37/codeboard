@@ -1,7 +1,0 @@
-FROM openjdk:17-alpine
-
-COPY target/codeboard-0.0.1-SNAPSHOT.jar /usr/src/myapp/codeboard.jar
-
-WORKDIR /usr/src/myapp
-
-CMD ["java", "-jar", "/usr/src/myapp/codeboard.jar"]
